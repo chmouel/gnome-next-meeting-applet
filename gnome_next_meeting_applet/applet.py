@@ -230,7 +230,6 @@ class Applet:
 
             icon = self.config['default_icon']
             for regexp in self.config['event_organizers_icon']:
-                print(regexp)
                 if re.match(regexp, organizer):
                     icon = self.config['event_organizers_icon'][regexp]
                     break
