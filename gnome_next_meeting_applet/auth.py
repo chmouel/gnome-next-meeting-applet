@@ -16,10 +16,12 @@ import argparse
 import pathlib
 import sys
 
-import gnome_next_meeting_applet.applet as gnma
 import oauth2client.client
-import oauth2client.tools
 import oauth2client.file
+import oauth2client.tools
+import yaml
+
+import gnome_next_meeting_applet.applet as gnma
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 
@@ -49,7 +51,12 @@ def main():
     flow = oauth2client.client.flow_from_clientsecrets(args.client_secret_file,
                                                        SCOPES)
     flow.user_agent = "Gnome Next Meeting applet"
-    oauth2client.tools.run_flow(flow, store, args)
+    # oauth2client.tools.run_flow(flow, store, args)
+
+    configfile = pathlib.Path(gnma.CONFIG_DIR) / "config.yaml"
+    if not configfile.exists():
+        configfile.write_text(yaml.safe_dump(gnma.DEFAULT_CONFIG))
+
     print(f'Credentials has been stored in {dpath}')
     print('You can now launch gnome-next-meeting-applet')
 

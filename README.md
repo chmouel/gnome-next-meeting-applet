@@ -12,7 +12,7 @@ An applet to show your next meetings in Gnome
 
 ### Ubuntu
 ```
-apt install python3-tzlocal python3-dateutil python3-googleapi python3-httplib2 python3-oauth2client python3-gi
+apt install python3-tzlocal python3-dateutil python3-googleapi python3-httplib2 python3-oauth2client python3-gi python3-yaml
 pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
 ```
 
@@ -24,6 +24,8 @@ pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
 * Fully configurable.
 
 ## Configuration
+
+### Oauth token
 
 Before launching the applet you need to first generate a Google OAuth 2.0 Client
 Credentials and authorize it.
@@ -41,24 +43,43 @@ Credentials and authorize it.
 * On the next screen you can just click OK, since we will look over the auth json file.
 
 * Now next to your created application you will see an icon to download the auth
-  json file, click on it and store it somewhere in a name you can rememeber (ie: `client_secret.json`)
+ json file, click on it and store it somewhere in a name you can rememeber (ie: `client_secret.json`)
 
 ![Click on download file](./.github/screenshot/create-oauth-2.png)
 
 * In the terminal launch `gnome-next-meeting-applet-auth` with the path to the auth json file : 
 
-    `gnome-next-meeting-applet-auth ~/Downloads/client_secret.json`
+   `gnome-next-meeting-applet-auth ~/Downloads/client_secret.json`
 
 * This will launch your webbrowser to do the oauth dance
 
 * If your browser tells you the apps is unverified you can say it's okay (it's
-  should be the one that you have created yourself).
-  
+ should be the one that you have created yourself).
+
 * After the last click of authorizations the credentials has been created.
 
 ![Created](./.github/screenshot/create-oauth-5.png)
 
 * You can now launch the gnome-next-meeting applet.
+
+### Applet configuration
+
+The applet can be configured with a config.yaml yaml located in your
+`$HOME/.config/gnome-next-meeting-applet/config.yaml`. This gets generated
+automatically when launching `gnome-next-meeting-applet-auth`.
+
+A configured example is located in the [config.samples.yaml](./config.samples.yaml).
+
+* **default_icon**: The default icon when showing each meeting.
+* **event_organizers_icon**: A map between a regexp matching the organizer to an
+  icon. This allows you to easily differentiate certain type of meetings like
+  the one from your team or colleagues.
+* **max_results**: Max results to ask to google calendar api.
+* **skip_non_accepted**: Skip the calendar events that you didn't accept, you
+  need to configure `my_email` setting for that.
+* **my_email**: Your email address
+* **restrict_to_calendar**: Restrict to some calendar, by default it will shows from all your calendar.
+* **title_max_char**: The maximum lenght of the title
 
 ### Credits
 

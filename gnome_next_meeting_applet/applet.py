@@ -28,27 +28,26 @@ import dateutil.tz as dttz
 import httplib2
 import oauth2client.file
 import tzlocal
+import yaml
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gdk as gdk
 from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 
 APP_INDICTOR_ID = "gnome-next-meeting-applet"
-RESTRICT_TO_CALENDAR = ["Work"]
-PASS_CREDENTIALS_ID = "google-calendar-api-token"
-SKIP_NON_ACCEEPTED = True
-MY_EMAIL = "cboudjna@redhat.com"
-MAX_RESULTS = 10
-TITLE_MAX_CHAR = 20
-EVENT_ORGANIZERS_ICON = {
-    "^Tekton$":
-    "🐱",
-    r"(pbhattac|nkakkar|rbehera|vdemeest|kbaig|pchandra|ssadeghi|hshinde|nikthoma|pthangad|yhontyk|varadhya|pgarg|pradkuma|sashture|sthaha|gmontero|ppitonak)@redhat.com":
-    "👷"
+CONFIG_DIR = os.path.expanduser(f"~/.config/{APP_INDICTOR_ID}")
+CREDENTIALS_PATH = f"{CONFIG_DIR}/calendar-python-quickstart.json"
+
+DEFAULT_CONFIG = {
+    'restrict_to_calendar': [],
+    'skip_non_accepted': True,
+    'my_email': "",
+    'max_results': 10,
+    'title_max_char': 20,
+    'refresh_interval': 300,
+    'event_organizers_icon': {},
+    'default_icon': "‣"
 }
-REFRESH_INTERVAL = 300  # seconds
-CREDENTIALS_PATH = os.path.expanduser(
-    f"~/.config/{APP_INDICTOR_ID}/calendar-python-quickstart.json")
 
 
 class Applet:
@@ -56,6 +55,15 @@ class Applet:
     events = []
     indicator = None
     api_service = None
+
+    def __init__(self):
+        self.config = DEFAULT_CONFIG
+        configfile = pathlib.Path(CONFIG_DIR) / "config.yaml"
+        if configfile.exists():
+            self.config = {
+                **DEFAULT_CONFIG,
+                **yaml.safe_load(configfile.open())
+            }
 
     def htmlspecialchars(self, text):
         """Replace html chars"""
@@ -65,7 +73,7 @@ class Applet:
     def first_event(self, event):
         """Show first even in toolbar"""
         summary = self.htmlspecialchars(
-            event['summary'].strip()[:TITLE_MAX_CHAR])
+            event['summary'].strip()[:self.config['title_max_char']])
         now = datetime.datetime.now(dttz.tzlocal()).astimezone(
             tzlocal.get_localzone())
         end_time = dtparse.parse(event['end']['dateTime']).astimezone(
@@ -112,8 +120,8 @@ class Applet:
             calendar_list = self.api_service.calendarList().list(
                 pageToken=page_token).execute()
             for calendar_list_entry in calendar_list['items']:
-                if RESTRICT_TO_CALENDAR and calendar_list_entry[
-                        'summary'] not in RESTRICT_TO_CALENDAR:
+                if self.config['restrict_to_calendar'] and calendar_list_entry[
+                        'summary'] not in self.config['restrict_to_calendar']:
                     continue
                 calendar_ids.append(calendar_list_entry['id'])
             page_token = calendar_list.get('nextPageToken')
@@ -126,7 +134,7 @@ class Applet:
             uhy = self.api_service.events().list(
                 calendarId=calendar_id,
                 timeMin=now,
-                maxResults=MAX_RESULTS,
+                maxResults=self.config['max_results'],
                 singleEvents=True,
                 orderBy='startTime').execute()
             uhx = uhy.get('items', [])
@@ -157,10 +165,13 @@ class Applet:
 
             # Get only accepted events
             skip_event = False
-            if SKIP_NON_ACCEEPTED:
+            if self.config['skip_non_accepted']:
                 skip_event = True
+            if self.config['my_email'] == "":
+                skip_event = False
+
             for attendee in event['attendees']:
-                if attendee['email'] == MY_EMAIL and attendee[
+                if attendee['email'] == self.config['my_email'] and attendee[
                         'responseStatus'] == "accepted":
                     skip_event = False
             if skip_event:
@@ -217,10 +228,11 @@ class Applet:
             organizer = event['organizer'].get('displayName',
                                                event['organizer'].get('email'))
 
-            icon = "💆"
-            for regexp in EVENT_ORGANIZERS_ICON:
+            icon = self.config['default_icon']
+            for regexp in self.config['event_organizers_icon']:
+                print(regexp)
                 if re.match(regexp, organizer):
-                    icon = EVENT_ORGANIZERS_ICON[regexp]
+                    icon = self.config['event_organizers_icon'][regexp]
                     break
 
             start_time_str = start_time.strftime("%H:%M")
@@ -264,7 +276,8 @@ class Applet:
         self.set_indicator_icon_label(self.indicator)
         glib.timeout_add_seconds(1, self.set_indicator_icon_label,
                                  self.indicator)
-        glib.timeout_add_seconds(REFRESH_INTERVAL, self.make_menu_items)
+        glib.timeout_add_seconds(self.config['refresh_interval'],
+                                 self.make_menu_items)
         gtk.main()
 
     def main(self):
