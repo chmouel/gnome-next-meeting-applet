@@ -1,3 +1,5 @@
+***This is currently beta software, would be great if you can help test this.***
+
 # Gnome Next Meeting applet
 
 An applet to show your next meetings in Gnome
