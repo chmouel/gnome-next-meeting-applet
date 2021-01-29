@@ -146,8 +146,8 @@ class Applet:
 
     def get_all_events(self):
         """Get all events from Google Calendar API"""
-        event_list = json.load(open("/tmp/allevents.json"))
-        # event_list = self.get_from_gcal_calendar_entries()
+        # event_list = json.load(open("/tmp/allevents.json"))
+        event_list = self.get_from_gcal_calendar_entries()
 
         ret = []
         for event in sorted(event_list,
