@@ -81,6 +81,16 @@ Credentials and authorize it.
 
 * You can now launch the gnome-next-meeting applet.
 
+### Starting
+
+You can just do : 
+
+Alt+F2 and start `gnome-next-meeting-applet` make sure you have done the oauth
+dance previously.
+
+There is a setting menu to add an autostart file to autostart it when gnome
+launch.
+
 ### Credits
 
 * This package was created with
