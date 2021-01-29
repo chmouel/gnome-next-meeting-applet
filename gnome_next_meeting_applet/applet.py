@@ -64,6 +64,9 @@ class Applet:
                 **DEFAULT_CONFIG,
                 **yaml.safe_load(configfile.open())
             }
+        self.autostart_file = pathlib.Path(
+            "~/.config/autostart/gnome-next-meeting-applet.desktop"
+        ).expanduser()
 
     def htmlspecialchars(self, text):
         """Replace html chars"""
@@ -255,6 +258,16 @@ class Applet:
 
         menu.append(gtk.SeparatorMenuItem())
 
+        settingMenu = gtk.Menu()
+        label = self.autostart_file.exists(
+        ) and "Remove autostart" or "Auto start at boot"
+        item_autostart = gtk.MenuItem(label=label)
+        item_autostart.connect('activate', self.install_uninstall_autostart)
+        settingMenu.add(item_autostart)
+        settingItem = gtk.MenuItem("Setting")
+        settingItem.set_submenu(settingMenu)
+        menu.add(settingItem)
+
         item_refreh = gtk.MenuItem(label="Refresh")
         item_refreh.connect('activate', self.make_menu_items)
         menu.add(item_refreh)
@@ -265,6 +278,26 @@ class Applet:
         menu.show_all()
 
         self.indicator.set_menu(menu)
+
+    def install_uninstall_autostart(self, source):
+
+        if self.autostart_file.exists():
+            self.autostart_file.unlink()
+            source.set_label("Auto start at boot")
+            return
+
+        self.autostart_file.write_text("""#!/usr/bin/env xdg-open
+[Desktop Entry]
+Categories=Productivity;
+Comment=Google calendar applet to show next meetings
+Exec=gnome-next-meeting-applet
+Icon=calendar
+Name=Google Calendar next meeting
+StartupNotify=false
+Type=Application
+Version=1.0
+""")
+        source.set_label("Remove autostart")
 
     def build_indicator(self):
         self.indicator = appindicator.Indicator.new(
