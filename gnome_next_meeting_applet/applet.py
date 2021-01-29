@@ -238,8 +238,8 @@ class Applet:
                     break
 
             start_time_str = start_time.strftime("%H:%M")
-            if True or now >= start_time:
-                summary = f"<span color='blue'>{summary}</span>"
+            if now >= start_time:
+                summary = f"<i>{summary}</i>"
 
             menuitem = gtk.MenuItem(
                 label=f"{icon} {summary} - {start_time_str}")
