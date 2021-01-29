@@ -25,7 +25,26 @@ pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
 
 ## Configuration
 
-### Oauth token
+### Applet configuration
+
+The applet can be configured with a config.yaml yaml located in your
+`$HOME/.config/gnome-next-meeting-applet/config.yaml`. This gets generated
+automatically when launching `gnome-next-meeting-applet-auth`.
+
+A configured example is located in the [config.samples.yaml](./config.samples.yaml).
+
+* **default_icon**: The default icon when showing each meeting.
+* **event_organizers_icon**: A map between a regexp matching the organizer to an
+  icon. This allows you to easily differentiate certain type of meetings like
+  the one from your team or colleagues.
+* **max_results**: Max results to ask to google calendar api.
+* **skip_non_accepted**: Skip the calendar events that you didn't accept, you
+  need to configure `my_email` setting for that.
+* **my_email**: Your email address
+* **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
+* **title_max_char**: The maximum length of the title
+
+### Oauth token configuration
 
 Before launching the applet you need to first generate a Google OAuth 2.0 Client
 Credentials and authorize it.
@@ -61,25 +80,6 @@ Credentials and authorize it.
 ![Created](./.github/screenshot/create-oauth-5.png)
 
 * You can now launch the gnome-next-meeting applet.
-
-### Applet configuration
-
-The applet can be configured with a config.yaml yaml located in your
-`$HOME/.config/gnome-next-meeting-applet/config.yaml`. This gets generated
-automatically when launching `gnome-next-meeting-applet-auth`.
-
-A configured example is located in the [config.samples.yaml](./config.samples.yaml).
-
-* **default_icon**: The default icon when showing each meeting.
-* **event_organizers_icon**: A map between a regexp matching the organizer to an
-  icon. This allows you to easily differentiate certain type of meetings like
-  the one from your team or colleagues.
-* **max_results**: Max results to ask to google calendar api.
-* **skip_non_accepted**: Skip the calendar events that you didn't accept, you
-  need to configure `my_email` setting for that.
-* **my_email**: Your email address
-* **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
-* **title_max_char**: The maximum length of the title
 
 ### Credits
 
