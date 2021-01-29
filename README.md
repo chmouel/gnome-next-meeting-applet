@@ -14,7 +14,7 @@ An applet to show your next meetings in Gnome
 
 ### Ubuntu
 ```
-apt install python3-tzlocal python3-dateutil python3-googleapi python3-httplib2 python3-oauth2client python3-gi python3-yaml
+sudo apt install python3-tzlocal python3-dateutil python3-googleapi python3-httplib2 python3-oauth2client python3-gi python3-yaml
 pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
 ```
 
