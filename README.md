@@ -78,8 +78,8 @@ A configured example is located in the [config.samples.yaml](./config.samples.ya
 * **skip_non_accepted**: Skip the calendar events that you didn't accept, you
   need to configure `my_email` setting for that.
 * **my_email**: Your email address
-* **restrict_to_calendar**: Restrict to some calendar, by default it will shows from all your calendar.
-* **title_max_char**: The maximum lenght of the title
+* **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
+* **title_max_char**: The maximum length of the title
 
 ### Credits
 
