@@ -28,6 +28,10 @@ import dateutil.tz as dttz
 import httplib2
 import oauth2client.file
 import tzlocal
+from gi.repository import AppIndicator3 as appindicator
+from gi.repository import Gdk as gdk
+from gi.repository import GLib as glib
+from gi.repository import Gtk as gtk
 
 APP_INDICTOR_ID = "gnome-next-meeting-applet"
 RESTRICT_TO_CALENDAR = ["Work"]
@@ -274,14 +278,9 @@ class Applet:
 
 
 def run():
-    import gi
-    gi.require_version('Gtk', '3.0')
-    gi.require_version('Gdk', '3.0')
-    gi.require_version('AppIndicator3', '0.1')
-    from gi.repository import AppIndicator3 as appindicator
-    from gi.repository import Gdk as gdk
-    from gi.repository import GLib as glib
-    from gi.repository import Gtk as gtk
-
     c = Applet()
     c.main()
+
+
+if __name__ == '__main__':
+    run()
