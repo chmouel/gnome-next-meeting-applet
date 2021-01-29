@@ -2,13 +2,19 @@
 
 An applet to show your next meetings in Gnome
 
-
 * Free software: GNU General Public License v3
-* Documentation: https://gnome-next-meeting-applet.readthedocs.io.
 
 ## Screenshot
 
 ![Screenshot](./.github/screenshot/screenshot.png)
+
+## Installation
+
+### Ubuntu
+```
+apt install python3-tzlocal python3-dateutil python3-googleapi python3-httplib2 python3-oauth2client python3-gi
+pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
+```
 
 ## Features
 
@@ -56,7 +62,10 @@ Credentials and authorize it.
 
 ### Credits
 
-This package was created with
+* This package was created with
 [Cookiecutter](https://github.com/audreyr/cookiecutter-pypackage) and the
 `[audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage)`
 project template.
+* Orginally inspired from the [gnome next
+  meeting](https://github.com/tjwells47/gnome-next-meeting) argos based
+  extension.
