@@ -6,6 +6,16 @@ An applet to show your next meetings in Gnome
 * Free software: GNU General Public License v3
 * Documentation: https://gnome-next-meeting-applet.readthedocs.io.
 
+## Screenshot
+
+![Screenshot](./.github/screenshot/screenshot.png)
+
+## Features
+
+* Make it easy to know how long you have until your next meeting.
+* Detect video conference URL in location or google meet.
+* Shows the documents link to the current meeting.
+* Fully configurable.
 
 ## Configuration
 
@@ -43,13 +53,6 @@ Credentials and authorize it.
 ![Created](./.github/screenshot/create-oauth-5.png)
 
 * You can now launch the gnome-next-meeting applet.
-
-## Features
-
-* Make it easy to know how long you have until your next meeting.
-* Detect video conference URL in location or google meet.
-* Shows the documents link to the current meeting.
-* Fully configurable.
 
 ### Credits
 
