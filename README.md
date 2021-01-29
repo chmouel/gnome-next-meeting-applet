@@ -33,7 +33,7 @@ The applet can be configured with a config.yaml yaml located in your
 `$HOME/.config/gnome-next-meeting-applet/config.yaml`. This gets generated
 automatically when launching `gnome-next-meeting-applet-auth`.
 
-A configured example is located in the [config.samples.yaml](./config.samples.yaml).
+A configured example is located in the [config.sample.yaml](./config.samples.yaml).
 
 * **default_icon**: The default icon when showing each meeting.
 * **event_organizers_icon**: A map between a regexp matching the organizer to an
