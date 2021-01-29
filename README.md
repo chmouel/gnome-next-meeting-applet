@@ -18,6 +18,16 @@ sudo apt install python3-tzlocal python3-dateutil python3-googleapi python3-http
 pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
 ```
 
+### Fedora
+*not tested*
+```
+sudo dnf install python3-tzlocal python3-dateutil python3-google-auth python3-google-api-client python3-google-auth-httplib2 python3-httplib2 python3-oauth2client pygobject3 python3-gobject python3-yaml
+pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
+```
+
+
+
+
 ## Features
 
 * Make it easy to know how long you have until your next meeting.
