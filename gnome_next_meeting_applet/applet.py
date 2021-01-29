@@ -219,10 +219,14 @@ class Applet:
             start_time = dtparse.parse(event['start']['dateTime']).astimezone(
                 tzlocal.get_localzone())
             _cday = start_time.strftime('%A %d %B %Y')
+
             if _cday != currentday:
                 if currentday != "":
                     menu.append(gtk.MenuItem(label=""))
-                menu.append(gtk.MenuItem(label=_cday))
+                todayitem = gtk.MenuItem(
+                    label=f'<span size="large" font="FreeSerif:18">{_cday}</span>')
+                todayitem.get_child().set_use_markup(True)
+                menu.append(todayitem)
                 menu.append(gtk.SeparatorMenuItem())
                 currentday = _cday
 
