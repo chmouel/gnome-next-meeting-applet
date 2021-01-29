@@ -193,6 +193,8 @@ class Applet:
         gtk.main_quit()
 
     def applet_click(self, source):
+        print(source.location)
+
         gtk.show_uri(None, source.location, gdk.CURRENT_TIME)
 
     def make_menu_items(self, source=None):
@@ -226,6 +228,8 @@ class Applet:
                 todayitem = gtk.MenuItem(
                     label=f'<span size="large" font="FreeSerif:18">{_cday}</span>')
                 todayitem.get_child().set_use_markup(True)
+                todayitem.location = f"https://calendar.google.com/calendar/r/day/{start_time.strftime('%Y/%m/%d')}"
+                todayitem.connect('activate', self.applet_click)
                 menu.append(todayitem)
                 menu.append(gtk.SeparatorMenuItem())
                 currentday = _cday
@@ -244,7 +248,6 @@ class Applet:
             start_time_str = start_time.strftime("%H:%M")
             if now >= start_time:
                 summary = f"<i>{summary}</i>"
-
             menuitem = gtk.MenuItem(
                 label=f"{icon} {summary} - {start_time_str}")
             menuitem.get_child().set_use_markup(True)
