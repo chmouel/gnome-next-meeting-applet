@@ -55,6 +55,9 @@ A configured example is located in the [config.sample.yaml](./config.samples.yam
 * **my_email**: Your email address
 * **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
 * **title_max_char**: The maximum length of the title
+* **change_icon_minutes**: Before the meeting x minutes before the event we will
+  change the icon to gently remind you to connect.
+
 
 ### Oauth token configuration
 

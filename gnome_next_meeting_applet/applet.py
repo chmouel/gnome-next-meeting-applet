@@ -15,7 +15,6 @@
 # pylint: disable=no-self-use
 """Gnome next meeting calendar applet via Google Calendar"""
 import datetime
-import json
 import os.path
 import pathlib
 import re
@@ -46,6 +45,7 @@ DEFAULT_CONFIG = {
     'title_max_char': 20,
     'refresh_interval': 300,
     'event_organizers_icon': {},
+    'change_icon_minutes': 2,
     'default_icon': "‣"
 }
 
@@ -184,17 +184,35 @@ class Applet:
 
     # pylint: disable=unused-argument
     def set_indicator_icon_label(self, source):
+        now = datetime.datetime.now(dttz.tzlocal()).astimezone(
+            tzlocal.get_localzone())
+        first_start_time = dtparse.parse(
+            self.events[0]['start']['dateTime']).astimezone(
+                tzlocal.get_localzone())
+        if now > (first_start_time - datetime.timedelta(
+                minutes=self.config['change_icon_minutes'])
+        ) and not now > first_start_time:
+            source.set_icon(self.get_icon_path("notification"))
+        else:
+            source.set_icon(self.get_icon_path("calendar"))
+
         source.set_label(f"{self.first_event(self.events[0])}",
                          APP_INDICTOR_ID)
         return True
+
+    def get_icon_path(self, icon):
+        devpath = pathlib.Path(__file__).parent.parent / "images"
+
+        for ext in ['svg', 'png']:
+            if (devpath / f"{icon}.{ext}").exists():
+                return str(devpath / f"{icon}.{ext}")
+        return "x-office-calendar-symbolic"
 
     # pylint: disable=unused-argument
     def applet_quit(self, source):
         gtk.main_quit()
 
     def applet_click(self, source):
-        print(source.location)
-
         gtk.show_uri(None, source.location, gdk.CURRENT_TIME)
 
     def make_menu_items(self, source=None):
@@ -308,12 +326,12 @@ Version=1.0
 
     def build_indicator(self):
         self.indicator = appindicator.Indicator.new(
-            APP_INDICTOR_ID, "calendar",
+            APP_INDICTOR_ID, self.get_icon_path("calendar"),
             appindicator.IndicatorCategory.SYSTEM_SERVICES)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.make_menu_items()
         self.set_indicator_icon_label(self.indicator)
-        glib.timeout_add_seconds(1, self.set_indicator_icon_label,
+        glib.timeout_add_seconds(5, self.set_indicator_icon_label,
                                  self.indicator)
         glib.timeout_add_seconds(self.config['refresh_interval'],
                                  self.make_menu_items)
@@ -325,7 +343,6 @@ Version=1.0
         self.api_service = apiclient.discovery.build('calendar',
                                                      'v3',
                                                      http=http_authorization)
-
         self.build_indicator()
 
 
