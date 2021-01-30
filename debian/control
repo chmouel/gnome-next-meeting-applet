@@ -1,0 +1,17 @@
+Source: gnome-next-meeting-applet
+Maintainer: Chmouel Boudjnah <chmouel@chmouel.com>
+Homepage: https://github.com/chmouel/gnome-next-meeting-applet
+Section: python
+Priority: optional
+Build-Depends: debhelper-compat (= 12), dh-python, python3, python3-setuptools
+Standards-Version: 0.1
+Vcs-Git: https://github.com/chmouel/gnome-next-meeting-applet
+Vcs-Browser: https://github.com/chmouel/gnome-next-meeting-applet
+
+Package: gnome-next-meeting-applet
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, python3-gi, gir1.2-gtk-3.0, python3-tzlocal, python3-dateutil, python3-googleapi, python3-httplib2, python3-oauth2client, python3-gi, python3-yaml
+Description: Google calendar applet to show your next meetings coming up
+ Gnome next meeting applet will show your next appointment coming from Google
+ Calendar.
+ 
