@@ -1,16 +1,4 @@
-gnome-next-meeting-applet (0.1.0-1) groovy; urgency=medium
-
-  * new update
-
- -- Chmouel Boudjnah <chmouel@chmouel.com>  Sat, 30 Jan 2021 15:21:26 +0000
-
-gnome-next-meeting-applet (0.1.0-1) groovy; urgency=medium
-
-  * new update
-
- -- Chmouel Boudjnah <chmouel@chmouel.com>  Sat, 30 Jan 2021 15:20:39 +0000
-
-gnome-next-meeting-applet (0.1.0-1) groovy; urgency=medium
+gnome-next-meeting-applet (0.1.0) groovy; urgency=medium
 
   * Initial release.
 
