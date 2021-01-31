@@ -4,12 +4,10 @@ set -eux
 cd $(git rev-parse --show-toplevel)
 NAME=gnome-next-meeting-applet
 PPATARGET=chmouel/${NAME}
-GPG_KEY=${GPG_KEY}
-YUBIKEY=${YUBIKEY:-}
-DISTRO_VERSION="groovy"
+
 RELEASE=4
 VERSION=$(python3 -c 'import gnome_next_meeting_applet as f;print(f.__version__)')
-
+GPG_KEY=${GPG_KEY}
 
 [[ -n ${GPG_KEY} ]] || {
     echo "You need to setup your GPG_KEY"
