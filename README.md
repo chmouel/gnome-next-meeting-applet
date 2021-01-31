@@ -14,18 +14,20 @@ An applet to show your next meetings in Gnome
 
 ### Ubuntu
 ```
-sudo apt install python3-tzlocal python3-dateutil python3-googleapi python3-httplib2 python3-oauth2client python3-gi python3-yaml
-pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
+sudo add-apt-repository ppa:chmouel/gnome-next-meeting-applet
+sudo apt-get -y install gnome-next-meeting-applet
+gnome-next-meeting-applet-auth
 ```
 
 ### Fedora
-*not tested*
+You would need to install [`Top Indicator App`](https://extensions.gnome.org/extension/3681/top-indicator-app/) extension to be able to show it.
+
 ```
-sudo dnf install python3-tzlocal python3-dateutil python3-google-auth python3-google-api-client python3-google-auth-httplib2 python3-httplib2 python3-oauth2client pygobject3 python3-gobject python3-yaml
+
+sudo dnf install python3-tzlocal python3-dateutil python3-google-auth python3-google-api-client python3-google-auth-httplib2 python3-httplib2 python3-oauth2client libappindicator-gtk3 python3-gobject python3-yaml
 pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
+gnome-next-meeting-applet-auth
 ```
-
-
 
 
 ## Features
