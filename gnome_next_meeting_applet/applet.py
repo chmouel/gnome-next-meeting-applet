@@ -100,7 +100,7 @@ class Applet:
             if dttype[1] > 1:
                 humzrd += "s"
             humzrd += " "
-        if now > start_time:
+        if start_time < now < end_time:
             humzrd = humzrd.strip() + " left"
         return f"{humzrd.strip()} - {summary}"
 
