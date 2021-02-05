@@ -87,7 +87,7 @@ class Applet:
         start_time = dtparse.parse(event['start']['dateTime']).astimezone(
             tzlocal.get_localzone())
 
-        if now > start_time:
+        if start_time < now < end_time:
             _rd = dtrelative.relativedelta(end_time, now)
         else:
             _rd = dtrelative.relativedelta(start_time, now)
