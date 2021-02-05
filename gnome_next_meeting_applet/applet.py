@@ -19,6 +19,7 @@ import os.path
 import pathlib
 import re
 import sys
+import typing
 
 import apiclient
 import dateutil.parser as dtparse
@@ -34,8 +35,6 @@ from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 
 APP_INDICTOR_ID = "gnome-next-meeting-applet"
-CONFIG_DIR = os.path.expanduser(f"~/.config/{APP_INDICTOR_ID}")
-CREDENTIALS_PATH = f"{CONFIG_DIR}/calendar-python-quickstart.json"
 
 DEFAULT_CONFIG = {
     'restrict_to_calendar': [],
@@ -52,20 +51,24 @@ DEFAULT_CONFIG = {
 
 class Applet:
     """Applet: class"""
-    events = []
+    events: typing.List = []
     indicator = None
     api_service = None
 
     def __init__(self):
         self.config = DEFAULT_CONFIG
-        configfile = pathlib.Path(CONFIG_DIR) / "config.yaml"
+        self.config_dir = os.path.expanduser(
+            f"{glib.get_user_config_dir()}/{APP_INDICTOR_ID}")
+        self.credentials_path = f"{self.config_dir}/calendar-python-quickstart.json"
+
+        configfile = pathlib.Path(self.config_dir) / "config.yaml"
         if configfile.exists():
             self.config = {
                 **DEFAULT_CONFIG,
                 **yaml.safe_load(configfile.open())
             }
         self.autostart_file = pathlib.Path(
-            "~/.config/autostart/gnome-next-meeting-applet.desktop"
+            f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
         ).expanduser()
 
     def htmlspecialchars(self, text):
@@ -104,14 +107,14 @@ class Applet:
     def _get_credentials(self):
         """Gets valid user credentials from storage.
         """
-        credential_path = pathlib.Path(CREDENTIALS_PATH)
+        credential_path = pathlib.Path(self.credentials_path)
         if not credential_path.exists():
             # TODO: Graphical
             print("Credential has not been configured you need to launch "
                   " gnome-next-meeting-applet-auth")
             sys.exit(1)
 
-        store = oauth2client.file.Storage(CREDENTIALS_PATH)
+        store = oauth2client.file.Storage(self.credentials_path)
         return store.get()
 
     def get_from_gcal_calendar_entries(self):
@@ -225,6 +228,7 @@ class Applet:
         currentday = ""
 
         event_first = self.events[0]
+
         if now >= dtparse.parse(event_first['start']['dateTime']).astimezone(
                 tzlocal.get_localzone()) and 'attachments' in event_first:
             menuitem = gtk.MenuItem(label="📑 Open current meeting document")
@@ -284,8 +288,8 @@ class Applet:
         menu.append(gtk.SeparatorMenuItem())
 
         settingMenu = gtk.Menu()
-        label = self.autostart_file.exists(
-        ) and "Remove autostart" or "Auto start at boot"
+        label = "Remove autostart" if self.autostart_file.exists(
+        ) else "Auto start at boot"
         item_autostart = gtk.MenuItem(label=label)
         item_autostart.connect('activate', self.install_uninstall_autostart)
         settingMenu.add(item_autostart)
