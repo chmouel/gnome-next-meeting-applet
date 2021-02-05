@@ -110,13 +110,11 @@ launch.
 
 ### Credits
 
-* This package was created with
-[Cookiecutter](https://github.com/audreyr/cookiecutter-pypackage) and the
-`[audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage)`
-project template.
+* This package was created with [`Cookiecutter`](https://github.com/audreyr/cookiecutter-pypackage) and the
+[`audreyr/cookiecutter-pypackage`](https://github.com/audreyr/cookiecutter-pypackage) project template.
 * Originally inspired from the [gnome next
   meeting](https://github.com/tjwells47/gnome-next-meeting) argos based
   extension.
-* Used for a while the OSX Version
+* Used for a while the OSX application gnome-next-meeting
   https://apps.apple.com/us/app/next-meeting/id1017470484?mt=12 and missed it on
   Linux.
