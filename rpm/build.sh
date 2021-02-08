@@ -22,7 +22,6 @@ sudo docker run --rm \
            -it gnome-next-meeting-applet-builder \
            /bin/bash -c "sed 's/_VERSION_/${VERSION}/' /src/rpm/${NAME}.spec > /tmp/${NAME}.spec && \
                          sed -i -e \"/^%changelog/a\* $(date '+%a %b %-d %Y') ${AUTHOR_EMAIL} - ${VERSION}-${RELEASE}\n- New vesion ${VERSION}\n\" /tmp/${NAME}.spec && \
-                         cat /tmp/${NAME}.spec && \
                          git archive --prefix=${NAME}-${VERSION}/ --format=tar ${VERSION} |gzip  >/tmp/${NAME}-${VERSION}.tar.gz
                          rpmbuild -bs /tmp/${NAME}.spec --define '_sourcedir /tmp/' --define '_srcrpmdir /tmp/' && \
-                         echo copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm"
+                         copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm"
