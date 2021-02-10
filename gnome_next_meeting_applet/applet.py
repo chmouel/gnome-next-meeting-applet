@@ -151,7 +151,6 @@ class Applet:
         """Get all events from Google Calendar API"""
         # event_list = json.load(open("/tmp/allevents.json"))
         event_list = self.get_from_gcal_calendar_entries()
-
         ret = []
         for event in sorted(event_list,
                             key=lambda x: x['start'].get(
@@ -192,10 +191,16 @@ class Applet:
         first_start_time = dtparse.parse(
             self.events[0]['start']['dateTime']).astimezone(
                 tzlocal.get_localzone())
+        first_end_time = dtparse.parse(
+            self.events[0]['end']['dateTime']).astimezone(
+                tzlocal.get_localzone())
         if now > (first_start_time - datetime.timedelta(
                 minutes=self.config['change_icon_minutes'])
         ) and not now > first_start_time:
             source.set_icon(self.get_icon_path("notification"))
+        elif now >= first_end_time:  # need a refresh
+            self.make_menu_items()
+            return self.set_indicator_icon_label(source)
         else:
             source.set_icon(self.get_icon_path("calendar"))
 
@@ -339,7 +344,7 @@ Version=1.0
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.make_menu_items()
         self.set_indicator_icon_label(self.indicator)
-        glib.timeout_add_seconds(5, self.set_indicator_icon_label,
+        glib.timeout_add_seconds(30, self.set_indicator_icon_label,
                                  self.indicator)
         glib.timeout_add_seconds(self.config['refresh_interval'],
                                  self.make_menu_items)
