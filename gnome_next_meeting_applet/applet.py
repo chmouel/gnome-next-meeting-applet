@@ -239,7 +239,7 @@ class Applet:
             tzlocal.get_localzone())
         event_first_end_time = dtparse.parse(event_first['end']['dateTime']).astimezone(
             tzlocal.get_localzone())
-        if event_first_start_time < now < event_first_end_time and 'attachments' in event_first:
+        if event_first_start_time < now and now < event_first_end_time and 'attachments' in event_first:
             menuitem = gtk.MenuItem(label="📑 Open current meeting document")
             menuitem.location = event_first['attachments'][0]['fileUrl']
             menuitem.connect('activate', self.applet_click)
