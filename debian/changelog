@@ -1,8 +1,4 @@
-gnome-next-meeting-applet (0.1.0-2) hirsute; urgency=medium
-
-  * Initial release.
-
- -- Chmouel Boudjnah <chmouel@chmouel.com>  Sat, 30 Jan 2021 13:17:57 +0000gnome-next-meeting-applet (0.1.0) groovy; urgency=medium
+gnome-next-meeting-applet (0.1.0) groovy; urgency=medium
 
   * Initial release.
 
