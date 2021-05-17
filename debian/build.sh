@@ -5,7 +5,7 @@ cd $(git rev-parse --show-toplevel)
 NAME=gnome-next-meeting-applet
 PPATARGET=chmouel/${NAME}
 
-RELEASE=4
+RELEASE=1
 VERSION=$(python3 -c 'import gnome_next_meeting_applet as f;print(f.__version__)')
 GPG_KEY=${GPG_KEY}
 
