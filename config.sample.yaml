@@ -1,11 +1,12 @@
 default_icon: "➡"
-event_organizers_icon: 
+event_organizers_icon:
   - "^Upstream$": "🏢"
   - "colleague2@chmouel.com": "😈",
   - "boss@chmouel.com": "🤠"
 max_results: 10
 skip_non_accepted: true
-my_email: 'email@chmouel.com'
+my_emails:
+  - email@email.com
 refresh_interval: 300
 restrict_to_calendar:
   - Work

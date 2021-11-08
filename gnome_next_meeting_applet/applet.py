@@ -18,17 +18,17 @@ import datetime
 import os.path
 import pathlib
 import re
-import sys
 import typing
 
-import apiclient
 import dateutil.parser as dtparse
 import dateutil.relativedelta as dtrelative
 import dateutil.tz as dttz
-import httplib2
-import oauth2client.file
 import tzlocal
 import yaml
+
+import gnome_next_meeting_applet.evolution_calendars as evocal
+
+
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gdk as gdk
 from gi.repository import GLib as glib
@@ -37,9 +37,10 @@ from gi.repository import Gtk as gtk
 APP_INDICTOR_ID = "gnome-next-meeting-applet"
 
 DEFAULT_CONFIG = {
+    # TODO(chmouel): should be plural
     'restrict_to_calendar': [],
     'skip_non_accepted': True,
-    'my_email': "",
+    'my_emails': [],
     'max_results': 10,
     'title_max_char': 20,
     'refresh_interval': 300,
@@ -48,18 +49,17 @@ DEFAULT_CONFIG = {
     'default_icon': "‣"
 }
 
+VIDEOCALL_DESC_REGEXP = [r"This event has a video call.\nJoin: (https://meet.google.com/[^\n]*)"]
 
 class Applet:
     """Applet: class"""
     events: typing.List = []
     indicator = None
-    api_service = None
 
     def __init__(self):
         self.config = DEFAULT_CONFIG
         self.config_dir = os.path.expanduser(
             f"{glib.get_user_config_dir()}/{APP_INDICTOR_ID}")
-        self.credentials_path = f"{self.config_dir}/calendar-python-quickstart.json"
 
         configfile = pathlib.Path(self.config_dir) / "config.yaml"
         if configfile.exists():
@@ -77,14 +77,16 @@ class Applet:
             "<", "&lt;").replace(">", "&gt;"))
 
     def first_event(self, event):
-        """Show first even in toolbar"""
+        """Show first event in menubar"""
         summary = self.htmlspecialchars(
-            event['summary'].strip()[:self.config['title_max_char']])
+            event.get_summary().get_value().strip()[:self.config['title_max_char']])
         now = datetime.datetime.now(dttz.tzlocal()).astimezone(
             tzlocal.get_localzone())
-        end_time = dtparse.parse(event['end']['dateTime']).astimezone(
+
+        end_time = dtparse.parse(event.get_dtend().get_value().as_ical_string()).astimezone(
             tzlocal.get_localzone())
-        start_time = dtparse.parse(event['start']['dateTime']).astimezone(
+
+        start_time = dtparse.parse(event.get_dtstart().get_value().as_ical_string()).astimezone(
             tzlocal.get_localzone())
 
         if start_time < now < end_time:
@@ -104,83 +106,39 @@ class Applet:
             humzrd = humzrd.strip() + " left"
         return f"{humzrd.strip()} - {summary}"
 
-    def _get_credentials(self):
-        """Gets valid user credentials from storage.
-        """
-        credential_path = pathlib.Path(self.credentials_path)
-        if not credential_path.exists():
-            # TODO: Graphical
-            print("Credential has not been configured you need to launch "
-                  " gnome-next-meeting-applet-auth")
-            sys.exit(1)
-
-        store = oauth2client.file.Storage(self.credentials_path)
-        return store.get()
-
-    def get_from_gcal_calendar_entries(self):
-        page_token = None
-        calendar_ids = []
-        event_list = []
-        while True:
-            # pylint: disable=no-member
-            calendar_list = self.api_service.calendarList().list(
-                pageToken=page_token).execute()
-            for calendar_list_entry in calendar_list['items']:
-                if self.config['restrict_to_calendar'] and calendar_list_entry[
-                        'summary'] not in self.config['restrict_to_calendar']:
-                    continue
-                calendar_ids.append(calendar_list_entry['id'])
-            page_token = calendar_list.get('nextPageToken')
-            if not page_token:
-                break
-
-        now = datetime.datetime.utcnow().isoformat() + 'Z'
-        # pylint: disable=no-member
-        for calendar_id in calendar_ids:
-            uhy = self.api_service.events().list(
-                calendarId=calendar_id,
-                timeMin=now,
-                maxResults=self.config['max_results'],
-                singleEvents=True,
-                orderBy='startTime').execute()
-            uhx = uhy.get('items', [])
-            event_list = event_list + uhx
-        return event_list
-
     def get_all_events(self):
         """Get all events from Google Calendar API"""
         # event_list = json.load(open("/tmp/allevents.json"))
-        event_list = self.get_from_gcal_calendar_entries()
+
+        evolutionCalendar = evocal.EvolutionCalendarWrapper()
+        # TODO: add filtering user option GUI instead of just yaml
+        event_list = evolutionCalendar.get_all_events(restrict_to_calendar=self.config["restrict_to_calendar"])
         ret = []
-        for event in sorted(event_list,
-                            key=lambda x: x['start'].get(
-                                'dateTime', x['start'].get('date'))):
-            if 'date' in event['start']:
-                continue
-            end_time = dtparse.parse(event['end']['dateTime']).astimezone(
+        for event in sorted(event_list, key=lambda x: x.get_dtstart().get_value().as_ical_string()):
+            # NOTE: we need to double check if we really are getting astimezone from ical
+            end_time = dtparse.parse(event.get_dtend().get_value().as_ical_string()).astimezone(
                 tzlocal.get_localzone())
             now = datetime.datetime.now(dttz.tzlocal()).astimezone(
                 tzlocal.get_localzone())
-
+           
             if now >= end_time:
                 continue
 
-            if 'attendees' not in event:
+            if event.get_status().value_name != "I_CAL_STATUS_CONFIRMED":
                 continue
 
-            # Get only accepted events
-            skip_event = False
+            skipit = False
             if self.config['skip_non_accepted']:
-                skip_event = True
-            if self.config['my_email'] == "":
-                skip_event = False
-
-            for attendee in event['attendees']:
-                if attendee['email'] == self.config['my_email'] and attendee[
-                        'responseStatus'] == "accepted":
-                    skip_event = False
-            if skip_event:
+                skipit = True
+                for attendee in event.get_attendees():
+                    for myemail in self.config['my_emails']:
+                        if attendee.get_value().replace("mailto:", "") == myemail and \
+                           attendee.get_partstat().value_name == 'I_CAL_PARTSTAT_ACCEPTED':
+                            skipit = False
+                    
+            if skipit:
                 continue
+                        
             ret.append(event)
         return ret
 
@@ -188,12 +146,15 @@ class Applet:
     def set_indicator_icon_label(self, source):
         now = datetime.datetime.now(dttz.tzlocal()).astimezone(
             tzlocal.get_localzone())
-        first_start_time = dtparse.parse(
-            self.events[0]['start']['dateTime']).astimezone(
-                tzlocal.get_localzone())
-        first_end_time = dtparse.parse(
-            self.events[0]['end']['dateTime']).astimezone(
-                tzlocal.get_localzone())
+
+
+        first_end_time = dtparse.parse(self.events[0].get_dtend().get_value().as_ical_string()).astimezone(
+            tzlocal.get_localzone())
+
+        first_start_time = dtparse.parse(self.events[0].get_dtstart().get_value().as_ical_string()).astimezone(
+            tzlocal.get_localzone())
+
+
         if now > (first_start_time - datetime.timedelta(
                 minutes=self.config['change_icon_minutes'])
         ) and not now > first_start_time:
@@ -225,7 +186,7 @@ class Applet:
     def applet_click(self, source):
         gtk.show_uri(None, source.location, gdk.CURRENT_TIME)
 
-    def make_menu_items(self, source=None):
+    def make_menu_items(self):
         self.events = self.get_all_events()
 
         menu = gtk.Menu()
@@ -235,24 +196,24 @@ class Applet:
         currentday = ""
 
         event_first = self.events[0]
-        event_first_start_time = dtparse.parse(event_first['start']['dateTime']).astimezone(
-            tzlocal.get_localzone())
-        event_first_end_time = dtparse.parse(event_first['end']['dateTime']).astimezone(
-            tzlocal.get_localzone())
-        if event_first_start_time < now and now < event_first_end_time and 'attachments' in event_first:
+        event_first_start_time = dtparse.parse(event_first.get_dtstart().get_value().as_ical_string()).astimezone(
+                tzlocal.get_localzone())
+        event_first_end_time = dtparse.parse(event_first.get_dtstart().get_value().as_ical_string()).astimezone(
+                tzlocal.get_localzone())
+        if event_first_start_time < now and now < event_first_end_time and event_first.get_attachments():
             menuitem = gtk.MenuItem(label="📑 Open current meeting document")
-            menuitem.location = event_first['attachments'][0]['fileUrl']
+            menuitem.location = event_first.get_attachments()[0].get_url()
             menuitem.connect('activate', self.applet_click)
             menu.add(menuitem)
             menu.append(gtk.SeparatorMenuItem())
             menu.append(gtk.MenuItem(" "))
 
-        for event in self.events:
+        for event in self.events[0:int(self.config["max_results"])]:
             # TODO print the day
-            start_time = dtparse.parse(event['start']['dateTime']).astimezone(
+            start_time = dtparse.parse(event.get_dtstart().get_value().as_ical_string()).astimezone(
                 tzlocal.get_localzone())
             _cday = start_time.strftime('%A %d %B %Y')
-
+            
             if _cday != currentday:
                 if currentday != "":
                     menu.append(gtk.MenuItem(label=""))
@@ -265,10 +226,9 @@ class Applet:
                 menu.append(gtk.SeparatorMenuItem())
                 currentday = _cday
 
-            summary = self.htmlspecialchars(event['summary'].strip())
+            summary = self.htmlspecialchars(event.get_summary().get_value().strip())
 
-            organizer = event['organizer'].get('displayName',
-                                               event['organizer'].get('email'))
+            organizer = event.get_organizer().get_value().replace("mailto:", "")
 
             icon = self.config['default_icon']
             for regexp in self.config['event_organizers_icon']:
@@ -283,11 +243,12 @@ class Applet:
                 label=f"{icon} {summary} - {start_time_str}")
             menuitem.get_child().set_use_markup(True)
 
-            if 'location' in event and event['location'].startswith(
-                    "https://"):
-                menuitem.location = event['location']
-            elif 'hangoutLink' in event:
-                menuitem.location = event['hangoutLink']
+            match_videocall_summary = self._match_videocall_url_from_summary(event)
+            
+            if event.get_location() and event.get_location().startswith("https://"):
+                menuitem.location = event.get_location()
+            elif match_videocall_summary:
+                menuitem.location = match_videocall_summary
             else:
                 menuitem.location = ""
 
@@ -317,6 +278,16 @@ class Applet:
 
         self.indicator.set_menu(menu)
 
+    def _match_videocall_url_from_summary(self, event) -> str:
+        # can you have multiple descriptions???
+        text = event.get_descriptions()[0].get_value()
+        for reg in VIDEOCALL_DESC_REGEXP:
+            match = re.search(reg, text)
+            if match:
+                url = match.groups()[0]
+                return url
+        return ""
+        
     def install_uninstall_autostart(self, source):
 
         if self.autostart_file.exists():
@@ -351,11 +322,6 @@ Version=1.0
         gtk.main()
 
     def main(self):
-        credentials = self._get_credentials()
-        http_authorization = credentials.authorize(httplib2.Http())
-        self.api_service = apiclient.discovery.build('calendar',
-                                                     'v3',
-                                                     http=http_authorization)
         self.build_indicator()
 
 
