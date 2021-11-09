@@ -60,7 +60,6 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 %{python3_sitelib}/gnome_next_meeting_applet
 %{python3_sitelib}/gnome_next_meeting_applet-%{version}-py%{python3_version}.egg-info
 %{_bindir}/%{name}
-%{_bindir}/%{name}-auth
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 
