@@ -83,11 +83,8 @@ class Applet:
         now = datetime.datetime.now(dttz.tzlocal()).astimezone(
             tzlocal.get_localzone())
 
-        end_time = dtparse.parse(event.get_dtend().get_value().as_ical_string()).astimezone(
-            tzlocal.get_localzone())
-
-        start_time = dtparse.parse(event.get_dtstart().get_value().as_ical_string()).astimezone(
-            tzlocal.get_localzone())
+        start_time = evocal.get_ecal_as_tstzed(event.get_dtstart())
+        end_time = evocal.get_ecal_as_tstzed(event.get_dtend())
 
         if start_time < now < end_time:
             _rd = dtrelative.relativedelta(end_time, now)
@@ -114,16 +111,7 @@ class Applet:
         # TODO: add filtering user option GUI instead of just yaml
         event_list = evolutionCalendar.get_all_events(restrict_to_calendar=self.config["restrict_to_calendar"])
         ret = []
-        for event in sorted(event_list, key=lambda x: x.get_dtstart().get_value().as_ical_string()):
-            # NOTE: we need to double check if we really are getting astimezone from ical
-            end_time = dtparse.parse(event.get_dtend().get_value().as_ical_string()).astimezone(
-                tzlocal.get_localzone())
-            now = datetime.datetime.now(dttz.tzlocal()).astimezone(
-                tzlocal.get_localzone())
-           
-            if now >= end_time:
-                continue
-
+        for event in sorted(event_list, key=lambda x: evocal.get_ecal_as_tstzed(x.get_dtstart()).timestamp()):
             if event.get_status().value_name != "I_CAL_STATUS_CONFIRMED":
                 continue
 
@@ -135,10 +123,11 @@ class Applet:
                         if attendee.get_value().replace("mailto:", "") == myemail and \
                            attendee.get_partstat().value_name == 'I_CAL_PARTSTAT_ACCEPTED':
                             skipit = False
-                    
+
+            
             if skipit:
                 continue
-                        
+
             ret.append(event)
         return ret
 
@@ -146,14 +135,8 @@ class Applet:
     def set_indicator_icon_label(self, source):
         now = datetime.datetime.now(dttz.tzlocal()).astimezone(
             tzlocal.get_localzone())
-
-
-        first_end_time = dtparse.parse(self.events[0].get_dtend().get_value().as_ical_string()).astimezone(
-            tzlocal.get_localzone())
-
-        first_start_time = dtparse.parse(self.events[0].get_dtstart().get_value().as_ical_string()).astimezone(
-            tzlocal.get_localzone())
-
+        first_start_time = evocal.get_ecal_as_tstzed(self.events[0].get_dtstart())
+        first_end_time = evocal.get_ecal_as_tstzed(self.events[0].get_dtend())
 
         if now > (first_start_time - datetime.timedelta(
                 minutes=self.config['change_icon_minutes'])
@@ -188,7 +171,7 @@ class Applet:
 
     def make_menu_items(self):
         self.events = self.get_all_events()
-
+        
         menu = gtk.Menu()
         now = datetime.datetime.now(dttz.tzlocal()).astimezone(
             tzlocal.get_localzone())
@@ -196,10 +179,9 @@ class Applet:
         currentday = ""
 
         event_first = self.events[0]
-        event_first_start_time = dtparse.parse(event_first.get_dtstart().get_value().as_ical_string()).astimezone(
-                tzlocal.get_localzone())
-        event_first_end_time = dtparse.parse(event_first.get_dtstart().get_value().as_ical_string()).astimezone(
-                tzlocal.get_localzone())
+        event_first_start_time = evocal.get_ecal_as_tstzed(event_first.get_dtstart())
+        event_first_end_time = evocal.get_ecal_as_tstzed(event_first.get_dtend())
+        
         if event_first_start_time < now and now < event_first_end_time and event_first.get_attachments():
             menuitem = gtk.MenuItem(label="📑 Open current meeting document")
             menuitem.location = event_first.get_attachments()[0].get_url()
@@ -210,8 +192,7 @@ class Applet:
 
         for event in self.events[0:int(self.config["max_results"])]:
             # TODO print the day
-            start_time = dtparse.parse(event.get_dtstart().get_value().as_ical_string()).astimezone(
-                tzlocal.get_localzone())
+            start_time = evocal.get_ecal_as_tstzed(event.get_dtstart())
             _cday = start_time.strftime('%A %d %B %Y')
             
             if _cday != currentday:

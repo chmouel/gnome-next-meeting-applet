@@ -22,6 +22,7 @@ Requires:       python3-oauth2client
 Requires:       libappindicator-gtk3
 Requires:       python3-gobject
 Requires:       python3-yaml
+Requires:       python3-pytz
 Requires:       gnome-icon-theme
 
 %description

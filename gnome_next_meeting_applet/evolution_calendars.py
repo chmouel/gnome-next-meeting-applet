@@ -15,7 +15,15 @@
 # pylint: disable=no-self-use
 #
 # from Gab Leroux (@GabLeRoux) https://askubuntu.com/a/1371087
+import tzlocal
+import datetime
+
+import pytz
 import gi
+
+import dateutil.parser as dtparse
+import dateutil.tz as dttz
+
 
 gi.require_version('EDataServer', '1.2')
 from gi.repository import EDataServer
@@ -27,6 +35,11 @@ from gi.repository import Gio
 
 # https://lazka.github.io/pgi-docs/Gio-2.0/classes/Cancellable.html#Gio.Cancellable
 GIO_CANCELLABLE = Gio.Cancellable.new()
+
+def get_ecal_as_tstzed(ecalcomp) -> datetime.datetime:
+    tz = ecalcomp.get_tzid() or "UTC"
+    return dtparse.parse(ecalcomp.get_value().as_ical_string()).astimezone(pytz.timezone(tz))
+
 
 class EvolutionCalendarWrapper:
     @staticmethod
@@ -48,13 +61,34 @@ class EvolutionCalendarWrapper:
         )
 
         events = []
-        if new_client:
-            # https://lazka.github.io/pgi-docs/ECal-2.0/classes/Client.html#ECal.Client.get_object_list_as_comps_sync
-            ret, values = new_client.get_object_list_as_comps_sync(sexp="#t", cancellable=GIO_CANCELLABLE)
-            if ret:
-                for value in values:
-                    if value:
-                        events.append(value)
+        seen = []
+        if not new_client:
+            return events
+        # https://lazka.github.io/pgi-docs/ECal-2.0/classes/Client.html#ECal.Client.get_object_list_as_comps_sync
+        ret, values = new_client.get_object_list_as_comps_sync(sexp="#t", cancellable=GIO_CANCELLABLE)
+        if not ret:
+            return events
+
+        for value in values:
+            if not value:
+                continue
+            start_time = get_ecal_as_tstzed(value.get_dtstart())
+            end_time = get_ecal_as_tstzed(value.get_dtend())
+            now = datetime.datetime.now(dttz.tzlocal()).astimezone(tzlocal.get_localzone())
+
+            if now >= (end_time):
+                continue
+
+            ## save memory for stuff we won't care
+            if start_time > (now + datetime.timedelta(weeks=4)):
+                continue
+                        
+            uuid = value.get_id().get_uid()
+            # sometime we get doublons whatever the reasons is
+            if uuid in seen:
+                continue
+            seen.append(uuid)
+            events.append(value)
         return events
 
     # TODO: calendar filtering
