@@ -40,7 +40,8 @@ pip3 install --user git+https://github.com/chmouel/gnome-next-meeting-applet
 ### Applet configuration
 
 The applet can be configured with a config.yaml yaml located in your
-`$HOME/.config/gnome-next-meeting-applet/config.yaml`.
+`$XDG_CONFIG_HOME/gnome-next-meeting-applet/config.yaml`. It gets created
+automatically with default value at startup if you don't have one already.
 
 A configured example is located in the [config.sample.yaml](./config.samples.yaml).
 
