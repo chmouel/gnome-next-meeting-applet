@@ -68,6 +68,11 @@ class Applet:
         configfile = pathlib.Path(self.config_dir) / "config.yaml"
         if configfile.exists():
             self.config = {**DEFAULT_CONFIG, **yaml.safe_load(configfile.open())}
+        else:
+            configfile.parent.mkdir(parents=True)
+            configfile.write_text(yaml.safe_dump(DEFAULT_CONFIG))
+            self.config = DEFAULT_CONFIG
+            
         self.autostart_file = pathlib.Path(
             f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
         ).expanduser()
