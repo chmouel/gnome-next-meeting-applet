@@ -269,9 +269,6 @@ class Applet:
         settingItem.set_submenu(settingMenu)
         menu.add(settingItem)
 
-        item_refreh = gtk.MenuItem(label="Refresh")
-        item_refreh.connect("activate", self.make_menu_items)
-        menu.add(item_refreh)
         item_quit = gtk.MenuItem(label="Quit")
         item_quit.connect("activate", self.applet_quit)
         menu.add(item_quit)
