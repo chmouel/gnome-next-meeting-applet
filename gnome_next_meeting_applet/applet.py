@@ -83,9 +83,9 @@ class Applet:
 
     def first_event(self, event):
         """Show first event in menubar"""
-        summary = self.htmlspecialchars(
-            event.get_summary().get_value().strip()[: self.config["title_max_char"]]
-        )
+        # not sure why but on my gnome version (arch 40.4.0) we don't need to do
+        # htmlspecialchars in bar, but i am sure on ubuntu i needed that, YMMV :-d !
+        summary = event.get_summary().get_value().strip()[: self.config["title_max_char"]]
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
 
         start_time = evocal.get_ecal_as_utc(event.get_dtstart())
