@@ -18,7 +18,6 @@ BuildRequires:  python3-devel
 Requires:       python3-gobject
 Requires:       python3-tzlocal
 Requires:       python3-dateutil
-Requires:       python3-oauth2client
 Requires:       libappindicator-gtk3
 Requires:       python3-gobject
 Requires:       python3-yaml
