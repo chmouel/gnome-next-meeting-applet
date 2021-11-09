@@ -49,7 +49,9 @@ DEFAULT_CONFIG = {
     'default_icon': "‣"
 }
 
-VIDEOCALL_DESC_REGEXP = [r"This event has a video call.\nJoin: (https://meet.google.com/[^\n]*)"]
+VIDEOCALL_DESC_REGEXP = [
+    r"Join Zoom Meeting\n(https://zoom.us/j/[^\n]*)"
+    r"This event has a video call.\nJoin: (https://meet.google.com/[^\n]*)"]
 
 class Applet:
     """Applet: class"""
