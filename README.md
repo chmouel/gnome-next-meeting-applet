@@ -53,7 +53,7 @@ A configured example is located in the [config.sample.yaml](./config.samples.yam
 * **max_results**: Max results to ask to google calendar api.
 * **skip_non_accepted**: Skip the calendar events that you didn't accept, you
   need to configure `my_email` setting for that.
-* **my_email**: Your email address
+* **my_emails**: A list of email addresses.
 * **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
 * **title_max_char**: The maximum length of the title
 * **change_icon_minutes**: Before the meeting x minutes before the event we will
@@ -62,17 +62,24 @@ A configured example is located in the [config.sample.yaml](./config.samples.yam
 
 ### Calendars
 
-All calendars are configured directly in Gnome Online Account setting, it will grab it from there.
+All calendars are configured directly in Gnome Online Account setting, it will
+grab the events from there. Here is some instructions on how to setup your
+online calendars in Gnome :
+
+https://help.gnome.org/users/gnome-help/stable/accounts.html.en
 
 ### Starting
 
 You can just do :
 
-Alt+F2 and start `gnome-next-meeting-applet` make sure you have done the oauth
-dance previously.
+Alt+F2 and start `gnome-next-meeting-applet`.
 
-There is a setting menu to add an autostart file to autostart it when gnome
-launch.
+(I will be happy to add a `.desktop` file for launching
+gnome-next-meeting-applet directly but would need an icon first, if you have one
+let me know and I'll add this 🧝)
+
+There is a setting menu in the applet to add an autostart file to autostart it
+when gnome launch.
 
 ### Credits
 
