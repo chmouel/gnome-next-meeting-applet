@@ -18,13 +18,10 @@ BuildRequires:  python3-devel
 Requires:       python3-gobject
 Requires:       python3-tzlocal
 Requires:       python3-dateutil
-Requires:       python3-google-auth
-Requires:       python3-google-api-client
-Requires:       python3-google-auth-httplib2
-Requires:       python3-oauth2client
 Requires:       libappindicator-gtk3
 Requires:       python3-gobject
 Requires:       python3-yaml
+Requires:       python3-pytz
 Requires:       gnome-icon-theme
 
 %description
@@ -63,7 +60,6 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 %{python3_sitelib}/gnome_next_meeting_applet
 %{python3_sitelib}/gnome_next_meeting_applet-%{version}-py%{python3_version}.egg-info
 %{_bindir}/%{name}
-%{_bindir}/%{name}-auth
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 

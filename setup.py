@@ -34,7 +34,6 @@ setup(
     entry_points={
         'console_scripts': [
             'gnome-next-meeting-applet=gnome_next_meeting_applet.cli:main',
-            'gnome-next-meeting-applet-auth=gnome_next_meeting_applet.auth:main',
         ],
     },
     install_requires=requirements,
