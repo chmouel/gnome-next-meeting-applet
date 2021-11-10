@@ -13,6 +13,7 @@ Source0:        https://github.com/chmouel/%{name}/archive/%{name}-%{version}.ta
    
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 
 # gnome-settings-daemon
 Requires:       python3-gobject
