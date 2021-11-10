@@ -35,6 +35,8 @@ GIO_CANCELLABLE = Gio.Cancellable.new()
 
 
 def get_ecal_as_utc(ecalcomp) -> datetime.datetime:
+    if not ecalcomp:
+        return datetime.datetime.now().astimezone(pytz.timezone("UTC"))
     tz = pytz.timezone(ecalcomp.get_tzid() or "UTC")
     ts = ecalcomp.get_value().as_timet()
     dt = tz.normalize(tz.localize(datetime.datetime.utcfromtimestamp(ts)))
@@ -61,7 +63,6 @@ class EvolutionCalendarWrapper:
             wait_for_connected_seconds=1,  # this should probably be configured
             cancellable=GIO_CANCELLABLE,
         )
-
         events = []
         seen = []
         if not new_client:
@@ -100,7 +101,7 @@ class EvolutionCalendarWrapper:
         calendars = self._get_gnome_calendars()
         events = []
         for source in calendars:
-            if source.get_display_name() not in restrict_to_calendar:
+            if restrict_to_calendar and source.get_display_name() not in restrict_to_calendar:
                 continue
             events += self._get_gnome_events_from_calendar_source(source)
         return events

@@ -116,7 +116,6 @@ class Applet:
     def get_all_events(self):
         """Get all events from Google Calendar API"""
         # event_list = json.load(open("/tmp/allevents.json"))
-
         evolutionCalendar = evocal.EvolutionCalendarWrapper()
         # TODO: add filtering user option GUI instead of just yaml
         event_list = evolutionCalendar.get_all_events(
@@ -133,7 +132,7 @@ class Applet:
                 continue
 
             skipit = False
-            if self.config["skip_non_accepted"]:
+            if self.config["skip_non_accepted"] and self.config["my_emails"]:
                 skipit = True
                 for attendee in event.get_attendees():
                     for myemail in self.config["my_emails"]:
@@ -152,6 +151,10 @@ class Applet:
 
     # pylint: disable=unused-argument
     def set_indicator_icon_label(self, source):
+        if not self.events:
+            source.set_label("Configure Gnome Online Account First", APP_INDICTOR_ID)
+            return
+
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
         first_start_time = evocal.get_ecal_as_utc(self.events[0].get_dtstart())
         first_end_time = evocal.get_ecal_as_utc(self.events[0].get_dtend())
@@ -193,11 +196,18 @@ class Applet:
 
     def make_menu_items(self):
         self.events = self.get_all_events()
-
+        
         menu = gtk.Menu()
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
         currentday = ""
 
+        if not self.events:
+            menuitem = gtk.MenuItem(label="Configure Gnome Online Account first")
+            menu.show_all()
+            menu.add(menuitem)
+            self.indicator.set_menu(menu)
+            return
+        
         event_first = self.events[0]
         event_first_start_time = evocal.get_ecal_as_utc(event_first.get_dtstart())
         event_first_end_time = evocal.get_ecal_as_utc(event_first.get_dtend())
@@ -235,13 +245,16 @@ class Applet:
                 currentday = _cday
 
             summary = self.htmlspecialchars(event.get_summary().get_value().strip())
-            organizer = event.get_organizer().get_value().replace("mailto:", "")
 
-            icon = self.config["default_icon"]
-            for regexp in self.config["event_organizers_icon"]:
-                if re.match(regexp, organizer):
-                    icon = self.config["event_organizers_icon"][regexp]
-                    break
+            icon = ""
+            _organizer = event.get_organizer()
+            if _organizer:
+               organizer = _organizer.get_value().replace("mailto:", "")
+               icon = self.config["default_icon"]
+               for regexp in self.config["event_organizers_icon"]:
+                   if re.match(regexp, organizer):
+                       icon = self.config["event_organizers_icon"][regexp]
+                       break
 
             start_time_str = start_time.strftime("%H:%M")
             if now >= start_time:
