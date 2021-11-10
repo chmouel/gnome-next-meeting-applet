@@ -3,6 +3,8 @@
 
 from setuptools import setup, find_packages
 
+import gnome_next_meeting_applet
+
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
@@ -49,6 +51,6 @@ setup(
     include_package_data=True,
     tests_require=test_requirements,
     url='https://github.com/chmouel/gnome-next-meeting-applet',
-    version='0.1.0',
+    version=gnome_next_meeting_applet.__version__,
     zip_safe=False,
 )
