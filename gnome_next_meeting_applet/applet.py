@@ -176,7 +176,8 @@ class Applet:
     def get_icon_path(self, icon):
         devpath = pathlib.Path(__file__).parent.parent / "images"
         if not devpath.exists():
-            devpath = pathlib.Path("/usr/share/gnome-next-meeting/images")
+            devpath = pathlib.Path(
+                "/usr/share/gnome-next-meeting-applet/images")
 
         for ext in ["svg", "png"]:
             if (devpath / f"{icon}.{ext}").exists():

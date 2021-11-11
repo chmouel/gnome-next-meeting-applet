@@ -1,7 +1,15 @@
 #!/usr/bin/make -f
+PKGNAME=gnome-next-meeting-applet
+export DH_VERBOSE=1
 
 %:
 	dh $@ --with python3 --buildsystem pybuild
 
 override_dh_auto_install:
-        install -m 0644 $(CURDIR)/packaging/gnome-next-meeting-applet.desktop $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/
+	dh_auto_install
+	mkdir -p  $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/ \
+			  $(CURDIR)/debian/$(PKGNAME)/usr/share/$(PKGNAME) \
+			  $(CURDIR)/debian/$(PKGNAME)/usr/share/icons
+	mv $(CURDIR)/debian/$(PKGNAME)/usr/images/ $(CURDIR)/debian/$(PKGNAME)/usr/share/$(PKGNAME)/
+	install -m0644 images/icon.svg $(CURDIR)/debian/$(PKGNAME)/usr/share/icons/$(PKGNAME).svg
+	install -m0644 $(CURDIR)/packaging/$(PKGNAME).desktop $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/
