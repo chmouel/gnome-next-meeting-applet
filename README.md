@@ -4,14 +4,14 @@ An applet to show your next meetings in Gnome
 
 * Free software: GNU General Public License v3
 
-## Features
+### Features 
 
 * Make it easy to know how long you have until your next meeting.
-* Detect video conference URL in location or google meet.
-* Shows the documents link to the current meeting.
+* Detect video conference URLs allow to quickly click on it to join (Google Meet, Zoom, Bluejeans, supported).
+* Shows the documents link attached to the current meeting.
 * Fully configurable.
 
-## Screenshot
+### Screenshot
 
 ![Screenshot](./.github/screenshot/screenshot.png)
 
@@ -76,11 +76,14 @@ online calendars in Gnome :
 
 <https://help.gnome.org/users/gnome-help/stable/accounts.html.en>
 
+By default it will get all events from all calendars you are subscribed to, unless you are configuring 
+the restrict_to_calendar variable.
+
 ### Starting it
 
 There is a setting menu in the applet to add an autostart file to autostart it
 when gnome launch or you can launch it manually from the Gnome overview
-application launcher thing.
+application launcher thingy.
 
 ### Credits
 
