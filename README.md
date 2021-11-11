@@ -33,6 +33,17 @@ dnf copr enable chmouel/gnome-next-meeting-applet
 dnf install gnome-next-meeting-applet
 ```
 
+### Arch
+
+Just install the package from AUR with your favourite aur installer (ie:
+[yay](https://github.com/Jguer/yay))
+
+https://aur.archlinux.org/packages/gnome-next-meeting-applet/
+
+It depends on the
+[`gnome-shell-extension-appindicator`](https://archlinux.org/packages/community/any/gnome-shell-extension-appindicator/)
+extension package so you won't have to do manual instal there.
+
 ## Configuration
 
 ### Applet configuration
