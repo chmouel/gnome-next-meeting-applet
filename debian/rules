@@ -2,3 +2,6 @@
 
 %:
 	dh $@ --with python3 --buildsystem pybuild
+
+override_dh_auto_install:
+        install -m 0644 $(CURDIR)/packaging/gnome-next-meeting-applet.desktop $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/
