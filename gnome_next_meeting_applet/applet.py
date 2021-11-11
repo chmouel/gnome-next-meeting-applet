@@ -48,8 +48,9 @@ DEFAULT_CONFIG = {
 }
 
 VIDEOCALL_DESC_REGEXP = [
-    r"Join Zoom Meeting\n(https://zoom.us/j/[^\n]*)"
-    r"This event has a video call.\nJoin: (https://meet.google.com/[^\n]*)"
+    r"href=\"(https:..primetime.bluejeans.com.a2m.live-event.([^\/\"])*\")",
+    r"Join Zoom Meeting\n(https://zoom.us/j/[^\n]*)",
+    r"This event has a video call.\nJoin: (https://meet.google.com/[^\n]*)",
 ]
 
 
