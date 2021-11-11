@@ -85,6 +85,12 @@ There is a setting menu in the applet to add an autostart file to autostart it
 when gnome launch or you can launch it manually from the Gnome overview
 application launcher thingy.
 
+## Compatibility
+
+Works with Gnome tho!! but probably works with other DE/WM supporting appindicator, 
+feel free to [let me know](https://github.com/chmouel/gnome-next-meeting-applet/issues/new) 
+if it does so I can add it to the list.
+
 ### Credits
 
 * This package was created with [`Cookiecutter`](https://github.com/audreyr/cookiecutter-pypackage) and the
