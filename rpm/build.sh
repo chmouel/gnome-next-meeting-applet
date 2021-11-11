@@ -5,7 +5,7 @@ AUTHOR_EMAIL="Chmouel Boudjnah <chmouel@chmouel.com>"
 VERSION=$(python3 -c 'import gnome_next_meeting_applet as f;print(f.__version__)')
 RELEASE=1
 AUTHOR_EMAIL="Chmouel Boudjnah <chmouel@chmouel.com>"
-finalaction="copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm}"
+finalaction="copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm"
 
 gitdir=$(git rev-parse --show-toplevel)
 cd "${gitdir}"
