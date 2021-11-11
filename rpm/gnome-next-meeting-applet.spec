@@ -43,17 +43,17 @@ mv $RPM_BUILD_ROOT/usr/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications/
 cat <<EOF> $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 [Desktop Entry]
-Name=Gnome Calendar Next meeting
-Comment=An applet for your calendar
-Exec=sketch
-Icon=calendar
-Categories=Application;Productivity;
+Name=Gnome Next Meeting Applet
+Comment=An applet for your calendar to show your next meetings
+Exec=%{name}
+Icon=%{name}
+Categories=Application;Productivity;Calendar
 Type=Application
-Terminal=0
+Terminal=false
 EOF
 
-# Register as an application to be visible in the software center
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons
+install -m 0644 images/icon.svg $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.svg
 
 %files
 %doc README.md AUTHORS.rst CONTRIBUTING.rst config.sample.yaml
@@ -63,6 +63,7 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/%{name}.svg
 
 %changelog
 * Fri Feb  5 2021 Chmouel Boudjnah <chmouel@chmouel.com> - 0.1.0-1
