@@ -41,7 +41,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
 mv $RPM_BUILD_ROOT/usr/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications/
-install -m0644 rpm/%{name}.desktop $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
+install -m0644 packaging/%{name}.desktop $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons
 install -m 0644 images/icon.svg $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.svg

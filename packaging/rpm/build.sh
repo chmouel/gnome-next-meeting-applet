@@ -28,14 +28,14 @@ shift $((OPTIND-1))
     exit 1
 }
 
-sudo docker build -f ./rpm/Dockerfile -t gnome-next-meeting-applet-builder .
+sudo docker build -f ./packaging/rpm/Dockerfile -t gnome-next-meeting-applet-builder .
 
 sudo docker run --rm \
            -v ~/.config/copr:/home/builder/.config/copr \
            -v "${gitdir}":/src \
            --name gnome-next-meeting-applet-builder \
            -it gnome-next-meeting-applet-builder \
-           /bin/bash -c "sed 's/_VERSION_/${VERSION}/' /src/rpm/${NAME}.spec > /tmp/${NAME}.spec && \
+           /bin/bash -c "sed 's/_VERSION_/${VERSION}/' /src/packaging/rpm/${NAME}.spec > /tmp/${NAME}.spec && \
                          sed -i -e \"/^%changelog/a\* $(date '+%a %b %-d %Y') ${AUTHOR_EMAIL} - ${VERSION}-${RELEASE}\n- New vesion ${VERSION}\n\" /tmp/${NAME}.spec && \
                          git archive --prefix=${NAME}-${VERSION}/ --format=tar ${VERSION} |gzip  >/tmp/${NAME}-${VERSION}.tar.gz
                          rpmbuild -bs /tmp/${NAME}.spec --define '_sourcedir /tmp/' --define '_srcrpmdir /tmp/' && \
