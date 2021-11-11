@@ -24,7 +24,6 @@ import dateutil.relativedelta as dtrelative
 import dateutil.tz as dttz
 import pytz
 import yaml
-
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gdk as gdk
 from gi.repository import GLib as glib
@@ -73,7 +72,7 @@ class Applet:
             configfile.parent.mkdir(parents=True)
             configfile.write_text(yaml.safe_dump(DEFAULT_CONFIG))
             self.config = DEFAULT_CONFIG
-            
+
         self.autostart_file = pathlib.Path(
             f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
         ).expanduser()
@@ -91,7 +90,9 @@ class Applet:
         """Show first event in menubar"""
         # not sure why but on my gnome version (arch 40.4.0) we don't need to do
         # htmlspecialchars in bar, but i am sure on ubuntu i needed that, YMMV :-d !
-        summary = event.get_summary().get_value().strip()[: self.config["title_max_char"]]
+        summary = (
+            event.get_summary().get_value().strip()[: self.config["title_max_char"]]
+        )
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
 
         start_time = evocal.get_ecal_as_utc(event.get_dtstart())
@@ -193,11 +194,12 @@ class Applet:
         gtk.main_quit()
 
     def applet_click(self, source):
+        print(f"Opening Location: {source.location}")
         gtk.show_uri(None, source.location, gdk.CURRENT_TIME)
 
     def make_menu_items(self):
         self.events = self.get_all_events()
-        
+
         menu = gtk.Menu()
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
         currentday = ""
@@ -208,7 +210,7 @@ class Applet:
             menu.add(menuitem)
             self.indicator.set_menu(menu)
             return
-        
+
         event_first = self.events[0]
         event_first_start_time = evocal.get_ecal_as_utc(event_first.get_dtstart())
         event_first_end_time = evocal.get_ecal_as_utc(event_first.get_dtend())
@@ -250,12 +252,12 @@ class Applet:
             icon = ""
             _organizer = event.get_organizer()
             if _organizer:
-               organizer = _organizer.get_value().replace("mailto:", "")
-               icon = self.config["default_icon"]
-               for regexp in self.config["event_organizers_icon"]:
-                   if re.match(regexp, organizer):
-                       icon = self.config["event_organizers_icon"][regexp]
-                       break
+                organizer = _organizer.get_value().replace("mailto:", "")
+                icon = self.config["default_icon"]
+                for regexp in self.config["event_organizers_icon"]:
+                    if re.match(regexp, organizer):
+                        icon = self.config["event_organizers_icon"][regexp]
+                        break
 
             start_time_str = start_time.strftime("%H:%M")
             if now >= start_time:
