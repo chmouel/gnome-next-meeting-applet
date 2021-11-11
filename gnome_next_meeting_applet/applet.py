@@ -189,6 +189,8 @@ class Applet:
         gtk.main_quit()
 
     def applet_click(self, source):
+        if source.location == "":
+            return
         print(f"Opening Location: {source.location}")
         gtk.show_uri(None, source.location, gdk.CURRENT_TIME)
 
