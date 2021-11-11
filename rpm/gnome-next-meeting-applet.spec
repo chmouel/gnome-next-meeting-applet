@@ -41,16 +41,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
 mv $RPM_BUILD_ROOT/usr/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications/
-cat <<EOF> $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
-[Desktop Entry]
-Name=Gnome Next Meeting Applet
-Comment=An applet for your calendar to show your next meetings
-Exec=%{name}
-Icon=%{name}
-Categories=Application;Productivity;Calendar
-Type=Application
-Terminal=false
-EOF
+install -m0644 rpm/%{name}.desktop $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons
 install -m 0644 images/icon.svg $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.svg
