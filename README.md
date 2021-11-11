@@ -51,12 +51,13 @@ A configured example is located in the [config.sample.yaml](./config.samples.yam
   the one from your team or colleagues.
 * **max_results**: Max results to ask to google calendar api.
 * **skip_non_accepted**: Skip the calendar events that you didn't accept, you
-  need to configure `my_email` setting for that.
+  need to configure `my_emails` setting for that.
 * **my_emails**: A list of email addresses.
 * **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
 * **title_max_char**: The maximum length of the title
 * **change_icon_minutes**: Before the meeting x minutes before the event we will
   change the icon to gently remind you to connect.
+* **calendar_day_prefix_url**: The prefix URL for the day in the web calendar when clicking, by default this goes to google calendar URL.
 
 
 ### Calendars

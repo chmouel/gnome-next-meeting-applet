@@ -44,6 +44,7 @@ DEFAULT_CONFIG = {
     "event_organizers_icon": {},
     "change_icon_minutes": 2,
     "default_icon": "‣",
+    "calendar_day_prefix_url": "https://calendar.google.com/calendar/r/day/",
 }
 
 VIDEOCALL_DESC_REGEXP = [
@@ -241,7 +242,12 @@ class Applet:
                     label=f'<span size="large" font="FreeSerif:18">{_cday}</span>'
                 )
                 todayitem.get_child().set_use_markup(True)
-                todayitem.location = f"https://calendar.google.com/calendar/r/day/{start_time.strftime('%Y/%m/%d')}"
+                self.config["calendar_day_prefix_url"]
+                todayitem.location = (
+                    self.config["calendar_day_prefix_url"]
+                    + "/"
+                    + start_time.strftime("%Y/%m/%d")
+                )
                 todayitem.connect("activate", self.applet_click)
                 menu.append(todayitem)
                 menu.append(gtk.SeparatorMenuItem())
