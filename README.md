@@ -4,7 +4,7 @@ An applet to show your next meetings in Gnome
 
 * Free software: GNU General Public License v3
 
-### Features 
+### Features
 
 * Make it easy to know how long you have until your next meeting.
 * Detect video conference URLs allow to quickly click on it to join (Google Meet, Zoom, Bluejeans, supported).
@@ -58,6 +58,9 @@ A configured example is located in the [config.sample.yaml](./config.samples.yam
 * **event_organizers_icon**: A map between a regexp matching the organizer to an
   icon. This allows you to easily differentiate certain type of meetings like
   the one from your team or colleagues.
+* **title_match_icon**: A map between a regexp matching a tytle to an icon. This
+  allows you to easily differentiate certain type of meetings by titles, like
+  the recurring videogame break you are ought to deserve for your hard work.
 * **max_results**: Max results to ask to google calendar api.
 * **skip_non_accepted**: Skip the calendar events that you didn't accept, you
   need to configure `my_emails` setting for that.
@@ -76,7 +79,7 @@ online calendars in Gnome :
 
 <https://help.gnome.org/users/gnome-help/stable/accounts.html.en>
 
-By default it will get all events from all calendars you are subscribed to, unless you are configuring 
+By default it will get all events from all calendars you are subscribed to, unless you are configuring
 the restrict_to_calendar variable.
 
 ### Starting it
@@ -87,8 +90,8 @@ application launcher thingy.
 
 ## Compatibility
 
-Works with Gnome tho!! but probably works with other DE/WM supporting appindicator, 
-feel free to [let me know](https://github.com/chmouel/gnome-next-meeting-applet/issues/new) 
+Works with Gnome tho!! but probably works with other DE/WM supporting appindicator,
+feel free to [let me know](https://github.com/chmouel/gnome-next-meeting-applet/issues/new)
 if it does so I can add it to the list.
 
 ### Credits

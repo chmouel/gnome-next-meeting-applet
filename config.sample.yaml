@@ -1,8 +1,10 @@
 default_icon: "➡"
 event_organizers_icon:
-  - "^Upstream$": "🏢"
-  - "colleague2@chmouel.com": "😈"
-  - "boss@chmouel.com": "🤠"
+  "^Upstream$": "🏢"
+  "colleague2@chmouel.com": "😈"
+  "boss@chmouel.com": "🤠"
+title_match_icon:
+  "Get the kids and spend time with them!!!!": "👨‍👩‍👧‍👦"
 max_results: 10
 skip_non_accepted: true
 my_emails:

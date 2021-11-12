@@ -42,6 +42,7 @@ DEFAULT_CONFIG = {
     "title_max_char": 20,
     "refresh_interval": 300,
     "event_organizers_icon": {},
+    "title_match_icon": {},
     "change_icon_minutes": 2,
     "default_icon": "‣",
     "calendar_day_prefix_url": "https://calendar.google.com/calendar/r/day/",
@@ -185,7 +186,7 @@ class Applet:
         return "x-office-calendar-symbolic"
 
     # pylint: disable=unused-argument
-    def applet_quit(self, source):
+    def applet_quit(self, _):
         gtk.main_quit()
 
     def applet_click(self, source):
@@ -221,7 +222,6 @@ class Applet:
             menuitem.connect("activate", self.applet_click)
             menu.add(menuitem)
             menu.append(gtk.SeparatorMenuItem())
-            menu.append(gtk.MenuItem(" "))
 
         for event in self.events[0:int(self.config["max_results"])]:
             # TODO print the day
@@ -248,15 +248,20 @@ class Applet:
             summary = self.htmlspecialchars(
                 event.get_summary().get_value().strip())
 
-            icon = "• "
+            icon = self.config["default_icon"]
             _organizer = event.get_organizer()
             if _organizer:
                 organizer = _organizer.get_value().replace("mailto:", "")
-                icon = self.config["default_icon"]
                 for regexp in self.config["event_organizers_icon"]:
                     if re.match(regexp, organizer):
                         icon = self.config["event_organizers_icon"][regexp]
                         break
+
+            if icon == self.config["default_icon"]:
+                title = event.get_summary().get_value()
+                for regexp in self.config["title_match_icon"]:
+                    if re.match(regexp, title):
+                        icon = self.config["title_match_icon"][regexp]
 
             start_time_str = start_time.strftime("%H:%M")
             if now >= start_time:
