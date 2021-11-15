@@ -12,3 +12,4 @@ git push --tags origin ${VERSION}
 
 ./debian/build.sh
 ./packaging/rpm/build.sh
+./packaging/update-aur ${VERSION}
