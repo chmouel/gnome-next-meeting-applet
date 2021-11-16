@@ -52,7 +52,7 @@ The applet can be configured with a config.yaml yaml located in your
 `$XDG_CONFIG_HOME/gnome-next-meeting-applet/config.yaml`. It gets created
 automatically with default value at startup if you don't have one already.
 
-A configured example is located in the [config.sample.yaml](./config.samples.yaml).
+A configured example is located in the [config.sample.yaml](./config.sample.yaml).
 
 * **default_icon**: The default icon when showing each meeting.
 * **event_organizers_icon**: A map between a regexp matching the organizer to an
