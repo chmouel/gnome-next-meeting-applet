@@ -4,11 +4,13 @@ event_organizers_icon:
   "colleague2@chmouel.com": "😈"
   "boss@chmouel.com": "🤠"
 title_match_icon:
-  "Get the kids and spend time with them!!!!": "👨‍👩‍👧‍👦"
+  "^.*kid pickup.*": "👨‍👩‍👧‍👦"
+  "^[Project to the Moon].*": "🌕️"
 max_results: 10
 skip_non_accepted: true
 my_emails:
   - email@email.com
+# The time to query Gnome Online Accounts not to refresh calendars
 refresh_interval: 300
 restrict_to_calendar:
   - Work
