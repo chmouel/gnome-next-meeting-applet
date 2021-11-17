@@ -64,7 +64,7 @@ The applet can be configured with a config.yaml yaml located in your
 `$XDG_CONFIG_HOME/gnome-next-meeting-applet/config.yaml`. It gets created
 automatically with default value at startup if you don't have one already.
 
-A sample file is located here: [config.sample.yaml](./config.samples.yaml).
+A sample file is located here: [config.sample.yaml](./config.sample.yaml).
 
 Settings:
 
