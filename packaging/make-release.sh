@@ -11,5 +11,5 @@ git tag -s ${VERSION}
 git push --tags origin ${VERSION}
 
 ./debian/build.sh
+./packaging/aur/build.sh
 ./packaging/rpm/build.sh
-./packaging/update-aur ${VERSION}
