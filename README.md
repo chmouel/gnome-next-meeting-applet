@@ -2,8 +2,6 @@
 
 An applet to show your next meetings in Gnome
 
-* Free software: GNU General Public License v3
-
 ### Features
 
 * Use [Gnome Online Account](https://linuxkamarada.com/en/2019/04/10/get-the-most-out-of-gnome-syncing-your-google-account/) for calendar sources.
@@ -93,10 +91,10 @@ application launcher thingy.
 
 ## Compatibility
 
-Works with Gnome!! 
+Works with Gnome!!
 
-It was tested as semi working on [polybar](https://github.com/polybar/polybar), it only shows 
-an icon but you can click on it to show your next meetings. 
+It was tested as semi working on [polybar](https://github.com/polybar/polybar), it only shows
+an icon but you can click on it to show your next meetings.
 Make sure you have `tray_position = position` in your polybar config to enable it.
 
 Probably works with other DE/WM supporting appindicator,
@@ -113,4 +111,8 @@ if it does so I can add it to the list.
 * Used for a while the OSX application gnome-next-meeting
   <https://apps.apple.com/us/app/next-meeting/id1017470484?mt=12> and missed it on
   Linux.
-* Used code from from @GabLeRoux for evolution calendar integration - <https://askubuntu.com/a/1371087>
+* Used code from [@GabLeRoux](https://github.com/gableroux) for evolution calendar integration - <https://askubuntu.com/a/1371087>
+
+## License
+
+[MIT](LICENSE.md) © [Chmouel Boudjnah](https://github.com/chmouel)

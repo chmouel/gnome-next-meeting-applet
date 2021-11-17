@@ -7,10 +7,10 @@ Version:        _VERSION_
 Release:        1%{?dist}
 Summary:        Gnome Next Meeting Applet
 
-License:        GPLv3
+License:        MIT
 URL:            http://github.com/chmouel/gnome-next-meeting-applet
 Source0:        https://github.com/chmouel/%{name}/archive/%{name}-%{version}.tar.gz
-   
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
