@@ -6,6 +6,7 @@ An applet to show your next meetings in Gnome
 
 ### Features
 
+* Use [Gnome Online Account](https://linuxkamarada.com/en/2019/04/10/get-the-most-out-of-gnome-syncing-your-google-account/) for calendar sources.
 * Make it easy to know how long you have until your next meeting.
 * Detect video conference URLs allow to quickly click on it to join (Google Meet, Zoom, Bluejeans, supported).
 * Shows the documents link attached to the current meeting.
@@ -46,15 +47,28 @@ extension package so you won't have to do manual instal there.
 
 ## Configuration
 
+### Calendar sources
+
+All calendars are configured directly in Gnome Online Account setting, it will
+grab the events from there. Here is some instructions on how to setup your
+online calendars in Gnome :
+
+<https://help.gnome.org/users/gnome-help/stable/accounts.html.en>
+
+By default it will get all events from all calendars you are subscribed to, unless you are configuring
+the `restrict_to_calendar` variable.
+
 ### Applet configuration
 
 The applet can be configured with a config.yaml yaml located in your
 `$XDG_CONFIG_HOME/gnome-next-meeting-applet/config.yaml`. It gets created
 automatically with default value at startup if you don't have one already.
 
-A configured example is located in the [config.sample.yaml](./config.samples.yaml).
+A sample file is located here: [config.sample.yaml](./config.samples.yaml).
 
-* **default_icon**: The default icon when showing each meeting.
+Settings:
+
+* **default_icon**: The default icon when showing each meeting (default: ‣)
 * **event_organizers_icon**: A map between a regexp matching the organizer to an
   icon. This allows you to easily differentiate certain type of meetings like
   the one from your team or colleagues.
@@ -71,17 +85,6 @@ A configured example is located in the [config.sample.yaml](./config.samples.yam
   change the icon to gently remind you to connect.
 * **calendar_day_prefix_url**: The prefix URL for the day in the web calendar when clicking, by default this goes to google calendar URL.
 
-### Calendars
-
-All calendars are configured directly in Gnome Online Account setting, it will
-grab the events from there. Here is some instructions on how to setup your
-online calendars in Gnome :
-
-<https://help.gnome.org/users/gnome-help/stable/accounts.html.en>
-
-By default it will get all events from all calendars you are subscribed to, unless you are configuring
-the restrict_to_calendar variable.
-
 ### Starting it
 
 There is a setting menu in the applet to add an autostart file to autostart it
@@ -90,7 +93,13 @@ application launcher thingy.
 
 ## Compatibility
 
-Works with Gnome tho!! but probably works with other DE/WM supporting appindicator,
+Works with Gnome!! 
+
+It was tested as semi working on [polybar](https://github.com/polybar/polybar), it only shows 
+an icon but you can click on it to show your next meetings. 
+Make sure you have `tray_position = position` in your polybar config to enable it.
+
+Probably works with other DE/WM supporting appindicator,
 feel free to [let me know](https://github.com/chmouel/gnome-next-meeting-applet/issues/new)
 if it does so I can add it to the list.
 
