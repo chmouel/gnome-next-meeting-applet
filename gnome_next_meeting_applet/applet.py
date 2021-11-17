@@ -305,8 +305,11 @@ class Applet:
         self.indicator.set_menu(menu)
 
     def _match_videocall_url_from_summary(self, event) -> str:
+        descriptions = event.get_descriptions()
+        if not descriptions:
+            return ""
         # can you have multiple descriptions???
-        text = event.get_descriptions()[0].get_value()
+        text = descriptions[0].get_value()
         for reg in VIDEOCALL_DESC_REGEXP:
             match = re.search(reg, text)
             if match:
