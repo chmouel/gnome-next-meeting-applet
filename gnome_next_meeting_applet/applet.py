@@ -327,13 +327,12 @@ class Applet:
         self.autostart_file.write_text("""#!/usr/bin/env xdg-open
 [Desktop Entry]
 Categories=Productivity;
-Comment=Google calendar applet to show next meetings
 Exec=gnome-next-meeting-applet
 Icon=calendar
-Name=Google Calendar next meeting
-StartupNotify=false
+Name=Google Calendar next meeting applet
 Type=Application
-Version=1.0
+X-GNOME-Autostart-enabled=true
+Terminal=false
 """)
         source.set_label("Remove autostart")
 
