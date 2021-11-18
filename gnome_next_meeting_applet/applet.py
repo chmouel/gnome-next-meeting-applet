@@ -163,12 +163,17 @@ class Applet:
             (first_start_time -
              datetime.timedelta(minutes=self.config["change_icon_minutes"]))
                 and not now > first_start_time):
-            source.set_icon(self.get_icon_path("notification"))
+            source.set_icon_full(self.get_icon_path("notification"),
+                                 "Meeting start soon!")
+        elif now >= first_start_time and first_end_time > now:
+            source.set_icon_full(self.get_icon_path("in-event"),
+                                 "In meeting! Focus")
         elif now >= first_end_time:  # need a refresh
             self.make_menu_items()
             return self.set_indicator_icon_label(source)
         else:
-            source.set_icon(self.get_icon_path("calendar"))
+            source.set_icon_full(self.get_icon_path("calendar"),
+                                 "Next meeting")
 
         source.set_label(f"{self.first_event(self.events[0])}",
                          APP_INDICTOR_ID)
