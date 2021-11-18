@@ -97,6 +97,8 @@ class Applet:
         start_time = evocal.get_ecal_as_utc(event.get_dtstart())
         end_time = evocal.get_ecal_as_utc(event.get_dtend())
 
+        if end_time == now:
+            return f" Meeting over 😲 - {summary}"
         if start_time < now < end_time:
             _rd = dtrelative.relativedelta(end_time, now)
         else:
