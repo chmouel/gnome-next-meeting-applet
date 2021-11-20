@@ -11,6 +11,9 @@ import dateutil.relativedelta as dtrelative
 import dateutil.tz as dttz
 import pytz
 import yaml
+import gi
+
+gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gdk as gdk
 from gi.repository import GLib as glib
@@ -84,6 +87,8 @@ class Applet:
         start_time = evocal.get_ecal_as_utc(event.get_dtstart())
         end_time = evocal.get_ecal_as_utc(event.get_dtend())
 
+        if end_time == now:
+            return f" Meeting over 😲 - {summary}"
         if start_time < now < end_time:
             _rd = dtrelative.relativedelta(end_time, now)
         else:
@@ -150,12 +155,17 @@ class Applet:
             (first_start_time -
              datetime.timedelta(minutes=self.config["change_icon_minutes"]))
                 and not now > first_start_time):
-            source.set_icon(self.get_icon_path("notification"))
+            source.set_icon_full(self.get_icon_path("notification"),
+                                 "Meeting start soon!")
+        elif now >= first_start_time and first_end_time > now:
+            source.set_icon_full(self.get_icon_path("in-event"),
+                                 "In meeting! Focus")
         elif now >= first_end_time:  # need a refresh
             self.make_menu_items()
             return self.set_indicator_icon_label(source)
         else:
-            source.set_icon(self.get_icon_path("calendar"))
+            source.set_icon_full(self.get_icon_path("calendar"),
+                                 "Next meeting")
 
         source.set_label(f"{self.first_event(self.events[0])}",
                          APP_INDICTOR_ID)
@@ -279,7 +289,9 @@ class Applet:
         item_autostart = gtk.MenuItem(label=label)
         item_autostart.connect("activate", self.install_uninstall_autostart)
         settingMenu.add(item_autostart)
-        settingItem = gtk.MenuItem("Setting")
+
+        settingItem = gtk.MenuItem()
+        settingItem.set_label("Setting")
         settingItem.set_submenu(settingMenu)
         menu.add(settingItem)
 
