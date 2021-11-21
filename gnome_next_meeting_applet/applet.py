@@ -33,7 +33,7 @@ DEFAULT_CONFIG = {
     "refresh_interval": 5,
     "event_organizers_icon": {},
     "title_match_icon": {},
-    "change_icon_minutes": 2,
+    "change_icon_minutes": 5,
     "default_icon": "‣",
     "calendar_day_prefix_url": "https://calendar.google.com/calendar/r/day/",
 }
@@ -158,23 +158,26 @@ class Applet:
             (first_start_time -
              datetime.timedelta(minutes=self.config["change_icon_minutes"]))
                 and not now > first_start_time):
-            source.set_icon_full(self.get_icon_path("notification"),
+            source.set_icon_full(self.get_icon_path("before_event"),
                                  "Meeting start soon!")
         elif now >= first_start_time and first_end_time > now:
-            source.set_icon_full(self.get_icon_path("in-event"),
+            source.set_icon_full(self.get_icon_path("in_event"),
                                  "In meeting! Focus")
         elif now >= first_end_time:  # need a refresh
             self.make_menu_items()
             return self.set_indicator_icon_label(source)
         else:
-            source.set_icon_full(self.get_icon_path("calendar"),
-                                 "Next meeting")
+            source.set_icon_full(self.get_icon_path("default"), "Next meeting")
 
         source.set_label(f"{self.first_event(self.events[0])}",
                          APP_INDICTOR_ID)
         return True
 
     def get_icon_path(self, icon):
+        if f"icon_{icon}_path" in self.config and os.path.exists(
+                self.config[f"icon_{icon}_path"]):
+            return self.config[f"icon_{icon}_path"]
+
         devpath = pathlib.Path(__file__).parent.parent / "images"
         if not devpath.exists():
             devpath = pathlib.Path(
@@ -339,7 +342,7 @@ Terminal=false
     def build_indicator(self):
         self.indicator = appindicator.Indicator.new(
             APP_INDICTOR_ID,
-            self.get_icon_path("calendar"),
+            "calendar",
             appindicator.IndicatorCategory.SYSTEM_SERVICES,
         )
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
