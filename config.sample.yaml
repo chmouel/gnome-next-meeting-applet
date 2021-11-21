@@ -16,3 +16,14 @@ restrict_to_calendar:
   - Work
 title_max_char: 20
 calendar_day_prefix_url: "https://calendar.google.com/calendar/r/day/"
+# Five minutes before a meeting we will be changing the icon to reflect
+# something is coming up.
+change_icon_minutes: 5
+
+# You can customize the icons to a svg or png files with those variables :
+# icon_default_path: the default icon, it will use the icon
+#                    "x-office-calendar-symbolic" from gnome theme by default.
+# icon_in_event_path: the icon when in event, it will show a colored calendar
+#                     icon by default.
+# icon_before_event_path: an icon just before an event to show something is
+# coming up.
