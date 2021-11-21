@@ -30,7 +30,7 @@ DEFAULT_CONFIG = {
     "my_emails": [],
     "max_results": 10,
     "title_max_char": 20,
-    "refresh_interval": 300,
+    "refresh_interval": 5,
     "event_organizers_icon": {},
     "title_match_icon": {},
     "change_icon_minutes": 2,
@@ -111,6 +111,7 @@ class Applet:
         """Get all events from Google Calendar API"""
         # event_list = json.load(open("/tmp/allevents.json"))
         evolutionCalendar = evocal.EvolutionCalendarWrapper()
+
         # TODO: add filtering user option GUI instead of just yaml
         event_list = evolutionCalendar.get_all_events(
             restrict_to_calendar=self.config["restrict_to_calendar"])
@@ -142,6 +143,8 @@ class Applet:
 
     # pylint: disable=unused-argument
     def set_indicator_icon_label(self, source):
+        self.make_menu_items()
+
         if not self.events:
             source.set_label("Configure Gnome Online Account First",
                              APP_INDICTOR_ID)
@@ -194,7 +197,6 @@ class Applet:
 
     def make_menu_items(self):
         self.events = self.get_all_events()
-
         menu = gtk.Menu()
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
         currentday = ""
@@ -234,7 +236,6 @@ class Applet:
                     label=
                     f'<span size="large" font="FreeSerif:18">{_cday}</span>')
                 todayitem.get_child().set_use_markup(True)
-                self.config["calendar_day_prefix_url"]
                 todayitem.location = (self.config["calendar_day_prefix_url"] +
                                       "/" + start_time.strftime("%Y/%m/%d"))
                 todayitem.connect("activate", self.applet_click)
@@ -344,10 +345,8 @@ Terminal=false
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.make_menu_items()
         self.set_indicator_icon_label(self.indicator)
-        glib.timeout_add_seconds(30, self.set_indicator_icon_label,
-                                 self.indicator)
         glib.timeout_add_seconds(self.config["refresh_interval"],
-                                 self.make_menu_items)
+                                 self.set_indicator_icon_label, self.indicator)
         gtk.main()
 
     def main(self):
