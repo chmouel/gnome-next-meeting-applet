@@ -11,7 +11,7 @@ skip_non_accepted: true
 my_emails:
   - email@email.com
 # The time to query Gnome Online Accounts not to refresh calendars
-refresh_interval: 300
+refresh_interval: 5
 restrict_to_calendar:
   - Work
 title_max_char: 20
