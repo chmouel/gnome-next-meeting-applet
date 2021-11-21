@@ -41,5 +41,6 @@ sudo docker run --rm \
                          sed -E 's#(pkgver=).*#\1$VERSION#' -i PKGBUILD && \
                          updpkgsums && \
                          makepkg --printsrcinfo > .SRCINFO && \
+                         git clean -f && \
                          git commit -v -m 'Update to ${VERSION}' .SRCINFO PKGBUILD && \
                          ${finalaction}"
