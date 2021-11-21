@@ -47,7 +47,7 @@ setup(
         include=['gnome_next_meeting_applet', 'gnome_next_meeting_applet.*']),
     setup_requires=setup_requirements,
     test_suite='tests',
-    data_files=[('images/', ["images/notification.svg", "images/calendar.svg"])],
+    data_files=[('images/', ["images/before_event.svg", "images/in_event.png"])],
     include_package_data=True,
     tests_require=test_requirements,
     url='https://github.com/chmouel/gnome-next-meeting-applet',
