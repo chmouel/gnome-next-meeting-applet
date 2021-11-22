@@ -30,7 +30,7 @@ DEFAULT_CONFIG = {
     "my_emails": [],
     "max_results": 10,
     "title_max_char": 20,
-    "refresh_interval": 5,
+    "refresh_interval": 60,
     "event_organizers_icon": {},
     "title_match_icon": {},
     "change_icon_minutes": 5,
