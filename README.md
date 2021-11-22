@@ -8,6 +8,7 @@ An applet to show your next meetings in Gnome
 * Make it easy to know how long you have until your next meeting.
 * Detect video conference URLs allow to quickly click on it to join (Google Meet, Zoom, Bluejeans, supported).
 * Shows the documents link attached to the current meeting.
+* Change icons 5mn before and after meeting.
 * Fully configurable.
 
 ### Screenshot
@@ -82,6 +83,16 @@ Settings:
 * **change_icon_minutes**: Before the meeting x minutes before the event we will
   change the icon to gently remind you to connect.
 * **calendar_day_prefix_url**: The prefix URL for the day in the web calendar when clicking, by default this goes to google calendar URL.
+
+Default icons are customizatble too:
+
+* **icon_default_path**: the default icon, it will use the icon
+                   "x-office-calendar-symbolic" from gnome theme by default.
+* **icon_in_event_path**: the icon when in event, it will show a colored calendar
+                    icon by default.
+* **icon_before_event_path**: an icon just before an event to show something is
+coming up.
+
 
 ### Starting it
 
