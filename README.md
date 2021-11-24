@@ -104,11 +104,13 @@ application launcher thingy.
 
 ## Compatibility
 
-Works with Gnome!!
+Works with Gnome as long you have this appindicator applet (which is by default on Ubuntu*)
 
 It was tested as semi working on [polybar](https://github.com/polybar/polybar), it only shows
 an icon but you can click on it to show your next meetings.
 Make sure you have `tray_position = position` in your polybar config to enable it.
+
+It was tested as well on [waybar](https://github.com/Alexays/Waybar) and shows the icon (but not the full event).
 
 Probably works with other DE/WM supporting appindicator,
 feel free to [let me know](https://github.com/chmouel/gnome-next-meeting-applet/issues/new)
