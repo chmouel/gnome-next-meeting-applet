@@ -83,6 +83,8 @@ Settings:
 * **change_icon_minutes**: Before the meeting x minutes before the event we will
   change the icon to gently remind you to connect.
 * **calendar_day_prefix_url**: The prefix URL for the day in the web calendar when clicking, by default this goes to google calendar URL.
+* **strip_title_emojis**: wether removing the emojis from title when showing in
+  the menubar, so to keep the panel clean
 
 Default icons are customizatble too:
 

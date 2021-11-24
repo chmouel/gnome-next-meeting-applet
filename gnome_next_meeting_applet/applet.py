@@ -20,6 +20,7 @@ from gi.repository import GLib as glib
 from gi.repository import Gtk as gtk
 
 import gnome_next_meeting_applet.evolution_calendars as evocal
+import gnome_next_meeting_applet.strings as gnstr
 
 APP_INDICTOR_ID = "gnome-next-meeting-applet"
 
@@ -36,6 +37,9 @@ DEFAULT_CONFIG = {
     "change_icon_minutes": 5,
     "default_icon": "‣",
     "calendar_day_prefix_url": "https://calendar.google.com/calendar/r/day/",
+    # wether removing the emojis from title when showing in the menubar, so to
+    # keep the menubar clean
+    "strip_title_emojis": False,
 }
 
 VIDEOCALL_DESC_REGEXP = [
@@ -82,6 +86,9 @@ class Applet:
         # htmlspecialchars in bar, but i am sure on ubuntu i needed that, YMMV :-d !
         summary = (event.get_summary().get_value().strip()
                    [:self.config["title_max_char"]])
+        if self.config["strip_title_emojis"]:
+            summary = gnstr.remove_emojis(summary)
+
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
 
         start_time = evocal.get_ecal_as_utc(event.get_dtstart())
