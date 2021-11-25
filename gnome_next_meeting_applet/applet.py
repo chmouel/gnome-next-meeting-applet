@@ -14,6 +14,7 @@ import yaml
 import gi
 
 gi.require_version('AppIndicator3', '0.1')
+# pylint: disable=E0611
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Gdk as gdk
 from gi.repository import GLib as glib
@@ -117,10 +118,10 @@ class Applet:
     def get_all_events(self):
         """Get all events from Google Calendar API"""
         # event_list = json.load(open("/tmp/allevents.json"))
-        evolutionCalendar = evocal.EvolutionCalendarWrapper()
+        evolution_calendar = evocal.EvolutionCalendarWrapper()
 
         # TODO: add filtering user option GUI instead of just yaml
-        event_list = evolutionCalendar.get_all_events(
+        event_list = evolution_calendar.get_all_events(
             restrict_to_calendar=self.config["restrict_to_calendar"])
         ret = []
 
@@ -155,12 +156,13 @@ class Applet:
         if not self.events:
             source.set_label("Configure Gnome Online Account First",
                              APP_INDICTOR_ID)
-            return
+            return False
 
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
         first_start_time = evocal.get_ecal_as_utc(self.events[0].get_dtstart())
         first_end_time = evocal.get_ecal_as_utc(self.events[0].get_dtend())
 
+        # pylint: disable=C0113
         if (now >
             (first_start_time -
              datetime.timedelta(minutes=self.config["change_icon_minutes"]))
@@ -246,8 +248,8 @@ class Applet:
                     label=
                     f'<span size="large" font="FreeSerif:18">{_cday}</span>')
                 todayitem.get_child().set_use_markup(True)
-                todayitem.location = (self.config["calendar_day_prefix_url"] +
-                                      "/" + start_time.strftime("%Y/%m/%d"))
+                prefix_url = self.config["calendar_day_prefix_url"]
+                todayitem.location = f"{prefix_url}/{start_time.strftime('%Y/%m/%d')}"
                 todayitem.connect("activate", self.applet_click)
                 menu.append(todayitem)
                 menu.append(gtk.SeparatorMenuItem())
@@ -294,17 +296,17 @@ class Applet:
 
         menu.append(gtk.SeparatorMenuItem())
 
-        settingMenu = gtk.Menu()
+        setting_menu = gtk.Menu()
         label = ("Remove autostart"
                  if self.autostart_file.exists() else "Auto start at boot")
         item_autostart = gtk.MenuItem(label=label)
         item_autostart.connect("activate", self.install_uninstall_autostart)
-        settingMenu.add(item_autostart)
+        setting_menu.add(item_autostart)
 
-        settingItem = gtk.MenuItem()
-        settingItem.set_label("Setting")
-        settingItem.set_submenu(settingMenu)
-        menu.add(settingItem)
+        setting_item = gtk.MenuItem()
+        setting_item.set_label("Setting")
+        setting_item.set_submenu(setting_menu)
+        menu.add(setting_item)
 
         item_quit = gtk.MenuItem(label="Quit")
         item_quit.connect("activate", self.applet_quit)
@@ -364,8 +366,8 @@ Terminal=false
 
 
 def run():
-    c = Applet()
-    c.main()
+    applet = Applet()
+    applet.main()
 
 
 if __name__ == "__main__":
