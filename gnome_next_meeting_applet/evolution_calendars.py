@@ -3,6 +3,7 @@
 #
 # from Gabriel Le Breton (@GabLeRoux) https://askubuntu.com/a/1371087
 import datetime
+import logging
 from typing import List
 
 import gi
@@ -78,11 +79,16 @@ class EvolutionCalendarWrapper:
 
             ## save memory for stuff we won't care
             if start_time > (now + datetime.timedelta(weeks=4)):
+                logging.debug(
+                    "[SKIP] over a month event, skipping, start_time: %s: %s",
+                    start_time,
+                    value.get_summary().get_value())
                 continue
 
             uuid = value.get_id().get_uid()
             # sometime we get doublons whatever the reasons is
             if uuid in seen:
+                logging.debug("[SKIP] already seen event uuid, %s", uuid)
                 continue
             seen.append(uuid)
             events.append(value)

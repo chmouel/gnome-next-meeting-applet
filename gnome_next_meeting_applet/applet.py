@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=no-self-use
 """Gnome next meeting calendar applet via Google Calendar"""
+import argparse
 import datetime
+import logging
 import os.path
 import pathlib
 import re
@@ -9,9 +11,9 @@ import typing
 
 import dateutil.relativedelta as dtrelative
 import dateutil.tz as dttz
+import gi
 import pytz
 import yaml
-import gi
 
 gi.require_version('AppIndicator3', '0.1')
 # pylint: disable=E0611
@@ -56,7 +58,9 @@ class Applet:
     events: typing.List = []
     indicator = None
 
-    def __init__(self):
+    def __init__(self, args: argparse.ArgumentParser):
+        self.args = args
+        self.set_logging()
         self.config = DEFAULT_CONFIG
         self.config_dir = os.path.expanduser(
             f"{glib.get_user_config_dir()}/{APP_INDICTOR_ID}")
@@ -68,6 +72,7 @@ class Applet:
                 **yaml.safe_load(configfile.open())
             }
         else:
+            logging.debug("creating configfile %s", str(configfile))
             configfile.parent.mkdir(parents=True)
             configfile.write_text(yaml.safe_dump(DEFAULT_CONFIG))
             self.config = DEFAULT_CONFIG
@@ -75,6 +80,10 @@ class Applet:
         self.autostart_file = pathlib.Path(
             f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
         ).expanduser()
+
+    def set_logging(self):
+        if self.args.verbose:
+            logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
 
     def htmlspecialchars(self, text):
         """Replace html chars"""
@@ -94,6 +103,9 @@ class Applet:
 
         start_time = evocal.get_ecal_as_utc(event.get_dtstart())
         end_time = evocal.get_ecal_as_utc(event.get_dtend())
+
+        logging.debug("First event in UTC start_time: %s send_time: %s",
+                      start_time, end_time)
 
         if end_time == now:
             return f" Meeting over 😲 - {summary}"
@@ -129,7 +141,7 @@ class Applet:
             event_list, key=lambda x: evocal.get_ecal_as_utc(x.get_dtstart()))
         for event in events_sorted:
             if event.get_status().value_name != "I_CAL_STATUS_CONFIRMED":
-                print("SKipping not confirmed")
+                logging.debug("[SKIP] not confirmed event")
                 continue
 
             skipit = False
@@ -143,6 +155,8 @@ class Applet:
                                 == "I_CAL_PARTSTAT_ACCEPTED"):
                             skipit = False
             if skipit:
+                logging.debug("[SKIP] event since not accepted: %s",
+                              event.get_summary().get_value())
                 continue
 
             ret.append(event)
@@ -170,6 +184,9 @@ class Applet:
             source.set_icon_full(self.get_icon_path("before_event"),
                                  "Meeting start soon!")
         elif now >= first_start_time and first_end_time > now:
+            logging.debug(
+                "current in meeting, now: %s, first_start_time: %s, first_end_time: %s",
+                now, first_start_time, first_end_time)
             source.set_icon_full(self.get_icon_path("in_event"),
                                  "In meeting! Focus")
         elif now >= first_end_time:  # need a refresh
@@ -204,10 +221,12 @@ class Applet:
     def applet_click(self, source):
         if source.location == "":
             return
-        print(f"Opening Location: {source.location}")
+        logging.debug(f"Opening Location: %s", source.location)
         gtk.show_uri(None, source.location, gdk.CURRENT_TIME)
 
     def make_menu_items(self):
+        logging.debug("refreshing goa calendars event")
+
         self.events = self.get_all_events()
         menu = gtk.Menu()
         now = datetime.datetime.now().astimezone(pytz.timezone("UTC"))
@@ -355,7 +374,6 @@ Terminal=false
             appindicator.IndicatorCategory.SYSTEM_SERVICES,
         )
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
-        self.make_menu_items()
         self.set_indicator_icon_label(self.indicator)
         glib.timeout_add_seconds(self.config["refresh_interval"],
                                  self.set_indicator_icon_label, self.indicator)
@@ -365,10 +383,6 @@ Terminal=false
         self.build_indicator()
 
 
-def run():
-    applet = Applet()
+def run(args: argparse.ArgumentParser):
+    applet = Applet(args)
     applet.main()
-
-
-if __name__ == "__main__":
-    run()
