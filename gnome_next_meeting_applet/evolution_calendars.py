@@ -3,6 +3,7 @@
 #
 # from Gabriel Le Breton (@GabLeRoux) https://askubuntu.com/a/1371087
 import datetime
+from typing import List
 
 import gi
 import pytz

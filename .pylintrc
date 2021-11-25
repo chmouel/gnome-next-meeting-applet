@@ -1,2 +1,2 @@
 [MASTER]
-disable = missing-docstring, R0903
+disable = missing-docstring, R0903, R0912, R0914, R0915, W0511, E402, chained-comparison, C0413
