@@ -20,14 +20,22 @@ from gi.repository import Gio
 # https://lazka.github.io/pgi-docs/Gio-2.0/classes/Cancellable.html#Gio.Cancellable
 GIO_CANCELLABLE = Gio.Cancellable.new()
 
+# gnome-calendar, evolution, libical stuff seems to add those to their timezone,
+# see https://git.io/JMItN
+LIBICAL_TZID_PREFIX = "/freeassociation.sourceforge.net/"
+
 
 def get_ecal_as_utc(ecalcomp) -> datetime.datetime:
     if not ecalcomp:
         return datetime.datetime.now().astimezone(pytz.timezone("UTC"))
-    tz = pytz.timezone(ecalcomp.get_tzid() or "UTC")
-    ts = ecalcomp.get_value().as_timet()
-    dt = tz.normalize(tz.localize(datetime.datetime.utcfromtimestamp(ts)))
-    return dt.astimezone(pytz.timezone("UTC"))
+    # remove this prefix or it's not a real TZ
+    ecaltz = ecalcomp.get_tzid() and ecalcomp.get_tzid().replace(
+        LIBICAL_TZID_PREFIX, "")
+    timezone = pytz.timezone(ecaltz or "UTC")
+    timestamp = ecalcomp.get_value().as_timet()
+    tz_datetime = timezone.normalize(
+        timezone.localize(datetime.datetime.utcfromtimestamp(timestamp)))
+    return tz_datetime.astimezone(pytz.timezone("UTC"))
 
 
 class EvolutionCalendarWrapper:
