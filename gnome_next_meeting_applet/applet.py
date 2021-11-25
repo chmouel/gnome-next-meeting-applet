@@ -221,7 +221,7 @@ class Applet:
     def applet_click(self, source):
         if source.location == "":
             return
-        logging.debug(f"Opening Location: %s", source.location)
+        logging.debug("Opening Location: %s", source.location)
         gtk.show_uri(None, source.location, gdk.CURRENT_TIME)
 
     def make_menu_items(self):
