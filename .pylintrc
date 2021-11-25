@@ -1,0 +1,2 @@
+[MASTER]
+disable = missing-docstring, R0903
