@@ -39,7 +39,7 @@ def get_ecal_as_utc(ecalcomp) -> datetime.datetime:
 
 class EvolutionCalendarWrapper:
     @staticmethod
-    def _get_gnome_calendars():
+    def _get_goa_calendars():
         # https://lazka.github.io/pgi-docs/EDataServer-1.2/classes/SourceRegistry.html#EDataServer.SourceRegistry.new_sync
         registry = EDataServer.SourceRegistry.new_sync(GIO_CANCELLABLE)
         return EDataServer.SourceRegistry.list_sources(
@@ -97,11 +97,13 @@ class EvolutionCalendarWrapper:
     def get_all_events(self, restrict_to_calendar=None):
         if restrict_to_calendar is None:
             restrict_to_calendar = []
-        calendars = self._get_gnome_calendars()
+        goa_calendars = self._get_goa_calendars()
         events = []
-        for source in calendars:
+        for source in goa_calendars:
             if restrict_to_calendar and source.get_display_name(
             ) not in restrict_to_calendar:
+                logging.debug("[SKIP] skipping calendars not in restrict_to_calendar: %s",
+                              source.get_display_name())
                 continue
             events += self._get_gnome_events_from_calendar_source(source)
         return events
