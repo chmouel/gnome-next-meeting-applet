@@ -33,6 +33,10 @@ bumpversion() {
    echo "Releasing ${VERSION}"
 }
 
+[[ $(git rev-parse --abbrev-ref HEAD) != main ]] && {
+    echo "you need to be on the main branch"
+    exit 1
+}
 [[ -z ${VERSION} ]] && bumpversion
 
 vfile=gnome_next_meeting_applet/__init__.py
@@ -40,7 +44,8 @@ sed -i "s/.*version.*/__version__ = '${VERSION}'/" ${vfile}
 git commit -S -m "Release ${VERSION} 🥳" ${vfile} || true
 git tag -s ${VERSION} -m "Releasing version ${VERSION}"
 git push --tags origin ${VERSION}
-gh release create ${VERSION} --notes "Release ${VERSION} 🥳"
+git push origin main
+gh release create ${VERSION} --title "Release ${VERSION} 🥳"
 
 ./debian/build.sh
 ./packaging/aur/build.sh
