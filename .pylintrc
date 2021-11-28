@@ -9,6 +9,9 @@ disable = C0413,
         R0914,
         R0915,
         W0511,
+        no-self-use,
         chained-comparison,
         unspecified-encoding,
         missing-docstring,
+
+# vim: ft=toml
