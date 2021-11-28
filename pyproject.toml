@@ -19,6 +19,8 @@ PyYAML = "^6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
+yapf = "*"
+toml = "*"
 
 [tool.poetry.scripts]
 gnome-next-meeting-applet = "gnma.cli:cli"

@@ -44,15 +44,12 @@ class GnomeOnlineAccountCal:
             raise GnomeOnlineAccountError from gliberror
 
         self.registry_watcher = EDataServer.SourceRegistryWatcher.new(
-            self.registry, None
-        )
+            self.registry, None)
 
         self.client_appeared_id = self.registry_watcher.connect(
-            "appeared", self.source_appeared
-        )
+            "appeared", self.source_appeared)
         self.client_disappeared_id = self.registry_watcher.connect(
-            "disappeared", self.source_disappeared
-        )
+            "disappeared", self.source_disappeared)
         self.registry_watcher.connect("filter", self.is_relevant_source)
 
         # This forces the watcher to notify about all pre-existing sources (so
@@ -61,12 +58,9 @@ class GnomeOnlineAccountCal:
 
     # pylint: disable=no-self-use
     def is_relevant_source(self, watcher, source):
-        relevant = (
-            source.has_extension(EDataServer.SOURCE_EXTENSION_CALENDAR)
-            and source.get_extension(
-                EDataServer.SOURCE_EXTENSION_CALENDAR
-            ).get_selected()
-        )
+        relevant = (source.has_extension(EDataServer.SOURCE_EXTENSION_CALENDAR)
+                    and source.get_extension(
+                        EDataServer.SOURCE_EXTENSION_CALENDAR).get_selected())
         return relevant
 
     def ecal_client_connected(self, _, res, source):
@@ -94,7 +88,8 @@ class GnomeOnlineAccountCal:
         calendar.view = None
 
         current_month_start = datetime.datetime.now()
-        current_month_end = datetime.datetime.now() + datetime.timedelta(weeks=4)
+        current_month_end = datetime.datetime.now() + datetime.timedelta(
+            weeks=4)
         calendar.start = datetime.datetime.timestamp(current_month_start)
         calendar.end = datetime.datetime.timestamp(current_month_end)
         from_iso = ECal.isodate_from_time_t(calendar.start)
@@ -102,9 +97,8 @@ class GnomeOnlineAccountCal:
         location = self.zone.get_location()
         # pylint: disable=line-too-long
         query = f'occur-in-time-range? (make-time "{from_iso}") (make-time "{to_iso}") "{location}"'
-        calendar.client.get_view(
-            query, calendar.view_cancellable, self.got_calendar_view, calendar
-        )
+        calendar.client.get_view(query, calendar.view_cancellable,
+                                 self.got_calendar_view, calendar)
 
     def got_calendar_view(self, client, res, calendar):
         if calendar.view_cancellable.is_cancelled():
@@ -124,10 +118,16 @@ class GnomeOnlineAccountCal:
         view.start()
 
     def view_objects_added(self, view, objects, calendar):
-        self.handle_new_or_modified_objects(view, objects, calendar, mod="added")
+        self.handle_new_or_modified_objects(view,
+                                            objects,
+                                            calendar,
+                                            mod="added")
 
     def view_objects_modified(self, view, objects, calendar):
-        self.handle_new_or_modified_objects(view, objects, calendar, mod="modified")
+        self.handle_new_or_modified_objects(view,
+                                            objects,
+                                            calendar,
+                                            mod="modified")
 
     def view_objects_removed(self, view, component_ids, calendar):
         self.handle_removed_objects(view, component_ids, calendar)
@@ -146,9 +146,8 @@ class GnomeOnlineAccountCal:
             # pylint: disable=no-member
             self.make_menu_items()
 
-    def recurrence_generated(
-        self, ical_comp, instance_start, instance_end, calendar, cancellable
-    ):
+    def recurrence_generated(self, ical_comp, instance_start, instance_end,
+                             calendar, cancellable):
         if calendar.view_cancellable.is_cancelled():
             return False
 
@@ -175,8 +174,7 @@ class GnomeOnlineAccountCal:
         end_timet = instance_end.as_timet_with_zone(dte_timezone)
         end_dttime = datetime.datetime.fromtimestamp(end_timet)
         mod_prop = ical_comp.get_first_property(
-            ICalGLib.PropertyKind.LASTMODIFIED_PROPERTY
-        )
+            ICalGLib.PropertyKind.LASTMODIFIED_PROPERTY)
         ical_time_modified = mod_prop.get_lastmodified()
         # Modified time "last-modified" is utc
         mod_timet = ical_time_modified.as_timet()
@@ -206,9 +204,8 @@ class GnomeOnlineAccountCal:
             if ical_comp.get_uid() is None:
                 continue
 
-            if (
-                not ECal.util_component_is_instance(ical_comp)
-            ) and ECal.util_component_has_recurrences(ical_comp):
+            if (not ECal.util_component_is_instance(ical_comp)
+                ) and ECal.util_component_has_recurrences(ical_comp):
                 calendar.client.generate_instances_for_object(
                     ical_comp,
                     calendar.start,
@@ -231,31 +228,26 @@ class GnomeOnlineAccountCal:
                     summary = ""
 
                 dts_prop = ical_comp.get_first_property(
-                    ICalGLib.PropertyKind.DTSTART_PROPERTY
-                )
+                    ICalGLib.PropertyKind.DTSTART_PROPERTY)
                 ical_time_start = dts_prop.get_dtstart()
-                start_timet = self.ical_time_get_timet(
-                    calendar.client, ical_time_start, dts_prop
-                )
+                start_timet = self.ical_time_get_timet(calendar.client,
+                                                       ical_time_start,
+                                                       dts_prop)
                 all_day = ical_time_start.is_date()
 
                 dte_prop = ical_comp.get_first_property(
-                    ICalGLib.PropertyKind.DTEND_PROPERTY
-                )
+                    ICalGLib.PropertyKind.DTEND_PROPERTY)
 
                 if dte_prop is not None:
                     ical_time_end = dte_prop.get_dtend()
                     end_timet = self.ical_time_get_timet(
-                        calendar.client, ical_time_end, dte_prop
-                    )
+                        calendar.client, ical_time_end, dte_prop)
                 else:
                     end_timet = start_timet + (
-                        60 * 30
-                    )  # Default to 30m if the end time is bad.
+                        60 * 30)  # Default to 30m if the end time is bad.
 
                 mod_prop = ical_comp.get_first_property(
-                    ICalGLib.PropertyKind.LASTMODIFIED_PROPERTY
-                )
+                    ICalGLib.PropertyKind.LASTMODIFIED_PROPERTY)
                 ical_time_modified = mod_prop.get_lastmodified()
                 # Modified time "last-modified" is utc
                 mod_timet = ical_time_modified.as_timet()
