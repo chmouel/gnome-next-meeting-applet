@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "gnome-next-meeting-applet"
+version = "2.0.0"
+description = "Show your next meeetings in an applet"
+authors = ["Chmouel Boudjnah <chmouel@chmouel.com>"]
+maintainers = ["Chmouel Boudjnah <chmouel@chmouel.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = ""
+keywords = [
+    "calendar", "Gnome",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+PyGObject = "^3.0.0"
+python-dateutil = "^2.0.0"
+PyYAML = "^6.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+
+[tool.poetry.scripts]
+gnome-next-meeting-applet = "gnma.cli:cli"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.urls]
+issues = "https://github.com/chmouel/gnome-next-meeting-applet/issues"
