@@ -7,9 +7,9 @@ import dateutil.relativedelta as dtrelative
 import gi  # type:ignore
 import yaml
 
-gi.require_version('AppIndicator3', '0.1')
-gi.require_version('EDataServer', '1.2')
-gi.require_version('Gtk', '3.0')
+gi.require_version("AppIndicator3", "0.1")
+gi.require_version("EDataServer", "1.2")
+gi.require_version("Gtk", "3.0")
 # pylint: disable=E0611 disable=C0411
 from gi.repository import AppIndicator3 as appindicator  # type:ignore
 from gi.repository import EDataServer
@@ -32,7 +32,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
 
     def set_logging(self):
         if self.args.verbose:
-            logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
+            logging.basicConfig(encoding="utf-8", level=logging.DEBUG)
 
     def get_or_init_config(self) -> None:
         configfile = pathlib.Path(config.CONFIG_FILE).expanduser()
@@ -57,8 +57,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
         if events is None:
             return []
         for event in events:
-            if self.config["skip_non_confirmed"] and event.comp.get_status(
-            ).value_name != "I_CAL_STATUS_CONFIRMED":
+            if (self.config["skip_non_confirmed"]
+                    and event.comp.get_status().value_name !=
+                    "I_CAL_STATUS_CONFIRMED"):
                 logging.debug("[SKIP] non confirmed event")
                 continue
             ret.append(event)
@@ -82,8 +83,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
             summary = strings.remove_emojis(summary)
 
         now = datetime.datetime.now()
-        logging.debug("First event in UTC start_time: %s send_time: %s",
-                      event.start_dttime, event.end_dttime)
+        logging.debug("First event in start_time: %s end_time: %s summary: %s",
+                      event.start_dttime, event.end_dttime, summary)
 
         if event.end_dttime == now:
             return f" Meeting over 😲 - {summary}"
@@ -97,8 +98,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
         return f"{humanized_str} - {summary}"
 
     def get_icon_path(self, icon):
-        if f"icon_{icon}_path" in self.config and pathlib.Path(
-                self.config[f"icon_{icon}_path"]).exists():
+        if (f"icon_{icon}_path" in self.config
+                and pathlib.Path(self.config[f"icon_{icon}_path"]).exists()):
             return self.config[f"icon_{icon}_path"]
 
         devpath = pathlib.Path(__file__).parent.parent / "images"
@@ -110,6 +111,12 @@ class Applet(goacal.GnomeOnlineAccountCal):
             if (devpath / f"{icon}.{ext}").exists():
                 return str(devpath / f"{icon}.{ext}")
         return "x-office-calendar-symbolic"
+
+    def open_source_location(self, source):
+        if source.location == "":
+            return
+        logging.debug("Opening Location: %s", source.location)
+        gtk.show_uri(None, source.location, gtk.get_current_event_time())
 
     def set_indicator_icon_label(self, event):
         now = datetime.datetime.now()
@@ -123,7 +130,10 @@ class Applet(goacal.GnomeOnlineAccountCal):
         elif now >= event.start_dttime and event.end_dttime > now:
             logging.debug(
                 "current in meeting, now: %s, first_start_time: %s, first_end_time: %s",
-                now, event.start_dttime, event.end_dttime)
+                now,
+                event.start_dttime,
+                event.end_dttime,
+            )
             self.indicator.set_icon_full(self.get_icon_path("in_event"),
                                          "In meeting! Focus")
         elif now >= event.end_dttime:  # need a refresh
@@ -144,15 +154,27 @@ class Applet(goacal.GnomeOnlineAccountCal):
         menu.show_all()
         self.indicator.set_menu(menu)
 
+    def make_attacchment_item(self, menu, event):
+        now = datetime.datetime.now()
+        if not (event.start_dttime < now and now < event.end_dttime
+                and event.comp.get_attachments()):
+            return menu
+        menuitem = gtk.MenuItem(label="📑 Open current meeting document")
+        menuitem.location = event.comp.get_attachments()[0].get_url()
+        menuitem.connect("activate", self.open_source_location)
+        menu.add(menuitem)
+        menu.append(gtk.SeparatorMenuItem())
+        return menu
+
     def make_menu_items(self):
         menu = gtk.Menu()
 
         events = self.sort_and_filter_event()
         if not events:
-            self.add_last_item(menu)
             return
-
-        self.set_indicator_icon_label(events[0])
+        first_event = events[0]
+        self.set_indicator_icon_label(first_event)
+        menu = self.make_attacchment_item(menu, first_event)
         self.add_last_item(menu)
 
     def run(self):
