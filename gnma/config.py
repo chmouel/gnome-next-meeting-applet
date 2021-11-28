@@ -1,3 +1,5 @@
+from gi.repository import GLib as glib  # type: ignore
+
 DEFAULT_CONFIG = {
     # TODO(chmouel): should be plural
     "restrict_to_calendar": [],
@@ -17,4 +19,21 @@ DEFAULT_CONFIG = {
     "strip_title_emojis": False,
 }
 
-CONFIG_FILE = "~/.config/gnome-next-meeting-applet/config.yaml"
+CONFIG_FILE = f"{glib.get_user_config_dir()}/gnome-next-meeting-applet/config.yaml"
+
+VIDEOCALL_DESC_REGEXP = [
+    r"href=\"(https:..primetime.bluejeans.com.a2m.live-event.([^\/\"])*\")",
+    r"(https://zoom.us/j/[^\n]*)",
+    r"(https://meet.google.com/[^\n]*)",
+]
+
+AUTOSTART_DESKTOP_FILE = """#!/usr/bin/env xdg-open
+[Desktop Entry]
+Categories=Productivity;
+Exec=gnome-next-meeting-applet
+Icon=calendar
+Name=Google Calendar next meeting applet
+Type=Application
+X-GNOME-Autostart-enabled=true
+Terminal=false
+"""

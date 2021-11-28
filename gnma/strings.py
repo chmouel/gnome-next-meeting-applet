@@ -4,6 +4,12 @@ import re
 import dateutil.relativedelta as dtrelative
 
 
+# Replace html chars
+def htmlspecialchars(text):
+    return (text.replace("&", "&amp;").replace('"', "&quot;").replace(
+        "<", "&lt;").replace(">", "&gt;"))
+
+
 # remove_emojis from https://stackoverflow.com/a/58356570
 def remove_emojis(data):
     emoj = re.compile(

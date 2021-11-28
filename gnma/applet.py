@@ -2,6 +2,7 @@
 import datetime
 import logging
 import pathlib
+import re
 
 import dateutil.relativedelta as dtrelative
 import gi  # type:ignore
@@ -14,6 +15,7 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import AppIndicator3 as appindicator  # type:ignore
 from gi.repository import EDataServer
 from gi.repository import Gtk as gtk
+from gi.repository import GLib as glib
 
 from gnma import config
 from gnma import gnome_online_account_cal as goacal
@@ -29,6 +31,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
         self.config = config.DEFAULT_CONFIG
         self.last_sorted = None
         self.indicator = None
+        self.autostart_file = pathlib.Path(
+            f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
+        )
 
     def set_logging(self):
         if self.args.verbose:
@@ -148,6 +153,18 @@ class Applet(goacal.GnomeOnlineAccountCal):
         return True
 
     def add_last_item(self, menu):
+        setting_menu = gtk.Menu()
+        label = ("Remove autostart"
+                 if self.autostart_file.exists() else "Auto start at boot")
+        item_autostart = gtk.MenuItem(label=label)
+        item_autostart.connect("activate", self.install_uninstall_autostart)
+        setting_menu.add(item_autostart)
+
+        setting_item = gtk.MenuItem()
+        setting_item.set_label("Setting")
+        setting_item.set_submenu(setting_menu)
+        menu.add(setting_item)
+
         item_quit = gtk.MenuItem(label="Quit")
         item_quit.connect("activate", gtk.main_quit)
         menu.add(item_quit)
@@ -175,7 +192,90 @@ class Applet(goacal.GnomeOnlineAccountCal):
         first_event = events[0]
         self.set_indicator_icon_label(first_event)
         menu = self.make_attacchment_item(menu, first_event)
+
+        currentday = ""
+        for event in events:
+            event_day = event.start_dttime.strftime("%A %d %B %Y")
+            if event_day != currentday:
+                menu = self.add_current_day(menu, event, currentday)
+                currentday = event_day
+
+            summary = strings.htmlspecialchars(
+                event.comp.get_summary().get_value().strip())
+            if datetime.datetime.now() >= event.start_dttime:
+                summary = f"<i>{summary}</i>"
+            icon = self.make_icon(event)
+            start_time_str = event.start_dttime.strftime("%H:%M")
+            menuitem = gtk.MenuItem(
+                label=f"{icon} {summary} - {start_time_str}")
+            menuitem.get_child().set_use_markup(True)
+
+            match_videocall_summary = self.match_videocall_url_from_summary(
+                event)
+            if event.comp.get_location() and event.comp.get_location(
+            ).startswith("https://"):
+                menuitem.location = event.comp.get_location()
+            elif match_videocall_summary:
+                menuitem.location = match_videocall_summary
+            else:
+                menuitem.location = ""
+            menuitem.connect("activate", self.open_source_location)
+            menu.append(menuitem)
+
         self.add_last_item(menu)
+
+    def make_icon(self, event):
+        icon = self.config["default_icon"]
+        _organizer = event.comp.get_organizer()
+        if _organizer:
+            organizer = _organizer.get_value().replace("mailto:", "")
+            for regexp in self.config["event_organizers_icon"]:
+                if re.match(regexp, organizer):
+                    icon = self.config["event_organizers_icon"][regexp]
+                    break
+
+        if icon == self.config["default_icon"]:
+            title = event.comp.get_summary().get_value()
+            for regexp in self.config["title_match_icon"]:
+                if re.match(regexp, title):
+                    icon = self.config["title_match_icon"][regexp]
+        return icon
+
+    def add_current_day(self, menu, event, currentday):
+        event_day = event.start_dttime.strftime("%A %d %B %Y")
+        if currentday != "":
+            menu.append(gtk.MenuItem(label=""))
+        todayitem = gtk.MenuItem(
+            label=f'<span size="large">{event_day}</span>')
+        todayitem.get_child().set_use_markup(True)
+        prefix_url = self.config["calendar_day_prefix_url"]
+        # this only works with google calendar i think
+        todayitem.location = f"{prefix_url}/{event.start_dttime.strftime('%Y/%m/%d')}"
+        todayitem.connect("activate", self.open_source_location)
+        menu.append(todayitem)
+        menu.append(gtk.SeparatorMenuItem())
+        return menu
+
+    def match_videocall_url_from_summary(self, event) -> str:
+        descriptions = event.comp.get_descriptions()
+        if not descriptions:
+            return ""
+        # can you have multiple descriptions???
+        text = descriptions[0].get_value()
+        for reg in config.VIDEOCALL_DESC_REGEXP:
+            match = re.search(reg, text)
+            if match:
+                url = match.groups()[0]
+                return url
+        return ""
+
+    def install_uninstall_autostart(self, source):
+        if self.autostart_file.exists():
+            self.autostart_file.unlink()
+            source.set_label("Auto start at boot")
+            return
+        self.autostart_file.write_text(config.AUTOSTART_DESKTOP_FILE)
+        source.set_label("Remove autostart")
 
     def run(self):
         self.set_logging()
