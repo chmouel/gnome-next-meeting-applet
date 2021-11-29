@@ -122,7 +122,12 @@ class Applet(goacal.GnomeOnlineAccountCal):
         logging.debug("Opening Location: %s", source.location)
         gtk.show_uri(None, source.location, gtk.get_current_event_time())
 
-    def set_indicator_icon_label(self, event):
+    def set_indicator_icon_label(self, event=None):
+        if event is None and len(self.all_events) > 0:
+            self.sort_and_filter_event()
+            event = self.all_events[self.last_sorted[0]]
+        else:
+            return True
         now = datetime.datetime.now()
         # pylint: disable=C0113
         if (now >
@@ -284,8 +289,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
             "calendar",
             appindicator.IndicatorCategory.SYSTEM_SERVICES,
         )
-        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         EDataServer.SourceRegistry.new(None, self.goa_registry_callback)
+        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+        glib.timeout_add_seconds(2, self.set_indicator_icon_label)
         gtk.main()
 
 
