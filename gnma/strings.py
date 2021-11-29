@@ -1,7 +1,6 @@
 import datetime
 import re
 
-import dateutil.relativedelta as dtrelative
 import humanize
 
 
