@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import gi  # type:ignore
 
@@ -8,8 +9,15 @@ gi.require_version("ECal", "2.0")
 gi.require_version("EDataServer", "1.2")
 gi.require_version("Gio", "2.0")
 gi.require_version("ICal", "3.0")
+gi.require_version('GLib', '2.0')
 # pylint: disable=C0411,E0611
-from gi.repository import ECal, EDataServer, Gio, GLib, ICalGLib, ICal  # type:ignore
+from gi.repository import (
+    ECal,
+    EDataServer,
+    Gio,
+    GLib,
+    ICal,  # type:ignore
+    ICalGLib)
 
 
 class GnomeOnlineAccountError(Exception):
@@ -294,7 +302,9 @@ class GnomeOnlineAccountCal:
         self.interface.emit_client_disappeared(source.get_uid())
         calendar.destroy()
 
-        del self.calendars[source.get_uid()]
+        if source.get_uid() in self.calendars:
+            logging.debug("deleting event: %s", source.get_uid())
+            del self.calendars[source.get_uid()]
         if len(self.calendars) > 0:
             return
 
