@@ -123,7 +123,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
 
     def set_indicator_icon_label(self, event=None):
         if event is None and len(self.all_events) > 0:
-            self.sort_and_filter_event()
+            self.make_menu_items()
             event = self.all_events[self.last_sorted[0]]
         else:
             return True
