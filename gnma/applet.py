@@ -62,6 +62,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
         if events is None:
             return []
         for event in events:
+            if datetime.datetime.now() > event.end_dttime:
+                continue
             if (self.config["skip_non_confirmed"]
                     and event.comp.get_status().value_name !=
                     "I_CAL_STATUS_CONFIRMED"):
