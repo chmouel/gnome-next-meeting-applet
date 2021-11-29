@@ -14,8 +14,9 @@ keywords = [
 [tool.poetry.dependencies]
 python = "^3.8"
 PyGObject = "^3.0.0"
-python-dateutil = "^2.0.0"
-PyYAML = "^6.0"
+python-dateutil = "*"
+PyYAML = "*"
+humanize = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

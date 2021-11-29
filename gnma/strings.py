@@ -2,6 +2,7 @@ import datetime
 import re
 
 import dateutil.relativedelta as dtrelative
+import humanize
 
 
 # Replace html chars
@@ -37,21 +38,17 @@ def remove_emojis(data):
     return re.sub(emoj, '', data)
 
 
-def humanize_rd(
-    relative: dtrelative.relativedelta,
-    start_time: datetime.datetime,
-    end_time: datetime.datetime,
-) -> str:
-    humzrd = ""
-    for dttype in (("day", relative.days), ("hour", relative.hours),
-                   ("minute", relative.minutes)):
-        if dttype[1] == 0:
-            continue
-        humzrd += f"{dttype[1]} {dttype[0]}"
-        if dttype[1] > 1:
-            humzrd += "s"
-        humzrd += " "
+def humanize_time(start_time: datetime.datetime,
+                  end_time: datetime.datetime) -> str:
+    now = datetime.datetime.now()
 
-    if start_time < datetime.datetime.now() < end_time:
-        humzrd = humzrd.strip() + " left"
-    return humzrd.strip()
+    if end_time == now:
+        return "meeting is over"
+
+    # if event already started
+    if start_time <= now <= end_time:
+        return humanize.naturaldelta(
+            end_time, when=(now - datetime.timedelta(minutes=1))) + " left"
+    return humanize.precisedelta(start_time + datetime.timedelta(minutes=1),
+                                 minimum_unit="minutes",
+                                 format="%d")

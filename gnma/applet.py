@@ -97,8 +97,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         else:
             _rd = dtrelative.relativedelta(event.start_dttime, now)
 
-        humanized_str = strings.humanize_rd(_rd, event.start_dttime,
-                                            event.end_dttime)
+        humanized_str = strings.humanize_time(event.start_dttime, event.end_dttime)
         return f"{humanized_str} - {summary}"
 
     def get_icon_path(self, icon):
@@ -137,12 +136,6 @@ class Applet(goacal.GnomeOnlineAccountCal):
             self.indicator.set_icon_full(self.get_icon_path("before_event"),
                                          "Meeting start soon!")
         elif now >= event.start_dttime and event.end_dttime > now:
-            logging.debug(
-                "current in meeting, now: %s, first_start_time: %s, first_end_time: %s",
-                now,
-                event.start_dttime,
-                event.end_dttime,
-            )
             self.indicator.set_icon_full(self.get_icon_path("in_event"),
                                          "In meeting! Focus")
         elif now >= event.end_dttime:  # need a refresh
