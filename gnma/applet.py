@@ -90,9 +90,6 @@ class Applet(goacal.GnomeOnlineAccountCal):
             summary = strings.remove_emojis(summary)
 
         now = datetime.datetime.now()
-        logging.debug("First event in start_time: %s end_time: %s summary: %s",
-                      event.start_dttime, event.end_dttime, summary)
-
         if event.end_dttime == now:
             return f" Meeting over 😲 - {summary}"
         if event.start_dttime < now < event.end_dttime:
