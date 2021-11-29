@@ -63,6 +63,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
             return []
         for event in events:
             if datetime.datetime.now() > event.end_dttime:
+                del self.all_events[event.uid]
+                logging.debug("[skipping] elapsed: %s", event.summary)
                 continue
             if (self.config["skip_non_confirmed"]
                     and event.comp.get_status().value_name !=
@@ -127,6 +129,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
             event = self.all_events[self.last_sorted[0]]
         else:
             return True
+
         now = datetime.datetime.now()
         # pylint: disable=C0113
         if (now >
@@ -138,7 +141,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         elif now >= event.start_dttime and event.end_dttime > now:
             self.indicator.set_icon_full(self.get_icon_path("in_event"),
                                          "In meeting! Focus")
-        elif now >= event.end_dttime:  # need a refresh
+        elif now > event.end_dttime:  # need a refresh
             self.make_menu_items()
             self.set_indicator_icon_label(event)
         else:
