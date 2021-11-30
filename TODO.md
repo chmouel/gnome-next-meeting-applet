@@ -1,0 +1,3 @@
+- Filter different account/calendar_name
+- GUI for settings
+- Syncronize Calendar request to evodataserver <https://github.com/GNOME/gnome-calendar/blob/d26f3fe01b4f68ede9ffff11a9f7a72c799f81ff/src/core/gcal-manager.c#L166> - <https://lazka.github.io/pgi-docs/ECal-2.0/classes/Client.html#ECal.Client.connect_sync>
