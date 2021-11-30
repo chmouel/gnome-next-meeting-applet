@@ -1,6 +1,7 @@
 # Gnome Next Meeting applet
+<img src="./data/desktop/icon.svg" width=64 height=64 align=center> An applet to show your next meetings in Gnome and others with Gnome Online Accounts and Evolution Data Server
 
-An applet to show your next meetings in Gnome
+<br>
 
 ### Features
 
