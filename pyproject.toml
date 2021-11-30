@@ -40,3 +40,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.urls]
 issues = "https://github.com/chmouel/gnome-next-meeting-applet/issues"
+
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
