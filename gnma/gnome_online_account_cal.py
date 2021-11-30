@@ -26,6 +26,7 @@ class GnomeOnlineAccountError(Exception):
 
 class GnomeOnlineAccountCal:
     def __init__(self):
+        self.config = {}
         self.registry = []
         self.client_appeared_id = 0
         self.client_disappeared_id = 0
@@ -116,7 +117,6 @@ class GnomeOnlineAccountCal:
             _, view = client.get_view_finish(res)
             calendar.view = view
         except GLib.Error as gliberror:
-            print("get view failed: ", gliberror)
             raise GnomeOnlineAccountError from gliberror
 
         view.set_flags(ECal.ClientViewFlags.NOTIFY_INITIAL)
@@ -283,6 +283,12 @@ class GnomeOnlineAccountCal:
         return self.get_id_from_comp_id(comp_id, source_id)
 
     def source_appeared(self, watcher, source):
+        if self.config["restrict_to_calendar"] and source.get_display_name(
+        ) not in self.config["restrict_to_calendar"]:
+            logging.debug("[SKIP] skipping calendar not in config: %s",
+                          source.get_display_name())
+            return
+        logging.debug("Watching calendar %s", source.get_display_name())
         ECal.Client.connect(
             source,
             ECal.ClientSourceType.EVENTS,
