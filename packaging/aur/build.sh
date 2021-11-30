@@ -41,6 +41,7 @@ sudo docker run --rm \
                          git config --global user.email '${AUTHOR_EMAIL}' && \
                          git config --global user.name '${AUTHOR_NAME}' && \
                          sed -E 's#(pkgver=).*#\1$VERSION#' -i PKGBUILD && \
+                         sed -E 's#(pkgrel=).*#\1$RELEASE#' -i PKGBUILD && \
                          updpkgsums && \
                          makepkg --printsrcinfo > .SRCINFO && \
                          git clean -f && \
