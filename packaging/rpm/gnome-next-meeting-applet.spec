@@ -47,8 +47,8 @@ cp -a data/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications/
 install -m0644 data/desktop/%{name}.desktop $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons
-install -m 0644 data/desktop/icon.svg $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.svg
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+install -m 0644 data/desktop/icon.svg $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %files
 %doc README.md config.sample.yaml
@@ -58,6 +58,7 @@ install -m 0644 data/desktop/icon.svg $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.s
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/%{name}.svg
 
 %changelog
