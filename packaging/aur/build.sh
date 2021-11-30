@@ -2,19 +2,19 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-VERSION=$(python3 -c 'import gnome_next_meeting_applet as f;print(f.__version__)')
+POETRY_NAME_VERSION="$(poetry version)"
+PKGNAME=${POETRY_NAME_VERSION% *}
 AUTHOR_EMAIL="chmouel@chmouel.com"
 AUTHOR_NAME="Chmouel Boudjnah"
 RELEASE=1
-PKGNAME=gnome-next-meeting-applet
 image_name=${PKGNAME}-aur-builder
 finalaction="git push origin master"
 gitdir=$(git rev-parse --show-toplevel)
 cd "${gitdir}"
 
-while getopts "n" o; do
+while getopts "d" o; do
     case "${o}" in
-        n)
+        d)
             finalaction="echo done"
             ;;
         *)
@@ -23,6 +23,8 @@ while getopts "n" o; do
     esac
 done
 shift $((OPTIND-1))
+
+VERSION=${1:-${POETRY_NAME_VERSION#* }}
 
 sudo docker build -f ./packaging/aur/Dockerfile -t ${image_name} .
 

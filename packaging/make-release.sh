@@ -39,8 +39,8 @@ bumpversion() {
 }
 [[ -z ${VERSION} ]] && bumpversion
 
-vfile=gnome_next_meeting_applet/__init__.py
-sed -i "s/.*version.*/__version__ = '${VERSION}'/" ${vfile}
+vfile=pyproject.toml
+sed -i "s/^version = .*/version = \"${VERSION}\"/" ${vfile}
 git commit -S -m "Release ${VERSION} 🥳" ${vfile} || true
 git tag -s ${VERSION} -m "Releasing version ${VERSION}"
 git push --tags origin ${VERSION}

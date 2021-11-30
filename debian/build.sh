@@ -30,7 +30,7 @@ shift $((OPTIND-1))
 }
 gpg --list-secret-keys >/dev/null || { echo "You need to have a secret GPG key"; exit 1 ;}
 
-for dockerdistroversion in latest ;do
+for dockerdistroversion in latest rolling;do
     dockerfile=/tmp/Dockerfile.${dockerdistroversion}.$$
     sed "s/FROM ubuntu:.*/FROM ubuntu:${dockerdistroversion}/" ./debian/Dockerfile > ${dockerfile}
     sudo docker build -f ${dockerfile} -t ${NAME}-${dockerdistroversion}-builder .
