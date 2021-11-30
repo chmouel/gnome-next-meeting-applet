@@ -1,3 +1,4 @@
+PACKAGE := gnome-next-meeting-applet
 
 .PHONY: requirements
 requirements:
@@ -14,3 +15,7 @@ fmt: requirements_tools
 .PHONY: lint
 lint: requirements_tools
 	@poetry run pylint -r y gnma/
+
+.PHONY: run
+run: requirements
+	@poetry run $(PACKAGE)
