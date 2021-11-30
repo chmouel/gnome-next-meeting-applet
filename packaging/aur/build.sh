@@ -4,8 +4,8 @@ IFS=$'\n\t'
 
 POETRY_NAME_VERSION="$(poetry version)"
 PKGNAME=${POETRY_NAME_VERSION% *}
-AUTHOR_EMAIL="chmouel@chmouel.com"
-AUTHOR_NAME="Chmouel Boudjnah"
+AUTHOR_EMAIL="$(git config --get user.email)"
+AUTHOR_NAME="$(git config --get user.name)"
 RELEASE=1
 image_name=${PKGNAME}-aur-builder
 finalaction="git push origin master"

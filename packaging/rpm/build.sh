@@ -3,7 +3,7 @@ set -feux
 POETRY_NAME_VERSION="$(poetry version)"
 NAME=${POETRY_NAME_VERSION% *}
 VERSION=${POETRY_NAME_VERSION#* }
-AUTHOR_EMAIL="Chmouel Boudjnah <chmouel@chmouel.com>"
+AUTHOR_EMAIL="$(git config --get user.name) <$(git config --get user.email)>"
 RELEASE=1
 finalaction="copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm"
 
