@@ -46,8 +46,12 @@ def humanize_time(start_time: datetime.datetime,
 
     # if event already started
     if start_time <= now <= end_time:
-        return humanize.naturaldelta(
-            end_time, when=(now - datetime.timedelta(minutes=1))) + " left"
+        try:
+            natural = humanize.naturaldelta(
+                end_time, when=(now - datetime.timedelta(minutes=1)))
+        except TypeError:
+            natural = humanize.naturaldelta(end_time)
+        return natural + " left"
     return humanize.precisedelta(start_time + datetime.timedelta(minutes=1),
                                  minimum_unit="minutes",
                                  format="%d")
