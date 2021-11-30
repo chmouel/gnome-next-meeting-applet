@@ -71,6 +71,23 @@ class Applet(goacal.GnomeOnlineAccountCal):
                     "I_CAL_STATUS_CONFIRMED"):
                 logging.debug("[SKIP] non confirmed event")
                 continue
+
+            skipit = False
+            if self.config["skip_non_accepted"] and self.config["my_emails"]:
+                skipit = True
+                for attendee in event.comp.get_attendees():
+                    for myemail in self.config["my_emails"]:
+                        if (attendee.get_value().replace("mailto:",
+                                                         "") == myemail
+                                and attendee.get_partstat().value_name
+                                == "I_CAL_PARTSTAT_ACCEPTED"):
+                            skipit = False
+            if skipit:
+                logging.debug("[SKIP] not accepted: %s",
+                              event.comp.get_summary().get_value())
+                del self.all_events[event.uid]
+                continue
+
             ret.append(event)
 
         lastids = [x.uid for x in ret[:self.config["max_results"]]]
