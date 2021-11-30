@@ -99,7 +99,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
         else:
             _rd = dtrelative.relativedelta(event.start_dttime, now)
 
-        humanized_str = strings.humanize_time(event.start_dttime, event.end_dttime)
+        humanized_str = strings.humanize_time(event.start_dttime,
+                                              event.end_dttime)
         return f"{humanized_str} - {summary}"
 
     def get_icon_path(self, icon):
@@ -107,7 +108,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 and pathlib.Path(self.config[f"icon_{icon}_path"]).exists()):
             return self.config[f"icon_{icon}_path"]
 
-        devpath = pathlib.Path(__file__).parent.parent / "images"
+        devpath = pathlib.Path(__file__).parent.parent / "data" / "images"
         if not devpath.exists():
             devpath = pathlib.Path(
                 "/usr/share/gnome-next-meeting-applet/images")
