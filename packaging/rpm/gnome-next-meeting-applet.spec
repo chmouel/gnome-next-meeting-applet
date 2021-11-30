@@ -59,7 +59,7 @@ install -m 0644 data/desktop/icon.svg $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/icons/%{name}.svg
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
 * Fri Nov 30 2021 Chmouel Boudjnah <chmouel@chmouel.com> - 2.0.0-1
