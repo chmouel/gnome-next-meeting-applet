@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-set -eux
-NAME=gnome-next-meeting-applet
+set -feux
+POETRY_NAME_VERSION="$(poetry version)"
+NAME=${POETRY_NAME_VERSION% *}
+VERSION=${POETRY_NAME_VERSION#* }
 AUTHOR_EMAIL="Chmouel Boudjnah <chmouel@chmouel.com>"
-VERSION=$(python3 -c 'import gnome_next_meeting_applet as f;print(f.__version__)')
 RELEASE=1
 finalaction="copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm"
 
@@ -11,10 +12,13 @@ cd "${gitdir}"
 justbuildrpm=""
 image_name=gnome-next-meeting-applet-rpm-builder
 
-while getopts "r" o; do
+while getopts "rd" o; do
     case "${o}" in
         r)
             finalaction="rpmbuild -ba /tmp/${NAME}.spec --define '_sourcedir /tmp/' --define '_srcrpmdir /tmp/'"
+            ;;
+        d)
+            finalaction="echo rpmbuild -ba /tmp/${NAME}.spec --define \'_sourcedir /tmp/\' --define \'_srcrpmdir /tmp/\'; /bin/bash"
             ;;
         *)
             echo "Invalid option"; exit 1;

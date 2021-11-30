@@ -1,4 +1,13 @@
+import datetime
 import re
+
+import humanize
+
+
+# Replace html chars
+def htmlspecialchars(text):
+    return (text.replace("&", "&amp;").replace('"', "&quot;").replace(
+        "<", "&lt;").replace(">", "&gt;"))
 
 
 # remove_emojis from https://stackoverflow.com/a/58356570
@@ -26,3 +35,19 @@ def remove_emojis(data):
         "]+",
         re.UNICODE)
     return re.sub(emoj, '', data)
+
+
+def humanize_time(start_time: datetime.datetime,
+                  end_time: datetime.datetime) -> str:
+    now = datetime.datetime.now()
+
+    if end_time == now:
+        return "meeting is over"
+
+    # if event already started
+    if start_time <= now <= end_time:
+        return humanize.naturaldelta(
+            end_time, when=(now - datetime.timedelta(minutes=1))) + " left"
+    return humanize.precisedelta(start_time + datetime.timedelta(minutes=1),
+                                 minimum_unit="minutes",
+                                 format="%d")

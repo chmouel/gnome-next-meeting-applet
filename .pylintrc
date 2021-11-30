@@ -1,2 +1,17 @@
 [MASTER]
-disable = missing-docstring, R0903, R0912, R0914, R0915, W0511, E402, chained-comparison, C0413, E0401
+disable = C0413,
+        E0401,
+        E402,
+        R0902,
+        R0903,
+        R0912,
+        R0913,
+        R0914,
+        R0915,
+        W0511,
+        no-self-use,
+        chained-comparison,
+        unspecified-encoding,
+        missing-docstring,
+
+# vim: ft=toml

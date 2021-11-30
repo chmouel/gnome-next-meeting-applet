@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Gnome Next Meeting Applet
-Comment=An applet for your calendar to show your next meetings
+Name=Next Meeting Applet
+Comment=An applet to show your next meetings in panel
 Exec=gnome-next-meeting-applet
 Icon=gnome-next-meeting-applet
 Categories=Application;Productivity;Calendar

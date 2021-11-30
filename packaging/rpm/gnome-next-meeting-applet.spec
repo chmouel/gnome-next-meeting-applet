@@ -13,49 +13,56 @@ Source0:        https://github.com/chmouel/%{name}/archive/%{name}-%{version}.ta
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-toml
+BuildRequires:  python3-poetry-core
 
 # gnome-settings-daemon
-Requires:       python3-gobject
-Requires:       python3-tzlocal
-Requires:       python3-dateutil
 Requires:       libappindicator-gtk3
 Requires:       python3-gobject
+Requires:       python3-dateutil
 Requires:       python3-yaml
-Requires:       python3-pytz
+Requires:       python3-humanize
+Requires:       evolution-data-server
 Requires:       gnome-icon-theme
 
 %description
-Gnome next meeting applet will show your next appointment coming from Google
- Calendar.
+Gnome next meeting applet will show your next appointments coming from your
+calendar configured in Gnome Online Accounts or Evolution data server.
 
+%generate_buildrequires
+%pyproject_buildrequires
+ 
 %prep
 %setup -q -n %{name}-%{version}
 
 %build
-%py3_build
+%pyproject_wheel
 
 %install
-%py3_install
+%pyproject_install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
-mv $RPM_BUILD_ROOT/usr/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
+cp -a data/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications/
-install -m0644 packaging/%{name}.desktop $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
+install -m0644 data/desktop/%{name}.desktop $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons
-install -m 0644 images/icon.svg $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.svg
+install -m 0644 data/desktop/icon.svg $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.svg
 
 %files
-%doc README.md AUTHORS.rst CONTRIBUTING.rst config.sample.yaml
+%doc README.md config.sample.yaml
 %license LICENSE
-%{python3_sitelib}/gnome_next_meeting_applet
-%{python3_sitelib}/gnome_next_meeting_applet-%{version}-py%{python3_version}.egg-info
+%{python3_sitelib}/gnma
+%{python3_sitelib}/gnome_next_meeting_applet-%{version}.dist-info
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/%{name}.svg
 
 %changelog
+* Fri Nov 30 2021 Chmouel Boudjnah <chmouel@chmouel.com> - 2.0.0-1
+- Use poetry pypackages
+
 * Fri Feb  5 2021 Chmouel Boudjnah <chmouel@chmouel.com> - 0.1.0-1
 - first packaging version

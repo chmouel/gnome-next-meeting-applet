@@ -16,6 +16,7 @@ restrict_to_calendar:
   - Work
 title_max_char: 20
 calendar_day_prefix_url: "https://calendar.google.com/calendar/r/day/"
+
 # Five minutes before a meeting we will be changing the icon to reflect
 # something is coming up.
 change_icon_minutes: 5
