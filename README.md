@@ -126,7 +126,8 @@ if it does so I can add it to the list.
 * Used for a while the OSX application gnome-next-meeting
   <https://apps.apple.com/us/app/next-meeting/id1017470484?mt=12> and missed it on
   Linux.
-* Used code from [@GabLeRoux](https://github.com/gableroux) for evolution calendar integration - <https://askubuntu.com/a/1371087>
+* Originally used code from [@GabLeRoux](https://github.com/gableroux) for evolution calendar integration - <https://askubuntu.com/a/1371087>
+* Used code from cinnamon calendar server code https://github.com/linuxmint/cinnamon/blob/fc57426d44c0f5a31fe29f268a15e9928e8b6a14/calendar-server/cinnamon-calendar-server.py and adapted from gnome-shell calendar-server https://gitlab.gnome.org/GNOME/gnome-shell/-/tree/main/src/calendar-server
 
 ## License
 
