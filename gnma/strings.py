@@ -52,6 +52,11 @@ def humanize_time(start_time: datetime.datetime,
         except TypeError:
             natural = humanize.naturaldelta(end_time)
         return natural + " left"
-    return humanize.precisedelta(start_time + datetime.timedelta(minutes=1),
-                                 minimum_unit="minutes",
-                                 format="%d")
+    try:
+        natural = humanize.precisedelta(start_time +
+                                        datetime.timedelta(minutes=1),
+                                        minimum_unit="minutes",
+                                        format="%d")
+    except AttributeError:
+        natural = humanize.naturaldelta(start_time)
+    return natural
