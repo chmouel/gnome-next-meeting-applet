@@ -10,6 +10,6 @@ override_dh_auto_install:
 	mkdir -p  $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/ \
 			  $(CURDIR)/debian/$(PKGNAME)/usr/share/$(PKGNAME) \
 			  $(CURDIR)/debian/$(PKGNAME)/usr/share/icons
-	mv $(CURDIR)/debian/$(PKGNAME)/usr/images/ $(CURDIR)/debian/$(PKGNAME)/usr/share/$(PKGNAME)/
-	install -m0644 images/icon.svg $(CURDIR)/debian/$(PKGNAME)/usr/share/icons/$(PKGNAME).svg
-	install -m0644 $(CURDIR)/packaging/$(PKGNAME).desktop $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/
+	cp -av $(CURDIR)/data/images $(CURDIR)/debian/$(PKGNAME)/usr/share/$(PKGNAME)/
+	install -m0644 $(CURDIR)/data/desktop/icon.svg $(CURDIR)/debian/$(PKGNAME)/usr/share/icons/$(PKGNAME).svg
+	install -m0644 $(CURDIR)/data/desktop/$(PKGNAME).desktop $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/
