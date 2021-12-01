@@ -47,6 +47,6 @@ git push --tags origin ${VERSION}
 git push origin main
 gh release create ${VERSION} --title "Release ${VERSION} 🥳"
 
-./debian/build.sh
+./packaging/debian/build.sh
 ./packaging/aur/build.sh
 ./packaging/rpm/build.sh
