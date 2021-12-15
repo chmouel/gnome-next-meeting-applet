@@ -1,4 +1,4 @@
-#a Gnome Next Meeting applet
+# Gnome Next Meeting applet
 <img src="./data/desktop/icon.svg" width=64 height=64 align=center> An applet to show your next meetings with Gnome Online Accounts 
 
 <br>
