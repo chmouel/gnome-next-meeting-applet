@@ -13,11 +13,11 @@ bumpversion() {
    echo "If we bump we get, Major: ${major} Minor: ${minor} Patch: ${patch}"
    read -p "To which version you would like to bump [M]ajor, Mi[n]or, [P]atch or Manua[l]: " ANSWER
    if [[ ${ANSWER,,} == "m" ]];then
-       mode=major
+       mode="major"
    elif [[ ${ANSWER,,} == "n" ]];then
-       mode=minor
+       mode="minor"
    elif [[ ${ANSWER,,} == "p" ]];then
-       mode=patch
+       mode="patch"
    elif [[ ${ANSWER,,} == "l" ]];then
        read -p "Enter version: " -e VERSION
        return
