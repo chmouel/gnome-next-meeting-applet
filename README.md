@@ -1,4 +1,4 @@
-# Gnome Next Meeting applet
+#a Gnome Next Meeting applet
 <img src="./data/desktop/icon.svg" width=64 height=64 align=center> An applet to show your next meetings with Gnome Online Accounts 
 
 <br>
@@ -43,7 +43,7 @@ https://aur.archlinux.org/packages/gnome-next-meeting-applet/
 
 It depends on the
 [`gnome-shell-extension-appindicator`](https://archlinux.org/packages/community/any/gnome-shell-extension-appindicator/)
-extension package so you won't have to do manual instal there.
+extension package so you won't have to do a manual instal here. Just make sure to logout/relogin to your gnome desktop and enable the appindicator gnome-extension via the ["gnome-extensions-app"](https://ubuntuhandbook.org/index.php/2021/05/gnome-tweaks-40-no-longer-manage-extensions/)
 
 ## Configuration
 
