@@ -113,7 +113,7 @@ If you don't run on windows you need to make sure to run the goa-daemon, for exa
 /usr/lib/goa-daemon --replace &
 ```
 
-(binary may vary by distros, see bugzilla bug as well [#1340203](https://bugzilla.redhat.com/show_bug.cgi?id=1340203))
+(binary path may vary by distros, see this bugzilla bug as well [#1340203](https://bugzilla.redhat.com/show_bug.cgi?id=1340203))
 
 It was tested as working on [polybar](https://github.com/polybar/polybar), it only shows
 an icon but you can click on it to show your next meetings.
