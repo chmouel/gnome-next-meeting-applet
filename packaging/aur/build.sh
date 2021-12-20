@@ -32,7 +32,7 @@ sudo docker run --rm \
            -v ~/.config/copr:/home/builder/.config/copr \
            -v "${gitdir}":/src \
            -v $SSH_AUTH_SOCK:/ssh-agent --env SSH_AUTH_SOCK=/ssh-agent \
-           --name gnome-next-meeting-applet-builder \
+           --name ${PKGNAME}-builder \
            -it ${image_name} \
            /bin/bash -c "set -x;mkdir -p ~/.ssh/;chmod 0700 ~/.ssh && \
                          ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts && \
