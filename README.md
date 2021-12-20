@@ -1,5 +1,5 @@
 # Gnome Next Meeting applet
-<img src="./data/desktop/icon.svg" width=64 height=64 align=center> An applet to show your next meetings with Gnome Online Accounts 
+<img src="./data/desktop/icon.svg" width=64 height=64 align=center> An applet to show your next meetings with Gnome Online Accounts
 
 <br>
 
@@ -107,7 +107,7 @@ application launcher thingy.
 
 Works with Gnome as long you have this appindicator applet (which is by default on Ubuntu*)
 
-If you don't run on windows you need to make sure to run the goa-daemon, for example on my arch system :
+If you don't run on Gnome you need to make sure to run the goa-daemon, for example on my arch system :
 
 ```shell
 /usr/lib/goa-daemon --replace &
