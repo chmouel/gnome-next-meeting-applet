@@ -43,7 +43,7 @@ https://aur.archlinux.org/packages/gnome-next-meeting-applet/
 
 It depends on the
 [`gnome-shell-extension-appindicator`](https://archlinux.org/packages/community/any/gnome-shell-extension-appindicator/)
-extension package so you won't have to do manual instal there.
+extension package so you won't have to do a manual instal here. Just make sure to logout/relogin to your gnome desktop and enable the appindicator gnome-extension via the ["gnome-extensions-app"](https://ubuntuhandbook.org/index.php/2021/05/gnome-tweaks-40-no-longer-manage-extensions/)
 
 ## Configuration
 
@@ -107,7 +107,15 @@ application launcher thingy.
 
 Works with Gnome as long you have this appindicator applet (which is by default on Ubuntu*)
 
-It was tested as semi working on [polybar](https://github.com/polybar/polybar), it only shows
+If you don't run on windows you need to make sure to run the goa-daemon, for example on my arch system :
+
+```shell
+/usr/lib/goa-daemon --replace &
+```
+
+(binary path may vary by distros, see this bugzilla bug as well [#1340203](https://bugzilla.redhat.com/show_bug.cgi?id=1340203))
+
+It was tested as working on [polybar](https://github.com/polybar/polybar), it only shows
 an icon but you can click on it to show your next meetings.
 Make sure you have `tray_position = position` in your polybar config to enable it.
 
