@@ -32,7 +32,7 @@ gpg --list-secret-keys >/dev/null || { echo "You need to have a secret GPG key";
 
 for dockerdistroversion in latest rolling;do
     dockerfile=/tmp/Dockerfile.${dockerdistroversion}.$$
-    sed "s/FROM ubuntu:.*/FROM ubuntu:${dockerdistroversion}/" ./debian/Dockerfile > ${dockerfile}
+    sed "s/FROM ubuntu:.*/FROM ubuntu:${dockerdistroversion}/" ./packaging/debian/Dockerfile > ${dockerfile}
     sudo docker build -f ${dockerfile} -t ${NAME}-${dockerdistroversion}-builder .
     fpath=$(readlink -f .)
     sudo docker run --rm \
