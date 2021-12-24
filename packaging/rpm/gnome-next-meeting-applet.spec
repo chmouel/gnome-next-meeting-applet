@@ -23,6 +23,7 @@ Requires:       python3-gobject
 Requires:       python3-dateutil
 Requires:       python3-yaml
 Requires:       python3-humanize
+RequireS:       dbus-python
 Requires:       evolution-data-server
 Requires:       gnome-icon-theme
 

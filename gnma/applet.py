@@ -4,7 +4,6 @@ import logging
 import pathlib
 import re
 
-import dateutil.relativedelta as dtrelative
 import gi  # type:ignore
 import yaml
 
@@ -20,6 +19,7 @@ from gi.repository import GLib as glib
 from gnma import config
 from gnma import gnome_online_account_cal as goacal
 from gnma import strings
+from gnma import dbusservice
 
 APP_INDICTOR_ID = "gnome-next-meeting-applet"
 
@@ -30,7 +30,12 @@ class Applet(goacal.GnomeOnlineAccountCal):
         super().__init__()
         self.config = config.DEFAULT_CONFIG
         self.last_sorted = None
-        self.indicator = None
+        self.indicator = appindicator.Indicator.new(
+            APP_INDICTOR_ID,
+            "calendar",
+            appindicator.IndicatorCategory.SYSTEM_SERVICES,
+        )
+        self.dbus_server = dbusservice.DBusService(self)
         self.autostart_file = pathlib.Path(
             f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
         )
@@ -103,22 +108,16 @@ class Applet(goacal.GnomeOnlineAccountCal):
 
         # not sure why but on my gnome version (arch 40.4.0) we don't need to do
         # htmlspecialchars in bar, but i am sure on ubuntu i needed that, YMMV :-d !
-        summary = (comp.get_summary().get_value().strip()
-                   [:self.config["title_max_char"]])
+        summary = comp.get_summary().get_value().strip()
         if self.config["strip_title_emojis"]:
             summary = strings.remove_emojis(summary)
 
         now = datetime.datetime.now()
         if event.end_dttime == now:
-            return f" Meeting over 😲 - {summary}"
-        if event.start_dttime < now < event.end_dttime:
-            _rd = dtrelative.relativedelta(event.end_dttime, now)
-        else:
-            _rd = dtrelative.relativedelta(event.start_dttime, now)
-
+            return ["Meeting over 😲", summary]
         humanized_str = strings.humanize_time(event.start_dttime,
                                               event.end_dttime)
-        return f"{humanized_str} - {summary}"
+        return [humanized_str, summary]
 
     def get_icon_path(self, icon):
         if (f"icon_{icon}_path" in self.config
@@ -141,33 +140,38 @@ class Applet(goacal.GnomeOnlineAccountCal):
         logging.debug("Opening Location: %s", source.location)
         gtk.show_uri(None, source.location, gtk.get_current_event_time())
 
-    def set_indicator_icon_label(self, event=None):
-        if event is None and len(self.all_events) > 0:
-            self.make_menu_items()
-            event = self.all_events[self.last_sorted[0]]
-        else:
-            return True
-
+    def _get_icon(self, event):
         now = datetime.datetime.now()
-        # pylint: disable=C0113
+        # pylint: disable=C0113,R1705
         if (now >
             (event.start_dttime -
              datetime.timedelta(minutes=self.config["change_icon_minutes"]))
                 and not now > event.start_dttime):
-            self.indicator.set_icon_full(self.get_icon_path("before_event"),
-                                         "Meeting start soon!")
+            return [self.get_icon_path("before_event"), "Meeting start soon!"]
         elif now >= event.start_dttime and event.end_dttime > now:
-            self.indicator.set_icon_full(self.get_icon_path("in_event"),
-                                         "In meeting! Focus")
-        elif now > event.end_dttime:  # need a refresh
-            self.make_menu_items()
-            self.set_indicator_icon_label(event)
-        else:
-            self.indicator.set_icon_full(self.get_icon_path("default"),
-                                         "Next meeting")
+            return [self.get_icon_path("in_event"), "In meeting! Focus"]
+        return [self.get_icon_path("default"), "Next meeting"]
 
-        self.indicator.set_label(f"{self.first_event_label(event)}",
-                                 APP_INDICTOR_ID)
+    def get_icon_label(self, event=None):
+        if event is None and len(self.all_events) > 0:
+            self.make_menu_items()
+            event = self.all_events[self.last_sorted[0]]
+        else:
+            return []
+        icon, tooltip = self._get_icon(event)
+        humanized_str, title = self.first_event_label(event)
+        return [icon, tooltip, humanized_str, title]
+
+    def set_indicator_icon_label(self, event=None):
+        geticon = self.get_icon_label(event)
+        if not geticon:
+            return True
+        # pylint: disable=W0632
+        (icon, tooltip, humanized_str, title) = geticon
+        self.indicator.set_icon_full(icon, tooltip)
+
+        title = title[:self.config["title_max_char"]]
+        self.indicator.set_label(f"{humanized_str} - {title}", APP_INDICTOR_ID)
         return True
 
     def add_last_item(self, menu):
@@ -298,11 +302,6 @@ class Applet(goacal.GnomeOnlineAccountCal):
     def run(self):
         self.set_logging()
         self.get_or_init_config()
-        self.indicator = appindicator.Indicator.new(
-            APP_INDICTOR_ID,
-            "calendar",
-            appindicator.IndicatorCategory.SYSTEM_SERVICES,
-        )
         EDataServer.SourceRegistry.new(None, self.goa_registry_callback)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         glib.timeout_add_seconds(2, self.set_indicator_icon_label)

@@ -107,7 +107,7 @@ application launcher thingy.
 
 Works with Gnome as long you have this appindicator applet (which is by default on Ubuntu*)
 
-If you don't run on Gnome you need to make sure to run the goa-daemon, for example on my arch system :
+If you don't run on Gnome you need to make sure to first run the goa-daemon, for example on my arch system :
 
 ```shell
 /usr/lib/goa-daemon --replace &
@@ -115,15 +115,32 @@ If you don't run on Gnome you need to make sure to run the goa-daemon, for examp
 
 (binary path may vary by distros, see this bugzilla bug as well [#1340203](https://bugzilla.redhat.com/show_bug.cgi?id=1340203))
 
-It was tested as working on [polybar](https://github.com/polybar/polybar), it only shows
-an icon but you can click on it to show your next meetings.
-Make sure you have `tray_position = position` in your polybar config to enable it.
+If your "launcher" (like xfce, kde, polybar, waybar, i3bar etc..) supports trays icons then
+it would show the icon which you can click on it to see the full list of meetings.
 
-It was tested as well on [waybar](https://github.com/Alexays/Waybar) and shows the icon (but not the full event).
+You have a dbus interface to integrate with launcher, you can get the next meeting with `--get-last-status` :
 
-Probably works with other DE/WM supporting appindicator,
-feel free to [let me know](https://github.com/chmouel/gnome-next-meeting-applet/issues/new)
-if it does so I can add it to the list.
+```shell
+$ gnome-next-meeting-applet --get-last-status plain
+1 hour, 5 minutes -- New Meeting
+```
+
+which you can then integrate into your launcher as a module, for example on waybar :
+
+```json
+    "custom/gnma": {
+        "format": " {} ",
+        "interval": 5,
+        "exec": "gnome-next-meeting-applet --get-last-status plain",
+        "exec-if": "pgrep -f gnome-next-meeting-applet",
+        "max-length": 50,
+        "min-length": 1,
+        "on-click-right": "xdg-open https://calendar.google.com/",
+    },
+```
+
+there is more room to improvements here to integrate with other "bars".
+
 
 ### Credits
 
