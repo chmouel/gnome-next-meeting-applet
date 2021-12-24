@@ -139,7 +139,7 @@ which you can then integrate into your launcher as a module, for example on wayb
     },
 ```
 
-my waybar config looks like this and is [located here](https://github.com/chmouel/rc-config/blob/main/waybar/config) :
+my sway/waybar config looks like this and is [located here](https://github.com/chmouel/rc-config/blob/main/waybar/config) :
 
 ![image](https://user-images.githubusercontent.com/98980/147370583-c881d708-e697-49b1-8b88-da11b8956d2f.png)
 
