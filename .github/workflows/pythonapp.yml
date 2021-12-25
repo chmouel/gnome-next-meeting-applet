@@ -15,12 +15,12 @@ jobs:
         python-version: 3.9
     - name: Install poetry pylint
       run: |
-        sudo apt install gobject-introspection
-        python -m pip install --upgrade poetry
+        sudo apt install -y python-dev gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev
+        pip3 install --upgrade poetry
         poetry install -v
     - name: Test code
       run: |
-        poetry run pytest
+        poetry run pytest -v
     - name: Lint code
       run: |
         poetry run pylint -r y gnma
