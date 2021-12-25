@@ -59,4 +59,7 @@ def humanize_time(start_time: datetime.datetime,
                                         format="%d")
     except AttributeError:
         natural = humanize.naturaldelta(start_time)
-    return natural
+
+    # strip minutes, seconds and all if we have multiple days left to the next
+    # minute to short things up
+    return re.sub(r"(\d+\s+day(s)?) and.*", r"\1", natural)
