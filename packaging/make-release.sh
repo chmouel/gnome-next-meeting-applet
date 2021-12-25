@@ -45,7 +45,7 @@ git commit -S -m "Release ${VERSION} 🥳" ${vfile} || true
 git tag -s ${VERSION} -m "Releasing version ${VERSION}"
 git push --tags origin ${VERSION}
 git push origin main
-gh release create ${VERSION} --title "Release ${VERSION} 🥳"
+gh release create ${VERSION} --title "Release ${VERSION} 🥳" --generate-notes
 
 ./packaging/debian/build.sh
 ./packaging/aur/build.sh
