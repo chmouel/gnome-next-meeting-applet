@@ -1,12 +1,12 @@
 import argparse
+
 import dbus
-
-from gnma import dbusservice
-
 import gi  # type:ignore
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk as gtk
+
+from gnma import dbusservice
 
 
 class DBUSClient:

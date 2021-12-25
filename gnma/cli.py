@@ -26,9 +26,9 @@ def cli():
     """Console script for gnome_next_meeting_applet."""
     args = parse_args()
     if "dbus_command" in args:
-        db = dbusclient.DBUSClient()
-        db.commands(args)
-        return
+        db_client = dbusclient.DBUSClient()
+        db_client.commands(args)
+        return 0
     applet.run(args)
     return 0
 
