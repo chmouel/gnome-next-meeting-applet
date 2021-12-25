@@ -15,6 +15,7 @@ jobs:
         python-version: 3.9
     - name: Install poetry pylint
       run: |
+        apt install gobject-introspection
         python -m pip install --upgrade poetry
         poetry install -v
     - name: Test code
