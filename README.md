@@ -151,8 +151,7 @@ An example of a custom module for [Waybar](https://github.com/Alexays/Waybar) :
 
 my sway/waybar config looks like this screenshot below and is [located here](https://github.com/chmouel/rc-config/blob/main/waybar/config) :
 
-![image](https://user-images.githubusercontent.com/98980/147370583-c881d708-e697-49b1-8b88-da11b8956d2f.png)
-
+<meta http-equiv="content-type" content="text/html; charset=utf-8"><img src="https://i.imgur.com/wwXY2C8.png" style="max-height: 216.365px; min-height: 216.365px; max-width: 1874.8px;">
 
 there is more room to improvements here to integrate with other "bars".
 
