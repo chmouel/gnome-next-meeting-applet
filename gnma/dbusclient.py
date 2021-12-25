@@ -4,6 +4,7 @@ import dbus
 import gi  # type:ignore
 
 gi.require_version("Gtk", "3.0")
+# pylint: disable=E0611
 from gi.repository import Gtk as gtk
 
 from gnma import dbusservice
