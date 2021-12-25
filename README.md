@@ -118,14 +118,24 @@ If you don't run on Gnome you need to make sure to first run the goa-daemon, for
 If your "launcher" (like xfce, kde, polybar, waybar, i3bar etc..) supports trays icons then
 it would show the icon which you can click on it to see the full list of meetings.
 
-You have a dbus interface to integrate with launcher, you can get the next meeting with `--get-last-status` :
+You have a dbus interface to integrate with a "bar", where you can use the cli to get the next meeting :
 
 ```shell
-$ gnome-next-meeting-applet --get-last-status plain
+$ gnome-next-meeting-applet dbus get_event
 1 hour, 5 minutes -- New Meeting
 ```
 
-which you can then integrate into your launcher as a module, for example on waybar :
+You can as well have it to open the next/current event url :
+
+```shell
+$ gnome-next-meeting-applet dbus open_event_url
+```
+
+which you can bind to a key in your Windows Manager or Gnome/KDE to directly go to your meeting invite Video Conference URL.
+
+### Sway/Waybar
+
+An example of a custom module for [Waybar](https://github.com/Alexays/Waybar) :
 
 ```json
     "custom/gnma": {
@@ -139,7 +149,7 @@ which you can then integrate into your launcher as a module, for example on wayb
     },
 ```
 
-my sway/waybar config looks like this and is [located here](https://github.com/chmouel/rc-config/blob/main/waybar/config) :
+my sway/waybar config looks like this screenshot below and is [located here](https://github.com/chmouel/rc-config/blob/main/waybar/config) :
 
 ![image](https://user-images.githubusercontent.com/98980/147370583-c881d708-e697-49b1-8b88-da11b8956d2f.png)
 
