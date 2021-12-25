@@ -15,7 +15,7 @@ jobs:
         python-version: 3.9
     - name: Install poetry pylint
       run: |
-        sudo apt install -y python-dev gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev
+        sudo apt install -y python3-dev gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev
         pip3 install --upgrade poetry
         poetry install -v
     - name: Test code
