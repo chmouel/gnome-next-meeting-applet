@@ -13,9 +13,13 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.9
-    - name: Install pylint
+    - name: Install poetry pylint
       run: |
-        python -m pip install --upgrade pylint
+        python -m pip install --upgrade poetry
+        poetry install -v
+    - name: Test code
+      run: |
+        poetry run pytest
     - name: Lint code
       run: |
-        pylint -r y gnma
+        poetry run pylint -r y gnma

@@ -31,6 +31,7 @@ pytest = "*"
 yapf = "*"
 toml = "*"
 pylint = "*"
+mypy = "^0.930"
 
 [tool.poetry.scripts]
 gnome-next-meeting-applet = "gnma.cli:cli"
