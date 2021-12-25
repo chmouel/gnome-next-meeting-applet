@@ -35,3 +35,12 @@ def test_humanize_until_to_more_than_a_day_plural():
     end_time = start_time + datetime.timedelta(minutes=2)
     humanized_time = strings.humanize_time(start_time, end_time)
     assert humanized_time == '2 days'
+
+
+def test_humanize_until_to_more_than_a_day_and_hours():
+    now = datetime.datetime.now()
+    start_time = now + datetime.timedelta(days=1) + datetime.timedelta(
+        hours=20) + datetime.timedelta(minutes=33)
+    end_time = start_time + datetime.timedelta(minutes=2)
+    humanized_time = strings.humanize_time(start_time, end_time)
+    assert humanized_time == '1 day, 20 hours'
