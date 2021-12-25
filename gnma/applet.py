@@ -153,11 +153,12 @@ class Applet(goacal.GnomeOnlineAccountCal):
         return [self.get_icon_path("default"), "Next meeting"]
 
     def get_icon_label(self, event=None):
-        if event is None and len(self.all_events) > 0:
-            self.make_menu_items()
-            event = self.all_events[self.last_sorted[0]]
-        else:
-            return []
+        if event is None:
+            if len(self.all_events) > 0:
+                self.make_menu_items()
+                event = self.all_events[self.last_sorted[0]]
+            else:
+                return []
         icon, tooltip = self._get_icon(event)
         humanized_str, title = self.first_event_label(event)
         return [icon, tooltip, humanized_str, title]
@@ -205,6 +206,24 @@ class Applet(goacal.GnomeOnlineAccountCal):
         menu.append(gtk.SeparatorMenuItem())
         return menu
 
+    def get_meeting_url(self, event=None) -> str:
+        if event is None:
+            if len(self.all_events) > 0:
+                self.make_menu_items()
+                event = self.all_events[self.last_sorted[0]]
+            else:
+                return ""
+
+        if event.comp.get_location() and event.comp.get_location().startswith(
+                "https://"):
+            return event.comp.get_location()
+
+        match_videocall_summary = self.match_videocall_url_from_summary(event)
+        if match_videocall_summary:
+            return match_videocall_summary
+
+        return ""
+
     def make_menu_items(self):
         menu = gtk.Menu()
 
@@ -232,15 +251,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 label=f"{icon} {summary} - {start_time_str}")
             menuitem.get_child().set_use_markup(True)
 
-            match_videocall_summary = self.match_videocall_url_from_summary(
-                event)
-            if event.comp.get_location() and event.comp.get_location(
-            ).startswith("https://"):
-                menuitem.location = event.comp.get_location()
-            elif match_videocall_summary:
-                menuitem.location = match_videocall_summary
-            else:
-                menuitem.location = ""
+            menuitem.location = self.get_meeting_url(event)
             menuitem.connect("activate", self.open_source_location)
             menu.append(menuitem)
 

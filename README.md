@@ -131,11 +131,11 @@ which you can then integrate into your launcher as a module, for example on wayb
     "custom/gnma": {
         "format": " {} ",
         "interval": 5,
-        "exec": "gnome-next-meeting-applet --get-last-status plain",
+        "exec": "gnome-next-meeting-applet dbus get_event",
         "exec-if": "pgrep -f gnome-next-meeting-applet",
         "max-length": 50,
         "min-length": 1,
-        "on-click": "xdg-open https://calendar.google.com/",
+        "on-click": "gnome-next-meeting-applet dbus open_event_url",
     },
 ```
 
