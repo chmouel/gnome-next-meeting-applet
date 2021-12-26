@@ -17,7 +17,9 @@ def parse_args():
     dbus_parser = client_parser.add_parser('dbus')
     dbus_parser.add_argument(
         "dbus_command",
-        choices=["get_event", "get_event_url", "open_event_url"],
+        choices=[
+            "get_event", "get_event_url", "get_event_json", "open_event_url"
+        ],
     )
     return parser.parse_args()
 

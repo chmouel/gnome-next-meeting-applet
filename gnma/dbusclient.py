@@ -1,4 +1,5 @@
 import argparse
+import json
 
 import dbus
 import gi  # type:ignore
@@ -33,7 +34,11 @@ class DBUSClient:
             return
 
         if args.dbus_command == "get_event":
-            ret = self.get_event("plain")
+            ret = self.get_event_plain()
+            if ret:
+                print(ret)
+        elif args.dbus_command == "get_event_json":
+            ret = self.get_event_json()
             if ret:
                 print(ret)
         elif args.dbus_command == "get_event_url":
@@ -57,7 +62,25 @@ class DBUSClient:
             return ""
         return eventurl[0]
 
-    def get_event(self, mode: str) -> str:
+    def get_event_json(self) -> str:
+        try:
+            nextone = self.dbus_intf.GetNextEvent()
+        except dbus.exceptions.DBusException as excp:
+            if self.verbose:
+                raise excp
+            return ""
+
+        #    '{text: $text, alt: $alt, tooltip: $tooltip, class: $class, percentage: $percentage, ifname: $ifname, ssid: $ssid, public_ip: $public_ip, ipaddr: $ippadr}'
+        ret = {
+            "tooltip": f"{nextone[0]} - {nextone[1]}",
+            "percentage": 1,
+            "timeto": nextone[0],
+            "title": nextone[1],
+            "text": nextone[0],
+        }
+        return json.dumps(ret)
+    
+    def get_event_plain(self) -> str:
         try:
             nextone = self.dbus_intf.GetNextEvent()
         except dbus.exceptions.DBusException as excp:
@@ -66,6 +89,4 @@ class DBUSClient:
             return ""
         if not nextone:
             return ""
-        if mode == "plain":
-            return f"{nextone[0]} - {nextone[1]}"
-        return ""
+        return f"{nextone[0]} - {nextone[1]}"
