@@ -70,7 +70,6 @@ class DBUSClient:
                 raise excp
             return ""
 
-        #    '{text: $text, alt: $alt, tooltip: $tooltip, class: $class, percentage: $percentage, ifname: $ifname, ssid: $ssid, public_ip: $public_ip, ipaddr: $ippadr}'
         ret = {
             "tooltip": f"{nextone[0]} - {nextone[1]}",
             "percentage": 1,
@@ -79,7 +78,7 @@ class DBUSClient:
             "text": nextone[0],
         }
         return json.dumps(ret)
-    
+
     def get_event_plain(self) -> str:
         try:
             nextone = self.dbus_intf.GetNextEvent()
