@@ -3,6 +3,7 @@ import datetime
 import logging
 import pathlib
 import re
+import dbus.exceptions
 
 import gi  # type:ignore
 import yaml
@@ -35,7 +36,10 @@ class Applet(goacal.GnomeOnlineAccountCal):
             "calendar",
             appindicator.IndicatorCategory.SYSTEM_SERVICES,
         )
-        self.dbus_server = dbusservice.DBusService(self)
+        try:
+            self.dbus_server = dbusservice.DBusService(self)
+        except dbus.exceptions.DBusException as e:
+            logging.debug("cannot start dbus service")
         self.autostart_file = pathlib.Path(
             f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
         )
