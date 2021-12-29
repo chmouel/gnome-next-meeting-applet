@@ -24,7 +24,7 @@ PyGObject = "^3.0.0"
 python-dateutil = "*"
 PyYAML = "*"
 humanize = "*"
-#dbus-python = "^1.2.18"
+dbus-python = "^1.2.18"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
