@@ -35,7 +35,7 @@ run-release: install
 	flatpak run $(ID) -v
 
 update-release:
-	sed '/sources/,/^$$/d' release.yaml > /tmp/.release.temp.yaml
+	sed '/sources/,$$d' release.yaml > /tmp/.release.temp.yaml
 	./update-release.sh >> /tmp/.release.temp.yaml
 	sed -i -e :a -e '/^\n*$$/{$$d;N;ba' -e '}' /tmp/.release.temp.yaml
 	mv /tmp/.release.temp.yaml release.yaml
