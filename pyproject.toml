@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gnome-next-meeting-applet"
-version = "2.4.0"
+version = "2.4.1"
 description = "Show your next meeetings in an applet"
 authors = ["Chmouel Boudjnah <chmouel@chmouel.com>"]
 maintainers = ["Chmouel Boudjnah <chmouel@chmouel.com>"]
