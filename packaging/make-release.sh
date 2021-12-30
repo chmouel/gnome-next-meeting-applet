@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euf
+VERSION=${1:-""}
 POETRY_NAME_VERSION="$(poetry version)"
-VERSION=${1-${POETRY_NAME_VERSION}}
 PKGNAME=${POETRY_NAME_VERSION% *}
 
 bumpversion() {
