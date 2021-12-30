@@ -45,8 +45,9 @@ calendar configured in Gnome Online Accounts or Evolution data server.
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
 cp -a data/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
 
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications/
-install -m0644 data/desktop/%{name}.desktop $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/metainfo/
+install -m0644 data/desktop/com.chmouel.gnomeNextMeetingApplet.desktop $RPM_BUILD_ROOT%{_datadir}/applications/com.chmouel.gnomeNextMeetingApplet.desktop
+install -m0644 data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml $RPM_BUILD_ROOT%{_datadir}/metainfo/com.chmouel.gnomeNextMeetingApplet.appdata.xml
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/scalable/apps
 install -m0644 data/desktop/icon.svg $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
@@ -58,7 +59,8 @@ install -m0644 data/desktop/icon.svg $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/s
 %{python3_sitelib}/gnome_next_meeting_applet-%{version}.dist-info
 %{_bindir}/%{name}
 %{_datadir}/%{name}
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/*.desktop
+%{_datadir}/metainfo/*.xml
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog

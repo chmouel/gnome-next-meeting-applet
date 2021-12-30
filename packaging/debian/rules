@@ -8,12 +8,14 @@ export DH_VERBOSE=1
 override_dh_auto_install:
 	dh_auto_install
 	mkdir -p  $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/ \
+			  $(CURDIR)/debian/$(PKGNAME)/usr/share/metainfo/ \
 			  $(CURDIR)/debian/$(PKGNAME)/usr/share/$(PKGNAME) \
 			  $(CURDIR)/debian/$(PKGNAME)/usr/share/docs/$(PKGNAME) \
 			  $(CURDIR)/debian/$(PKGNAME)/usr/share/icons/hicolor/scalable/apps/
 	cp -av $(CURDIR)/data/images $(CURDIR)/debian/$(PKGNAME)/usr/share/$(PKGNAME)/
 	install -m0644 $(CURDIR)/data/desktop/icon.svg $(CURDIR)/debian/$(PKGNAME)/usr/share/icons/hicolor/scalable/apps/$(PKGNAME).svg
-	install -m0644 $(CURDIR)/data/desktop/$(PKGNAME).desktop $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/
+	install -m0644 $(CURDIR)/data/desktop/com.chmouel.gnomeNextMeetingApplet.desktop $(CURDIR)/debian/$(PKGNAME)/usr/share/applications/
+	install -m0644 $(CURDIR)/data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml $(CURDIR)/debian/$(PKGNAME)/usr/share/metainfo/
 	install -m0644 $(CURDIR)/README.md \
 			$(CURDIR)/LICENSE $(CURDIR)/config.sample.yaml \
 			$(CURDIR)/debian/$(PKGNAME)/usr/share/docs/$(PKGNAME)/

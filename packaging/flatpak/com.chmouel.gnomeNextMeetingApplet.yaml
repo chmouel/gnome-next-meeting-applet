@@ -92,15 +92,11 @@ modules:
       - /libexec
       - /share/dbus-1/services
 
-  - name: gnome-next-meeting-applet
+  - name: python-deps
     buildsystem: simple
     build-commands:
-      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} pyyaml dbus-python humanize pycairo pygobject python-dateutil six gnome_next_meeting_applet --no-build-isolation
+      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} --no-build-isolation pyyaml dbus-python humanize pycairo pygobject python-dateutil six
     sources:
-      ## Dev
-      - type: dir
-        path: ../../dist
-
       - sha256: 98c11c755a16ef6c5673c22ca94a3802a7df4746a0853a70b6fae8b9f5cac206
         type: file
         url: https://files.pythonhosted.org/packages/40/d0/adc9ab25f68d9382f32c355627423a32135efaa5aaeebd6dec6d19e6b0af/poetry-core-1.0.7.tar.gz
@@ -126,15 +122,4 @@ modules:
         type: file
         url: https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl
 
-  # I can't put the icons in wheels or wheel install will get everything to $PYTHONPATH/
-  # compared to setuptool with poetry I cannot seem to be able to have a target
-  # directory, so let's do this manually.
-  - name: gnome-next-meeting-applet-icons
-    buildsystem: simple
-    build-commands:
-      - install -d -m0755 ${FLATPAK_DEST}/share/icons/gnome-next-meeting-applet
-      - cp *.svg *.png ${FLATPAK_DEST}/share/icons/gnome-next-meeting-applet
-    sources:
-      ## Dev
-      - type: dir
-        path: ../../data/images
+  - release.yaml
