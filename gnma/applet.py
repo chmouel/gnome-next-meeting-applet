@@ -26,6 +26,7 @@ APP_INDICTOR_ID = "gnome-next-meeting-applet"
 
 
 class Applet(goacal.GnomeOnlineAccountCal):
+
     def __init__(self, args):
         self.args = args
         super().__init__()
@@ -132,6 +133,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
         if not devpath.exists():
             devpath = pathlib.Path(
                 "/usr/share/gnome-next-meeting-applet/images")
+        if not devpath.exists():
+            devpath = pathlib.Path(
+                "/app/share/icons/gnome-next-meeting-applet")
 
         for ext in ["svg", "png"]:
             if (devpath / f"{icon}.{ext}").exists():

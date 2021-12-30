@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euf
-VERSION=${1-""}
+POETRY_NAME_VERSION="$(poetry version)"
+VERSION=${1-${POETRY_NAME_VERSION}}
+PKGNAME=${POETRY_NAME_VERSION% *}
 
 bumpversion() {
    current=$(git describe --tags $(git rev-list --tags --max-count=1))
@@ -45,7 +47,8 @@ git commit -S -m "Release ${VERSION} 🥳" ${vfile} || true
 git tag -s ${VERSION} -m "Releasing version ${VERSION}"
 git push --tags origin ${VERSION}
 git push origin main
-gh release create ${VERSION} --title "Release ${VERSION} 🥳" --generate-notes
+poetry build -f sdist
+gh release create ${VERSION} ./dist/${PKGNAME}-${VERSION}.tar.gz ./dist/${PKGNAME}-${VERSION}-py3-none-any.whl --title "Release ${VERSION} 🥳" --generate-notes
 
 ./packaging/debian/build.sh
 ./packaging/aur/build.sh

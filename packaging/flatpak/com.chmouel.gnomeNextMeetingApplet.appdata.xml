@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.chmouel.gnomeNextMeetingApplet</id>
+  <name>Gnome Next Meeting Applet</name>
+  <project_license>MIT</project_license>
+  <summary>Show your next events in your panel</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <developer_name>Chmouel Boudjnah</developer_name>
+  <description>
+    <p>
+        Gnome next meeting applet is an applet for Gnome using calendars from
+        Gnome Online Accounts to show the time to your next meeting and easily
+        open the meeting url.
+
+        Features include
+    </p>
+    <ul>
+      <li>Use Gnome Online Account for calendar sources.</li>
+      <li>Make it easy to know how long you have until your next meeting.</li>
+      <li>Detect video conference URLs allow to quickly click on it to join (Google Meet, Zoom, Bluejeans, supported).</li>
+      <li>Shows the documents link attached to the current meeting.</li>
+      <li>Change icons 5mn before and after meeting.</li>
+      <li>Fully configurable.</li>
+    </ul>    
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <caption>
+        Showing your next meeting in Gnome
+      </caption>
+      <image>https://github.com/chmouel/gnome-next-meeting-applet/raw/main/.github/screenshot/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/chmouel/gnome-next-meeting-applet/</url>
+  <url type="bugtracker">https://github.com/chmouel/gnome-next-meeting-applet/issues</url>
+  <launchable type="desktop-id">com.chmouel.gnomeNextMeetingApplet.desktop</launchable>
+  <content_rating type="oars-1.0" />
+  <update_contact>chmouel@chmouel.com</update_contact>
+
+  <releases>
+      <release version="2.4.0" date="2021-12-30">
+        - First flatpak release.
+      </release>
+  </releases>
+</component>

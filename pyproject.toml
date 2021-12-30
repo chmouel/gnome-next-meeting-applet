@@ -15,7 +15,8 @@ packages = [
 ]
 
 include = [
- "data/"
+ { path = "data/", format = ["sdist"] },
+ { path = "config.sample.yaml", format = ["sdist"] }
 ]
 
 [tool.poetry.dependencies]

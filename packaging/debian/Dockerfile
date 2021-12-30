@@ -21,5 +21,4 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -ms /bin/bash builder
 USER builder
 RUN mkdir -p /home/builder/build
-RUN python3 -m pip install --user dephell[full]
 WORKDIR /home/builder/build

@@ -44,12 +44,10 @@ for dockerdistroversion in latest rolling;do
            --env GPG_KEY=${GPG_KEY} \
            -it ${NAME}-${dockerdistroversion}-builder \
            /bin/bash -xec "gpg-agent --pinentry-program /usr/bin/pinentry --daemon && \
-                         cp -a src/ ${NAME}-${VERSION} && \
-                         rm -rf ${NAME}-${VERSION}/.{git,venv} && \
-                         mv -v ${NAME}-${VERSION}/packaging/debian ${NAME}-${VERSION}/ && \
+                         tar xzf src/dist/${NAME}-${VERSION}.tar.gz && \
+                         cp -a src/packaging/debian ${NAME}-${VERSION}/ && \
                          cd ${NAME}-${VERSION} && \
                          dch -M -v ${VERSION}-${RELEASE}~\`lsb_release -cs\`1 -D \`lsb_release -cs\` \"new update\" && \
-                         /home/builder/.local/bin/dephell deps convert --from=pyproject.toml --to=setup.py && \
                          dpkg-source -b . && \
                          ${finalaction}"
             rm -f ${dockerfile}
