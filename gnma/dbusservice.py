@@ -3,7 +3,7 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 
 PACKAGE_NAME = "gnma"
-DBUS_BUS_NAME = f'{PACKAGE_NAME}.{PACKAGE_NAME.capitalize()}Service'
+DBUS_BUS_NAME = 'com.chmouel.gnomeNextMeetingApplet'
 DBUS_OBJ_PATH = f'/{DBUS_BUS_NAME.replace(".", "/")}'
 
 DBusGMainLoop(set_as_default=True)
