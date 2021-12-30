@@ -39,7 +39,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         )
         try:
             self.dbus_server = dbusservice.DBusService(self)
-        except dbus.exceptions.DBusException as e:
+        except dbus.exceptions.DBusException:
             logging.debug("cannot start dbus service")
         self.autostart_file = pathlib.Path(
             f"{glib.get_user_config_dir()}/autostart/gnome-next-meeting-applet.desktop"
