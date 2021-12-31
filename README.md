@@ -115,10 +115,13 @@ If you don't run on Gnome you need to make sure to first run the goa-daemon, for
 
 (binary path may vary by distros, see this bugzilla bug as well [#1340203](https://bugzilla.redhat.com/show_bug.cgi?id=1340203))
 
-If your "launcher" (like xfce, kde, polybar, waybar, i3bar etc..) supports trays icons then
-it would show the icon which you can click on it to see the full list of meetings.
+If your "launcher/panel/bar" (like xfce, kde, polybar, waybar, i3bar etc..) supports trays icons then
+it would show the icon which you can click on it to see the full list of meetings. Usually you would not 
+be able to see the text directly on the panel/bar, to do this you can use the dbus interface. 
 
-You have a dbus interface to integrate with a "bar", where you can use the cli to get the next meeting :
+## Dbus Interface and CLI
+
+You have a dbus interface to integrate with a so called "panel" or bars that doesn't support the full appindicator specification like the gnome extensions does. Using the cli you can access that dbus interface to get to show your next meeting :
 
 ```shell
 $ gnome-next-meeting-applet dbus get_event
@@ -131,7 +134,7 @@ You can as well have it to open the next/current event url :
 $ gnome-next-meeting-applet dbus open_event_url
 ```
 
-which you can bind to a key in your Windows Manager or Gnome/KDE to directly go to your meeting invite Video Conference URL.
+which you can bind to a key in your Windows Manager or Gnome/KDE to quickly go to your meeting Video Conference URL.
 
 ### Sway/Waybar
 
