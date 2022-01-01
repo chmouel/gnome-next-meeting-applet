@@ -27,6 +27,7 @@ APP_INDICTOR_ID = "gnome-next-meeting-applet"
 
 
 class Applet(goacal.GnomeOnlineAccountCal):
+
     def __init__(self, args):
         self.args = args
         super().__init__()
@@ -154,6 +155,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
         return True
 
     def add_last_item(self, menu):
+        menu.append(gtk.SeparatorMenuItem())
+
         setting_menu = gtk.Menu()
         label = ("Remove autostart"
                  if self.autostart_file.exists() else "Auto start at boot")
