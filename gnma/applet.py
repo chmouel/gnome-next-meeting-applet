@@ -21,17 +21,17 @@ from gnma import config
 from gnma import gnome_online_account_cal as goacal
 from gnma import strings
 from gnma import dbusservice
+from gnma import icons
 
 APP_INDICTOR_ID = "gnome-next-meeting-applet"
 
 
 class Applet(goacal.GnomeOnlineAccountCal):
-
     def __init__(self, args):
         self.args = args
         super().__init__()
         self.config = config.DEFAULT_CONFIG
-        self.last_sorted = None
+        self.last_sorted = []
         self.indicator = appindicator.Indicator.new(
             APP_INDICTOR_ID,
             "calendar",
@@ -124,55 +124,25 @@ class Applet(goacal.GnomeOnlineAccountCal):
                                               event.end_dttime)
         return [humanized_str, summary]
 
-    def get_icon_path(self, icon):
-        if (f"icon_{icon}_path" in self.config
-                and pathlib.Path(self.config[f"icon_{icon}_path"]).exists()):
-            return self.config[f"icon_{icon}_path"]
-
-        devpath = pathlib.Path(__file__).parent.parent / "data" / "images"
-        if not devpath.exists():
-            devpath = pathlib.Path(
-                "/usr/share/gnome-next-meeting-applet/images")
-        if not devpath.exists():
-            devpath = pathlib.Path(
-                "/app/share/icons/gnome-next-meeting-applet")
-
-        for ext in ["svg", "png"]:
-            if (devpath / f"{icon}.{ext}").exists():
-                return str(devpath / f"{icon}.{ext}")
-        return "x-office-calendar-symbolic"
-
     def open_source_location(self, source):
         if source.location == "":
             return
         logging.debug("Opening Location: %s", source.location)
         gtk.show_uri(None, source.location, gtk.get_current_event_time())
 
-    def _get_icon(self, event):
-        now = datetime.datetime.now()
-        # pylint: disable=C0113,R1705
-        if (now >
-            (event.start_dttime -
-             datetime.timedelta(minutes=self.config["change_icon_minutes"]))
-                and not now > event.start_dttime):
-            return [self.get_icon_path("before_event"), "Meeting start soon!"]
-        elif now >= event.start_dttime and event.end_dttime > now:
-            return [self.get_icon_path("in_event"), "In meeting! Focus"]
-        return [self.get_icon_path("default"), "Next meeting"]
-
-    def get_icon_label(self, event=None):
+    def get_icon_and_label(self, event=None):
         if event is None:
             if len(self.all_events) > 0:
                 self.make_menu_items()
                 event = self.all_events[self.last_sorted[0]]
             else:
                 return []
-        icon, tooltip = self._get_icon(event)
+        icon, tooltip = icons.by_event_time(self.config, event)
         humanized_str, title = self.first_event_label(event)
         return [icon, tooltip, humanized_str, title]
 
     def set_indicator_icon_label(self, event=None):
-        geticon = self.get_icon_label(event)
+        geticon = self.get_icon_and_label(event)
         if not geticon:
             return True
         # pylint: disable=W0632
