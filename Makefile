@@ -17,5 +17,5 @@ lint: requirements_tools
 	@poetry run pylint -r y gnma/
 
 .PHONY: run
-run: 
+run:
 	@poetry run $(PACKAGE) -v
