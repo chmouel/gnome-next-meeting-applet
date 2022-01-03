@@ -63,7 +63,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 self.set_logging()
             return
         logging.debug("creating configfile %s", str(configfile))
-        configfile.parent.mkdir(parents=True)
+        if not configfile.parent.exists():
+            configfile.parent.mkdir(parents=True)
         configfile.write_text(yaml.safe_dump(config.DEFAULT_CONFIG))
         self.config = config.DEFAULT_CONFIG
 
