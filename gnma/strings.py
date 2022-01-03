@@ -53,13 +53,21 @@ def humanize_time(start_time: datetime.datetime,
             natural = humanize.naturaldelta(end_time)
         return natural + " left"
     try:
+        minimum_unit = "minutes"
+        inoneday = now + datetime.timedelta(days=1)
+        if start_time > inoneday:
+            minimum_unit = "days"
+
         natural = humanize.precisedelta(start_time +
                                         datetime.timedelta(minutes=1),
-                                        minimum_unit="minutes",
+                                        minimum_unit=minimum_unit,
                                         format="%d")
     except AttributeError:
         natural = humanize.naturaldelta(start_time)
 
+    if len(natural.split(" ")) == 2 and natural[0] == "1" and natural[-1] == "s":
+        natural = natural[0:-1]
+
     # strip minutes, seconds and all if we have multiple days left to the next
     # minute to short things up
-    return re.sub(r"((hour|day(s))?) and.*", r"\1", natural)
+    return natural

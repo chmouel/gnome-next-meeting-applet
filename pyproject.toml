@@ -44,3 +44,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.urls]
 issues = "https://github.com/chmouel/gnome-next-meeting-applet/issues"
+
+# pyproject.toml
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:.*deprecated:DeprecationWarning"
+]

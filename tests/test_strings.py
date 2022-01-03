@@ -16,7 +16,17 @@ def test_humanize_until_to_minute():
     start_time = now + datetime.timedelta(minutes=1)
     end_time = start_time + datetime.timedelta(minutes=1)
     humanized_time = strings.humanize_time(start_time, end_time)
-    assert humanized_time == '1 minutes'
+    assert humanized_time == '1 minute'
+
+
+def test_humanize_until_to_hours_minutes():
+    now = datetime.datetime.now()
+    start_time = now + (datetime.timedelta(hours=1) +
+                        datetime.timedelta(minutes=11))
+    end_time = start_time + datetime.timedelta(minutes=5)
+
+    humanized_time = strings.humanize_time(start_time, end_time)
+    assert humanized_time == '1 hour and 11 minutes'
 
 
 def test_humanize_until_to_more_than_a_day():
@@ -43,4 +53,12 @@ def test_humanize_until_to_more_than_a_day_and_hours():
         hours=20) + datetime.timedelta(minutes=33)
     end_time = start_time + datetime.timedelta(minutes=2)
     humanized_time = strings.humanize_time(start_time, end_time)
-    assert humanized_time == '1 day, 20 hours'
+    assert humanized_time == '1 day'
+
+
+def test_humanize_until_to_more_than_two_days():
+    now = datetime.datetime.now()
+    start_time = now + datetime.timedelta(days=2)
+    end_time = start_time + datetime.timedelta(minutes=2)
+    humanized_time = strings.humanize_time(start_time, end_time)
+    assert humanized_time == '2 days'
