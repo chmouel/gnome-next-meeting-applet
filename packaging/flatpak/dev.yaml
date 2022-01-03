@@ -4,6 +4,7 @@ build-commands:
   - pip3 install . --prefix=${FLATPAK_DEST}
   - ls -R ${FLATPAK_DEST}/bin
   - cp -a data/images/  ${FLATPAK_DEST}/share/icons/gnome-next-meeting-applet
+  - install -Dp -m644 data/desktop/icon.svg ${FLATPAK_DEST}/share/icons/gnome-next-meeting-applet/default.svg
   - install -Dp -m644 data/desktop/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/com.chmouel.gnomeNextMeetingApplet.svg
   - install -Dp -m644 data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml ${FLATPAK_DEST}/share/metainfo/com.chmouel.gnomeNextMeetingApplet.appdata.xml
   - install -Dp -m644 data/desktop/com.chmouel.gnomeNextMeetingApplet.desktop ${FLATPAK_DEST}/share/applications/com.chmouel.gnomeNextMeetingApplet.desktop
