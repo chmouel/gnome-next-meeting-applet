@@ -1,0 +1,3 @@
+packaging/flatpak/shared-modules
+packaging/flatpak/build
+packaging/flatpak/.flatpak-builder/
