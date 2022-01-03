@@ -20,7 +20,7 @@ class DBusService(dbus.service.Object):
 
     @dbus.service.method(dbus_interface=DBUS_BUS_NAME, out_signature='as')
     def GetNextEvent(self):
-        geticon = self.service.get_icon_label(None)
+        geticon = self.service.get_icon_and_label(None)
         if not geticon:
             return []
         # Todo: is icon useful? 🤔
