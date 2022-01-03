@@ -4,6 +4,9 @@ VERSION=${1:-""}
 POETRY_NAME_VERSION="$(poetry version)"
 PKGNAME=${POETRY_NAME_VERSION% *}
 
+
+docker ps -q >/dev/null || exit 1
+
 bumpversion() {
    current=$(git describe --tags $(git rev-list --tags --max-count=1))
    echo "Current version is ${current}"
@@ -40,6 +43,7 @@ bumpversion() {
     exit 1
 }
 [[ -z ${VERSION} ]] && bumpversion
+
 
 vfile=pyproject.toml
 sed -i "s/^version = .*/version = \"${VERSION}\"/" ${vfile}
