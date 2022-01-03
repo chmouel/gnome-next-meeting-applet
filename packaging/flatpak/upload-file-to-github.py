@@ -123,8 +123,8 @@ def upload_to_github(args):
         data={
             "message": args.message,
             "author": {
-                "name": "Tekton as a Code",
-                "email": "pipelines@redhat.com",
+                "name": args.name,
+                "email": args.email,
             },
             "parents": [last_commit_sha],
             "tree": tree_sha,
@@ -150,6 +150,8 @@ def parse_args():
     parser.add_argument("--token", "-t", required=True)
     parser.add_argument("--branch-ref", "-r", required=False)
     parser.add_argument("--from-tag", required=False)
+    parser.add_argument("--email", required=True)
+    parser.add_argument("--name", required=True)
     return parser.parse_args()
 
 
