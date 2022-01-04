@@ -103,11 +103,9 @@ coming up.
 
 ### Starting it
 
-If you install your application via Flatpak, you will need to create autostart entry manually. The easiest way to do this is to use [gnome-tweaks](https://gitlab.gnome.org/GNOME/gnome-tweaks) and add the Next meeting applet from there as seen on screenshot.
+If you install your application via Flatpak, you will need to create autostart entry manually. The easiest way to do this is to use [gnome-tweaks](https://gitlab.gnome.org/GNOME/gnome-tweaks) and add the Next meeting applet in the "Startup Applications" tab.
 
-There is a setting menu in the applet to add an autostart file to autostart it
-when gnome launch or you can launch it manually from the Gnome overview
-application launcher thingy.
+If you have access to it, there is a setting menu in the applet to add an autostart file to autostart it when gnome launch or you can launch it manually from the Gnome overview application launcher thingy.
 
 ## Compatibility
 
