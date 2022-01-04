@@ -10,7 +10,6 @@ finish-args:
   - "--socket=wayland"
   - "--share=network"
   - "--talk-name=org.gnome.OnlineAccounts"
-  - "--filesystem=~/.config/gnome-next-meeting-applet:ro"
   - "--talk-name=org.gnome.evolution.dataserver.*"
   - "--talk-name=org.kde.StatusNotifierWatcher"
   - "--talk-name=com.canonical.indicator.application"
