@@ -36,7 +36,7 @@ AUTOSTART_DESKTOP_FILE = """#!/usr/bin/env xdg-open
 [Desktop Entry]
 Categories=Productivity;
 Exec=gnome-next-meeting-applet
-Icon=calendar
+Icon=gnome-next-meeting-applet
 Name=Google Calendar next meeting applet
 Type=Application
 X-GNOME-Autostart-enabled=true
