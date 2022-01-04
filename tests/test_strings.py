@@ -16,7 +16,7 @@ def test_under_a_minutes():
 def test_humanize_an_hour_left():
     start_time = datetime.datetime.now()
     end_time = start_time + datetime.timedelta(hours=1)
-    humanized_time = strings.humanize_time(start_time, end_time)
+    got = strings.humanize_time(start_time, end_time)
     expected = '1 hour left'
     assert got == expected
 
