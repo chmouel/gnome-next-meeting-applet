@@ -1,5 +1,7 @@
 import datetime
 
+import dateutil.parser as dtparse
+
 from gnma import strings
 
 
@@ -42,7 +44,7 @@ def test_humanize_until_to_more_than_a_day():
         minutes=2)
     end_time = start_time + datetime.timedelta(minutes=2)
     humanized_time = strings.humanize_time(start_time, end_time)
-    assert humanized_time == 'tomorrow at ' + start_time.strftime("%H:%M")
+    assert humanized_time == 'Tomorrow at ' + start_time.strftime("%H:%M")
 
 
 def test_humanize_until_to_more_than_a_day_plural():
@@ -60,7 +62,7 @@ def test_humanize_until_to_more_than_a_day_and_hours():
         hours=20) + datetime.timedelta(minutes=33)
     end_time = start_time + datetime.timedelta(minutes=2)
     humanized_time = strings.humanize_time(start_time, end_time)
-    assert humanized_time == 'tomorrow at ' + start_time.strftime("%H:%M")
+    assert humanized_time == 'Tomorrow at ' + start_time.strftime("%H:%M")
 
 
 def test_humanize_until_to_more_than_two_days():
@@ -69,3 +71,11 @@ def test_humanize_until_to_more_than_two_days():
     end_time = start_time + datetime.timedelta(minutes=2)
     humanized_time = strings.humanize_time(start_time, end_time)
     assert humanized_time == '2 days at ' + start_time.strftime("%H:%M")
+
+
+def test_humanize_until_ann_event_tommorow():
+    now = dtparse.parse("23h00")
+    start_time = now + datetime.timedelta(hours=2)
+    end_time = start_time + datetime.timedelta(minutes=10)
+    humanized_time = strings.humanize_time(start_time, end_time)
+    assert humanized_time == 'Tomorrow at ' + start_time.strftime("%H:%M")
