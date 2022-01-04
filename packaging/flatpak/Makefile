@@ -33,16 +33,18 @@ run-dev: install-dev
 install-release:
 	$(CMD) --install $(RELEASEY)
 
-.PHONY: run
-run-release: install
+.PHONY: run-release
+run-release: install-release
 	flatpak run $(ID) -v
 
+.PHONY:update-release-yaml
 update-release-yaml:
 	sed '/sources/,$$d' release.yaml > /tmp/.release.temp.yaml
 	./update-release.sh >> /tmp/.release.temp.yaml
 	sed -i -e :a -e '/^\n*$$/{$$d;N;ba' -e '}' /tmp/.release.temp.yaml
 	mv /tmp/.release.temp.yaml release.yaml
 
+.PHONY: upload-to-flathub
 upload-to-flathub: update-release-yaml
 	target_release=`poetry version|cut -d" " -f2` ; \
 	./upload-file-to-github.py --branch-ref refs/heads/master -o flathub/$(ID) \
