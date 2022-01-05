@@ -27,9 +27,20 @@ class DBusService(dbus.service.Object):
         _, _, humanized_str, title = geticon
         return [humanized_str, title]
 
-    @dbus.service.method(dbus_interface=DBUS_BUS_NAME, out_signature='as')
+    @dbus.service.method(dbus_interface=DBUS_BUS_NAME, out_signature='s')
     def GetNextEventURL(self):
         eventurl = self.service.get_meeting_url()
         if not eventurl:
-            return []
-        return [eventurl]
+            return ""
+        return eventurl
+
+    @dbus.service.method(dbus_interface=DBUS_BUS_NAME, out_signature='s')
+    def GetEventDocument(self) -> str:
+        self.service.sort_and_filter_event()
+        if not self.service.all_events or not self.service.last_sorted:
+            return ""
+        event = self.service.all_events[self.service.last_sorted[0]]
+        if not event.comp.get_attachments():
+            return ""
+
+        return event.comp.get_attachments()[0].get_url()

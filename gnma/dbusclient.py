@@ -45,6 +45,10 @@ class DBUSClient:
             ret = self.get_event_url()
             if ret:
                 print(ret)
+        elif args.dbus_command == "get_event_document":
+            ret = self.get_event_document()
+            if ret:
+                print(ret)
         elif args.dbus_command == "open_event_url":
             ret = self.get_event_url()
             if ret:
@@ -60,7 +64,7 @@ class DBUSClient:
             return ""
         if not eventurl:
             return ""
-        return eventurl[0]
+        return eventurl
 
     def get_event_json(self) -> str:
         try:
@@ -89,3 +93,12 @@ class DBUSClient:
         if not nextone:
             return ""
         return f"{nextone[0]} - {nextone[1]}"
+
+    def get_event_document(self) -> str:
+        try:
+            doc = self.dbus_intf.GetEventDocument()
+        except dbus.exceptions.DBusException as excp:
+            if self.verbose:
+                raise excp
+            return ""
+        return doc
