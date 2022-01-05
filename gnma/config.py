@@ -34,7 +34,8 @@ VIDEOCALL_DESC_REGEXP = [
 
 AUTOSTART_DESKTOP_FILE = """#!/usr/bin/env xdg-open
 [Desktop Entry]
-Categories=Productivity;
+Keywords=Event;Calendar
+Categories=GNOME;Office;Calendar;GTK
 Exec=gnome-next-meeting-applet
 Icon=gnome-next-meeting-applet
 Name=Google Calendar next meeting applet
