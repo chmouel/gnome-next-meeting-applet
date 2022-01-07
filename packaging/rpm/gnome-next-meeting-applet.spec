@@ -46,11 +46,11 @@ mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
 cp -a data/images $RPM_BUILD_ROOT/%{_datadir}/%{name}
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/metainfo/
-install -m0644 data/desktop/com.chmouel.gnomeNextMeetingApplet.desktop $RPM_BUILD_ROOT%{_datadir}/applications/com.chmouel.gnomeNextMeetingApplet.desktop
-install -m0644 data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml $RPM_BUILD_ROOT%{_datadir}/metainfo/com.chmouel.gnomeNextMeetingApplet.appdata.xml
+install -D -m0644 data/desktop/com.chmouel.gnomeNextMeetingApplet.desktop $RPM_BUILD_ROOT%{_datadir}/applications/com.chmouel.gnomeNextMeetingApplet.desktop
+install -D -m0644 data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml $RPM_BUILD_ROOT%{_datadir}/metainfo/com.chmouel.gnomeNextMeetingApplet.appdata.xml
 
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/scalable/apps
-install -m0644 data/desktop/icon.svg $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+install -D -m0644 data/desktop/icon.svg $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %files
 %doc README.md config.sample.yaml
