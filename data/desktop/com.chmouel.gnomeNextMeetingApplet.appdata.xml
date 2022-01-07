@@ -21,7 +21,7 @@
       <li>Shows the documents link attached to the current meeting.</li>
       <li>Change icons 5mn before and after meeting.</li>
       <li>Fully configurable.</li>
-    </ul>    
+    </ul>
   </description>
   <screenshots>
     <screenshot type="default">
@@ -38,6 +38,9 @@
   <update_contact>chmouel@chmouel.com</update_contact>
 
   <releases>
+      <release version="2.5.0" date="2022-01-03">
+        - First flatpak release.
+      </release>
       <release version="2.4.0" date="2021-12-30">
         - First flatpak release.
       </release>
