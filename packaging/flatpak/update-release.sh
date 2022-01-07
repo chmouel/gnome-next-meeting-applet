@@ -12,20 +12,32 @@ ASSETSFILE=$(gh release view ${RELEASE} -q .assets[].url --json assets)
 }
 
 TMP=$(mktemp /tmp/.mm.XXXXXX)
-clean() { rm -f ${TMP}; }
+TMP2=$(mktemp /tmp/.mm.XXXXXX)
+clean() { rm -f ${TMP} ${TMP2}; }
 trap clean EXIT
 
-echo sources: 
+sed '/sources/,$d' release.yaml > ${TMP}
+echo "sources:" >> ${TMP}
 
 for asset in ${ASSETSFILE};do
-   curl -L -s -f --fail-early ${asset} -o ${TMP}
+   curl -L -s -f --fail-early ${asset} -o ${TMP2}
    sha=$(sha256sum ${TMP}|cut -d " " -f1)
    t=file
    [[ ${asset} == *.tar.gz ]] && t=archive
-   cat <<EOF
+   cat <<EOF >> ${TMP}
   - type: ${t}
     url: ${asset}
     sha256: ${sha}
 
 EOF
 done
+
+mv ${TMP} release.yaml
+
+(
+    cd $(git rev-parse --show-toplevel)
+    ./packaging/flatpak/update-appdata-xml.py data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml > ${TMP2}
+    mv ${TMP2} data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml
+)
+
+git commit -s -m "Update for ${RELEASE}" release.yaml $(git rev-parse --show-toplevel)/data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml

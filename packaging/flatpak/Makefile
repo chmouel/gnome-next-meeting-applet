@@ -37,12 +37,9 @@ install-release:
 run-release: install-release
 	flatpak run $(ID) -v
 
-.PHONY:update-release-yaml
-update-release-yaml:
-	sed '/sources/,$$d' release.yaml > /tmp/.release.temp.yaml
-	./update-release.sh >> /tmp/.release.temp.yaml
-	sed -i -e :a -e '/^\n*$$/{$$d;N;ba' -e '}' /tmp/.release.temp.yaml
-	mv /tmp/.release.temp.yaml release.yaml
+.PHONY: release
+release:
+	./update-release.sh
 
 .PHONY: upload-to-flathub
 upload-to-flathub: update-release-yaml
