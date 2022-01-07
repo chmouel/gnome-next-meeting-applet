@@ -41,3 +41,4 @@ mv ${TMP} release.yaml
 )
 
 git commit -s -m "Update for ${RELEASE}" release.yaml $(git rev-parse --show-toplevel)/data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml
+git push
