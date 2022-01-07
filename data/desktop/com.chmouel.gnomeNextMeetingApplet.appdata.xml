@@ -45,6 +45,18 @@ Friday 13th March 10h00 - Meeting
 
 There is other cleanup and fixes for flatpak and desktop entry.
 </release>
+    <release version="2.6.0" date="2022-01-07">Release 2.6.0 fixes showing the time left in meeting when there is an over an
+hour left.
+
+It now as well show the time directly if it happen the day after, for example if the next meeting is tomorrow at 10h00 it will show : 
+
+Tomorrow at 10h00 - Meeting 
+
+and if it's over two days it will show the date : 
+
+Friday 13th March 10h00 - Meeting
+
+There is other cleanup and fixes for flatpak and desktop entry.</release>
     <release version="2.5.0" date="2022-01-03">- First flatpak release.</release>
     <release version="2.4.0" date="2021-12-30">- First flatpak release.</release>
   </releases>
