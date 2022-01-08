@@ -33,6 +33,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         super().__init__()
         self.config = config.DEFAULT_CONFIG
         self.last_sorted = []
+        self.last_label = ""
         self.indicator = appindicator.Indicator.new(
             APP_INDICTOR_ID,
             "calendar",
@@ -152,7 +153,13 @@ class Applet(goacal.GnomeOnlineAccountCal):
         self.indicator.set_icon_full(icon, tooltip)
 
         title = title[:self.config["title_max_char"]]
-        self.indicator.set_label(f"{humanized_str} - {title}", APP_INDICTOR_ID)
+
+        new_label = f"{humanized_str} - {title}"
+        if self.last_label == new_label:
+            return
+
+        self.last_label = new_label
+        self.indicator.set_label(new_label, APP_INDICTOR_ID)
         return True
 
     def add_last_item(self, menu):
