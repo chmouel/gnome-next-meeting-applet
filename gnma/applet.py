@@ -156,7 +156,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
 
         new_label = f"{humanized_str} - {title}"
         if self.last_label == new_label:
-            return
+            return True
 
         self.last_label = new_label
         self.indicator.set_label(new_label, APP_INDICTOR_ID)
