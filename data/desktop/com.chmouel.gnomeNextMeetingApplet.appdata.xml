@@ -31,6 +31,11 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release type="stable" version="2.6.1" date="2022-01-10T00:00:00Z">
+      <description>
+        <p>Fix flatpak release</p>
+      </description>
+    </release>
     <release type="stable" version="2.6.0" date="2022-01-07T00:00:00Z">
       <description>
         <p>Release 2.6.0 fixes showing the time left in meeting when there is an over an hour left.</p>

@@ -1,4 +1,10 @@
 ---
+Version: 2.6.1
+Date: 2022-01-10
+Description:
+  - Fix flatpak release
+
+---
 Version: 2.6.0
 Date: 2022-01-07
 Description: |
