@@ -83,3 +83,4 @@ gh release create -F ${TMP} ${VERSION} ./dist/${PKGNAME}-${VERSION}.tar.gz ./dis
 ./packaging/debian/build.sh
 ./packaging/aur/build.sh
 ./packaging/rpm/build.sh
+make -C ./packaging/flatpak release
