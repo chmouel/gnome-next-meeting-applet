@@ -3,19 +3,43 @@ set -euf
 VERSION=${1:-""}
 POETRY_NAME_VERSION="$(poetry version)"
 PKGNAME=${POETRY_NAME_VERSION% *}
+CURRENT_VERSION=${POETRY_NAME_VERSION#* }
+APP_DATA_FILE=data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml
 
+TMP=$(mktemp /tmp/.mm.XXXXXX.yaml)
+clean() { rm -f ${TMP}; }
+trap clean EXIT
 
 docker ps -q >/dev/null || exit 1
 
-bumpversion() {
-   current=$(git describe --tags $(git rev-list --tags --max-count=1))
-   echo "log between current version ${current} and HEAD"
-   git log --oneline ${current}..HEAD
-   echo "---"
+editChanges() {
+   if [[ ${TERM} == *kitty ]];then
+       kitty @ launch --keep-focus --cwd=current --tab-title "Git log ${CURRENT_VERSION}..HEAD" bash -c "git log --oneline ${CURRENT_VERSION}..HEAD;read -p 'Press Key...'" >/dev/null
+   else
+      echo "log between current version ${CURRENT_VERSION} and HEAD"
+      read -t1 -p"Press Key to continue"
+   fi
+   if yq ".Version==\"${VERSION}\"" NEWS.yaml|grep -qw true;then
+      echo "We already have a VERSION in ${VERSION}"
+      rm -f ${TMP}
+   else
+       echo -e "---\nVersion: ${VERSION}\nDate: $(date +%Y-%m-%d)\nDescription:\n  - \n" > ${TMP}
+   fi
+   cat NEWS.yaml >> ${TMP}
+   $EDITOR +5 $TMP
+   while true;do
+         read -t5 -p "continue releasing? [yN]: " ANSWER
+         [[ ${ANSWER,} == y ]] && return
+   done
+   mv -v ${TMP} NEWS.yaml
+   appstreamcli news-to-metainfo NEWS.yaml ${APP_DATA_FILE}
+   yq -r "select(.Version==\"${VERSION}\") | .Description" NEWS.yaml > ${TMP}
+}
 
-   major=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_major()))" ${current})
-   minor=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_minor()))" ${current})
-   patch=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_patch()))" ${current})
+bumpversion() {
+   major=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_major()))" ${CURRENT_VERSION})
+   minor=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_minor()))" ${CURRENT_VERSION})
+   patch=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_patch()))" ${CURRENT_VERSION})
 
    echo "If we bump we get, Major: ${major} Minor: ${minor} Patch: ${patch}"
    read -p "To which version you would like to bump [M]ajor, Mi[n]or, [P]atch or Manua[l]: " ANSWER
@@ -32,7 +56,7 @@ bumpversion() {
        print "no or bad reply??"
        exit
    fi
-   VERSION=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_${mode}()))" ${current})
+   VERSION=$(python3 -c "import semver,sys;print(str(semver.VersionInfo.parse(sys.argv[1]).bump_${mode}()))" ${CURRENT_VERSION})
    [[ -z ${VERSION} ]] && {
        echo "could not bump version automatically"
        exit
@@ -45,17 +69,17 @@ bumpversion() {
     exit 1
 }
 [[ -z ${VERSION} ]] && bumpversion
-
+editChanges
 
 vfile=pyproject.toml
 sed -i "s/^version = .*/version = \"${VERSION}\"/" ${vfile}
-git commit -S -m "Release ${VERSION} 🥳" ${vfile} || true
+git commit -S -m "Release ${VERSION} 🥳" ${vfile} NEWS.yaml ${APP_DATA_FILE}  || true
 git tag -s ${VERSION} -m "Releasing version ${VERSION}"
 git push --tags origin ${VERSION}
 git push origin main
 rm -rf build
 poetry build
-gh release create ${VERSION} ./dist/${PKGNAME}-${VERSION}.tar.gz ./dist/${PKGNAME//-/_}-${VERSION}-py3-none-any.whl
+gh release create -F ${TMP} ${VERSION} ./dist/${PKGNAME}-${VERSION}.tar.gz ./dist/${PKGNAME//-/_}-${VERSION}-py3-none-any.whl
 
 ./packaging/debian/build.sh
 ./packaging/aur/build.sh

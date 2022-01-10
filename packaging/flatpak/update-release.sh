@@ -33,12 +33,3 @@ EOF
 done
 
 mv ${TMP} release.yaml
-
-(
-    cd $(git rev-parse --show-toplevel)
-    ./packaging/flatpak/update-appdata-xml.py data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml > ${TMP2}
-    mv ${TMP2} data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml
-)
-
-git commit -s -m "Update for ${RELEASE}" release.yaml $(git rev-parse --show-toplevel)/data/desktop/com.chmouel.gnomeNextMeetingApplet.appdata.xml
-git push

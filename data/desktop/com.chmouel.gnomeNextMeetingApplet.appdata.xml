@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop-application">
   <id>com.chmouel.gnomeNextMeetingApplet</id>
   <name>Gnome Next Meeting Applet</name>
-  <project_license>MIT</project_license>
   <summary>Show your next events in your panel</summary>
   <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
   <developer_name>Chmouel Boudjnah</developer_name>
   <description>
     <p>Gnome next meeting applet is an applet for Gnome using calendars from
@@ -20,31 +21,36 @@
       <li>Fully configurable.</li>
     </ul>
   </description>
+  <launchable type="desktop-id">com.chmouel.gnomeNextMeetingApplet.desktop</launchable>
+  <url type="homepage">https://github.com/chmouel/gnome-next-meeting-applet/</url>
+  <url type="bugtracker">https://github.com/chmouel/gnome-next-meeting-applet/issues</url>
   <screenshots>
     <screenshot type="default">
       <caption>Showing your next meeting in Gnome</caption>
-      <image>https://github.com/chmouel/gnome-next-meeting-applet/raw/main/.github/screenshot/screenshot.png</image>
+      <image type="source">https://github.com/chmouel/gnome-next-meeting-applet/raw/main/.github/screenshot/screenshot.png</image>
     </screenshot>
   </screenshots>
-  <url type="homepage">https://github.com/chmouel/gnome-next-meeting-applet/</url>
-  <url type="bugtracker">https://github.com/chmouel/gnome-next-meeting-applet/issues</url>
-  <launchable type="desktop-id">com.chmouel.gnomeNextMeetingApplet.desktop</launchable>
-  <content_rating type="oars-1.0"></content_rating>
-  <update_contact>chmouel@chmouel.com</update_contact>
   <releases>
-    <release version="2.6.0" date="2022-01-07">Release 2.6.0 fixes showing the time left in meeting when there is an over an
-hour left.
-
-It now as well show the time directly if it happen the day after, for example if the next meeting is tomorrow at 10h00 it will show :
-
-Tomorrow at 10h00 - Meeting
-
-and if it's over two days it will show the date :
-
-Friday 13th March 10h00 - Meeting
-
-There is other cleanup and fixes for flatpak and desktop entry.</release>
-    <release version="2.5.0" date="2022-01-03">- First flatpak release.</release>
-    <release version="2.4.0" date="2021-12-30">- First flatpak release.</release>
+    <release type="stable" version="2.6.0" date="2022-01-07T00:00:00Z">
+      <description>
+        <p>Release 2.6.0 fixes showing the time left in meeting when there is an over an hour left.</p>
+        <p>It now as well show the time directly if it happen the day after, for example if the next meeting is tomorrow at 10h00 it will show :</p>
+        <p>*Tomorrow at 10h00 - Meeting*</p>
+        <p>and if it's over two days it will show the date :</p>
+        <p>*Friday 13th March 10h00 - Meeting*</p>
+        <p>There is other cleanup and fixes for flatpak and desktop entry.</p>
+      </description>
+    </release>
+    <release type="stable" version="2.5.0" date="2022-01-03T00:00:00Z">
+      <description>
+        <p>Version 2.5.0 has been released</p>
+      </description>
+    </release>
+    <release type="stable" version="2.4.0" date="2021-12-30T00:00:00Z">
+      <description>
+        <p>Version 2.4.0 has been released</p>
+      </description>
+    </release>
   </releases>
+  <content_rating type="oars-1.0"/>
 </component>
