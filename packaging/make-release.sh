@@ -28,8 +28,8 @@ editChanges() {
    cat NEWS.yaml >> ${TMP}
    $EDITOR +5 $TMP
    while true;do
-         read -t5 -p "continue releasing? [yN]: " ANSWER
-         [[ ${ANSWER,} == y ]] && return
+         read -p "continue releasing? [yN]: " ANSWER
+         [[ ${ANSWER,} == y ]] && break
    done
    mv -v ${TMP} NEWS.yaml
    appstreamcli news-to-metainfo NEWS.yaml ${APP_DATA_FILE}
@@ -70,13 +70,12 @@ bumpversion() {
 }
 [[ -z ${VERSION} ]] && bumpversion
 editChanges
-
 vfile=pyproject.toml
 sed -i "s/^version = .*/version = \"${VERSION}\"/" ${vfile}
 git commit -S -m "Release ${VERSION} 🥳" ${vfile} NEWS.yaml ${APP_DATA_FILE}  || true
 git tag -s ${VERSION} -m "Releasing version ${VERSION}"
 git push --tags origin ${VERSION}
-git push origin main
+env NOTESTS=ci git push origin main
 rm -rf build
 poetry build
 gh release create -F ${TMP} ${VERSION} ./dist/${PKGNAME}-${VERSION}.tar.gz ./dist/${PKGNAME//-/_}-${VERSION}-py3-none-any.whl
