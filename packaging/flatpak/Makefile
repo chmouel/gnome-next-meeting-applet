@@ -45,5 +45,5 @@ release:
 		--email "$(EMAIL)" --name "$(NAME)" \
 		--token "`pass show $(GITHUB_PASS_TOKEN)`" --message "Release $$target_release" \
 		--destination release.yaml --filename release.yaml && \
-		git commit -m "Release $$target_release" release.yaml && \
-		git push origin main
+		git commit -m "Release flatpak release.yaml $$target_release" release.yaml && \
+		env NOTESTS=ci git push origin main

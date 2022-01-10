@@ -21,9 +21,9 @@ echo "sources:" >> ${TMP}
 
 for asset in ${ASSETSFILE};do
    curl -L -s -f --fail-early ${asset} -o ${TMP2}
-   sha=$(sha256sum ${TMP}|cut -d " " -f1)
-   t=file
-   [[ ${asset} == *.tar.gz ]] && t=archive
+   sha=$(sha256sum ${TMP2}|cut -d " " -f1)
+   t="file"
+   [[ ${asset} == *.tar.gz ]] && t="archive"
    cat <<EOF >> ${TMP}
   - type: ${t}
     url: ${asset}
