@@ -13,6 +13,10 @@ GITHUB_PASS_TOKEN = github/chmouel-token
 build-release:
 	$(CMD) $(RELEASEY)
 
+.PHONY: clean
+clean:
+	rm -rf .flatpak-builder/
+
 .PHONY: generate-dev
 generate-dev: $(RELEASEY)
 	@sed 's/- release.yaml/- dev.yaml/' >  $(DEVY)
