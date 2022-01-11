@@ -133,30 +133,30 @@ class Applet(goacal.GnomeOnlineAccountCal):
         logging.debug("Opening Location: %s", source.location)
         gtk.show_uri(None, source.location, gtk.get_current_event_time())
 
-    def get_icon_and_label(self, event=None):
-        if event is None:
-            if len(self.all_events) > 0:
-                self.make_menu_items()
-                event = self.all_events[self.last_sorted[0]]
-            else:
-                return []
-        icon, tooltip = icons.by_event_time(self.config, event)
-        humanized_str, title = self.first_event_label(event)
-        return [icon, tooltip, humanized_str, title]
+    def get_event(self):
+        if len(self.all_events) > 0:
+            self.make_menu_items()
+            return self.all_events[self.last_sorted[0]]
+        return None
 
     def set_indicator_icon_label(self, event=None):
-        geticon = self.get_icon_and_label(event)
-        if not geticon:
+        if event is None:
+            event = self.get_event()
+            if not event:
+                return True
+        getlabel = self.first_event_label(event)
+        if not getlabel:
             return True
         # pylint: disable=W0632
-        (icon, tooltip, humanized_str, title) = geticon
-        self.indicator.set_icon_full(icon, tooltip)
-
+        humanized_str, title = getlabel
         title = title[:self.config["title_max_char"]]
 
         new_label = f"{humanized_str} - {title}"
         if self.last_label == new_label:
             return True
+
+        icon, tooltip = icons.by_event_time(self.config, event)
+        self.indicator.set_icon_full(icon, tooltip)
 
         self.last_label = new_label
         self.indicator.set_label(new_label, APP_INDICTOR_ID)
@@ -197,10 +197,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
 
     def get_meeting_url(self, event=None) -> str:
         if event is None:
-            if len(self.all_events) > 0:
-                self.make_menu_items()
-                event = self.all_events[self.last_sorted[0]]
-            else:
+            event = self.get_event()
+            if not event:
                 return ""
 
         if event.comp.get_location() and event.comp.get_location().startswith(
@@ -304,7 +302,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         self.get_or_init_config()
         EDataServer.SourceRegistry.new(None, self.goa_registry_callback)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
-        glib.timeout_add_seconds(2, self.set_indicator_icon_label)
+        glib.timeout_add_seconds(30, self.set_indicator_icon_label)
         gtk.main()
 
 

@@ -20,12 +20,10 @@ class DBusService(dbus.service.Object):
 
     @dbus.service.method(dbus_interface=DBUS_BUS_NAME, out_signature='as')
     def GetNextEvent(self):
-        geticon = self.service.get_icon_and_label(None)
-        if not geticon:
+        event = self.service.get_event()
+        if not event:
             return []
-        # Todo: is icon useful? 🤔
-        _, _, humanized_str, title = geticon
-        return [humanized_str, title]
+        return self.service.first_event_label(event)
 
     @dbus.service.method(dbus_interface=DBUS_BUS_NAME, out_signature='s')
     def GetNextEventURL(self):
