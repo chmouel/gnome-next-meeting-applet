@@ -1,4 +1,13 @@
 ---
+Version: 2.6.2
+Date: 2022-01-11
+Description:
+  - Fix rpm packaging, the dbus python package is called python3-dbus
+  - Add optimizations to only refresh the icons when needed, reduce the loop to
+    30s instead of 2s previously since we know when the next event is coming.
+    This reduces the cpu usage quite significantly.
+
+---
 Version: 2.6.1
 Date: 2022-01-10
 Description:
