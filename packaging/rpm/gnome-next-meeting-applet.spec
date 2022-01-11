@@ -23,7 +23,7 @@ Requires:       python3-gobject
 Requires:       python3-dateutil
 Requires:       python3-yaml
 Requires:       python3-humanize
-RequireS:       dbus-python
+RequireS:       python3-dbus
 Requires:       evolution-data-server
 Requires:       gnome-icon-theme
 
@@ -33,7 +33,7 @@ calendar configured in Gnome Online Accounts or Evolution data server.
 
 %generate_buildrequires
 %pyproject_buildrequires
- 
+
 %prep
 %setup -q -n %{name}-%{version}
 
