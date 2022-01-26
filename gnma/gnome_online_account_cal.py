@@ -26,6 +26,7 @@ class GnomeOnlineAccountError(Exception):
 
 
 class GnomeOnlineAccountCal:
+
     def __init__(self):
         self.config = {}
         self.registry = []
@@ -257,6 +258,10 @@ class GnomeOnlineAccountCal:
 
                 mod_prop = ical_comp.get_first_property(
                     ICalGLib.PropertyKind.LASTMODIFIED_PROPERTY)
+                # sometime the mod_prop doesn't get set then let's skip this entry
+                # related: https://github.com/chmouel/gnome-next-meeting-applet/issues/27
+                if not mod_prop:
+                    return
                 ical_time_modified = mod_prop.get_lastmodified()
                 # Modified time "last-modified" is utc
                 mod_timet = ical_time_modified.as_timet()
