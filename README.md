@@ -82,6 +82,8 @@ Settings:
 * **max_results**: Max results to ask to google calendar api.
 * **skip_non_accepted**: Skip the calendar events that you didn't accept, you
   need to configure `my_emails` setting for that.
+* **skip_non_confirmed**: Skip calendar events that are not confirmed.
+* **skip_all_day**: Skip all day events.
 * **my_emails**: A list of email addresses.
 * **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
 * **title_max_char**: The maximum length of the title
