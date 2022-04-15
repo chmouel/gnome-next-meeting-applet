@@ -8,6 +8,7 @@ title_match_icon:
   "^[Project to the Moon].*": "🌕️"
 max_results: 10
 skip_non_accepted: true
+skip_non_confirmed: false
 skip_all_day: false
 my_emails:
   - email@email.com
