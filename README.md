@@ -92,6 +92,7 @@ Settings:
 * **calendar_day_prefix_url**: The prefix URL for the day in the web calendar when clicking, by default this goes to google calendar URL.
 * **strip_title_emojis**: wether removing the emojis from title when showing in
   the menubar, so to keep the panel clean
+* **skip_all_day**: Skip all days meeting.
 
 Default icons are customizatble too:
 
