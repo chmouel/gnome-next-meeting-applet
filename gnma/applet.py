@@ -84,6 +84,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
                     "I_CAL_STATUS_CONFIRMED"):
                 logging.debug("[SKIP] non confirmed event")
                 continue
+            if (self.config["skip_all_day"] and event.all_day == True):
+                logging.debug("[SKIP] all day event")
+                continue
 
             skipit = False
             if self.config["skip_non_accepted"] and self.config["my_emails"]:
