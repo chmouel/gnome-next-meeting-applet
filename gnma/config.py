@@ -29,8 +29,11 @@ CONFIG_FILE = f"{glib.get_user_config_dir()}/gnome-next-meeting-applet/config.ya
 
 VIDEOCALL_DESC_REGEXP = [
     r"href=\"(https:..primetime.bluejeans.com.a2m.live-event.([^\/\"])*\")",
-    r"(https://zoom.us/j/[^\n]*)",
+    r"(https://zoom.\w{,2}(/j)?/\d+\?[^\"\n]*)",
     r"(https://meet.google.com/[^\n]*)",
+    r"(https://meet.lync.com/[^\n]*)",
+    r"(https://meet.office.com/[^\n]*)",
+    r"(https://meet.microsoft.com/[^\n]*)",
 ]
 
 AUTOSTART_DESKTOP_FILE = """#!/usr/bin/env xdg-open
