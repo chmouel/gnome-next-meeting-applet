@@ -1,4 +1,11 @@
 ---
+Version: 2.7.0
+Date: 2022-05-18
+Description:
+  - Allow skipping all days events @jessarcher
+  - Fix zoom meeting url
+
+---
 Version: 2.6.2
 Date: 2022-01-11
 Description:

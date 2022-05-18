@@ -31,6 +31,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release type="stable" version="2.7.0" date="2022-05-18T00:00:00Z">
+      <description>
+        <ul>
+          <li>Allow skipping all days events @jessarcher</li>
+          <li>Fix zoom meeting url</li>
+        </ul>
+      </description>
+    </release>
     <release type="stable" version="2.6.2" date="2022-01-11T00:00:00Z">
       <description>
         <ul>
