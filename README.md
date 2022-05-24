@@ -1,4 +1,5 @@
 # Gnome Next Meeting applet
+
 <img src="./data/desktop/icon.svg" width=64 height=64 align=center> An applet to show your next meetings with Gnome Online Accounts
 
 <br>
@@ -43,7 +44,7 @@ dnf install gnome-next-meeting-applet
 Just install the package from AUR with your favourite aur installer (ie:
 [yay](https://github.com/Jguer/yay))
 
-https://aur.archlinux.org/packages/gnome-next-meeting-applet/
+<https://aur.archlinux.org/packages/gnome-next-meeting-applet/>
 
 It depends on the
 [`gnome-shell-extension-appindicator`](https://archlinux.org/packages/community/any/gnome-shell-extension-appindicator/)
@@ -60,7 +61,7 @@ online calendars in Gnome :
 <https://help.gnome.org/users/gnome-help/stable/accounts.html.en>
 
 By default it will get all events from all calendars you are subscribed to, unless you are configuring
-the `restrict_to_calendar` variable.
+the `restrict_to_calendar` variable in the `config.yaml` file. (see below).
 
 ### Applet configuration
 
@@ -103,7 +104,6 @@ Default icons are customizatble too:
 * **icon_before_event_path**: an icon just before an event to show something is
 coming up.
 
-
 ### Starting it
 
 If you install your application via Flatpak, you will need to create autostart entry manually. The easiest way to do this is to use [gnome-tweaks](https://gitlab.gnome.org/GNOME/gnome-tweaks) and add the Next meeting applet in the "Startup Applications" tab.
@@ -123,8 +123,8 @@ If you don't run on Gnome you need to make sure to first run the goa-daemon, for
 (binary path may vary by distros, see this bugzilla bug as well [#1340203](https://bugzilla.redhat.com/show_bug.cgi?id=1340203))
 
 If your "launcher/panel/bar" (like xfce, kde, polybar, waybar, i3bar etc..) supports trays icons then
-it would show the icon which you can click on it to see the full list of meetings. Usually you would not 
-be able to see the text directly on the panel/bar, to do this you can use the dbus interface. 
+it would show the icon which you can click on it to see the full list of meetings. Usually you would not
+be able to see the text directly on the panel/bar, to do this you can use the dbus interface.
 
 ## Dbus Interface and CLI
 
@@ -138,7 +138,7 @@ $ gnome-next-meeting-applet dbus get_event
 You can as well have it to open the next/current event url :
 
 ```shell
-$ gnome-next-meeting-applet dbus open_event_url
+gnome-next-meeting-applet dbus open_event_url
 ```
 
 which you can bind to a key in your Windows Manager or Gnome/KDE to quickly go to your meeting Video Conference URL.
@@ -165,7 +165,6 @@ my sway/waybar config looks like this screenshot below and is [located here](htt
 
 there is more room to improvements here to integrate with other "bars".
 
-
 ### Credits
 
 * This package was created with [`Cookiecutter`](https://github.com/audreyr/cookiecutter-pypackage) and the
@@ -177,7 +176,7 @@ there is more room to improvements here to integrate with other "bars".
   <https://apps.apple.com/us/app/next-meeting/id1017470484?mt=12> and missed it on
   Linux.
 * Originally used code from [@GabLeRoux](https://github.com/gableroux) for evolution calendar integration - <https://askubuntu.com/a/1371087>
-* Used code from cinnamon calendar server code https://github.com/linuxmint/cinnamon/blob/fc57426d44c0f5a31fe29f268a15e9928e8b6a14/calendar-server/cinnamon-calendar-server.py and adapted from gnome-shell calendar-server https://gitlab.gnome.org/GNOME/gnome-shell/-/tree/main/src/calendar-server
+* Used code from cinnamon calendar server code <https://github.com/linuxmint/cinnamon/blob/fc57426d44c0f5a31fe29f268a15e9928e8b6a14/calendar-server/cinnamon-calendar-server.py> and adapted from gnome-shell calendar-server <https://gitlab.gnome.org/GNOME/gnome-shell/-/tree/main/src/calendar-server>
 
 ## License
 
