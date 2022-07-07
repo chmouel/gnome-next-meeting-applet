@@ -31,6 +31,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release type="stable" version="2.8.0" date="2022-07-07T00:00:00Z">
+      <description>
+        <ul>
+          <li>Skip all but today events.</li>
+          <li>Support Ayatana appindicator fork (for debian12)</li>
+          <li>Improves zoom url regexp</li>
+        </ul>
+      </description>
+    </release>
     <release type="stable" version="2.7.0" date="2022-05-18T00:00:00Z">
       <description>
         <ul>

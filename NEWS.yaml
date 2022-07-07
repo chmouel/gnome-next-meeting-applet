@@ -1,4 +1,12 @@
 ---
+Version: 2.8.0
+Date: 2022-07-07
+Description:
+  - Skip all but today events.
+  - Support Ayatana appindicator fork (for debian12)
+  - Improves zoom url regexp
+
+---
 Version: 2.7.0
 Date: 2022-05-18
 Description:
