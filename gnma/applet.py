@@ -88,7 +88,11 @@ class Applet(goacal.GnomeOnlineAccountCal):
         for event in events:
             if datetime.datetime.now() > event.end_dttime:
                 del self.all_events[event.uid]
-                logging.debug("[skipping] elapsed: %s", event.summary)
+                logging.debug("[SKIP] elapsed: %s", event.summary)
+                continue
+            if self.config["starts_today_only"] and datetime.datetime.now().date() < event.end_dttime.date():
+                del self.all_events[event.uid]
+                logging.debug("[SKIP] non today event: %s", event.summary)
                 continue
             if (self.config["skip_non_confirmed"]
                     and event.comp.get_status().value_name !=
