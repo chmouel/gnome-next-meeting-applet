@@ -14,14 +14,15 @@ gi.require_version("Gtk", "3.0")
 try:
     gi.require_version("AppIndicator3", "0.1")
 except ValueError:
-    gi.require_version('AyatanaAppIndicator3', '0.1')
+    gi.require_version("AyatanaAppIndicator3", "0.1")
 
 try:
     from gi.repository import AppIndicator3 as appindicator
 except ImportError:
-    from gi.repository import AyatanaAppIndicator3 as appindicator  # type:ignore
-else:
-    raise Exception("Cannot find ayatana or appindicator3 library")
+    try:
+        from gi.repository import AyatanaAppIndicator3 as appindicator  # type:ignore
+    except ImportError as e:
+        raise Exception("Cannot find ayatana or appindicator3 library") from e
 
 # pylint: disable=E0611 disable=C0411
 from gi.repository import EDataServer
