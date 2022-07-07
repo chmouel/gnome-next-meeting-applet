@@ -10,7 +10,7 @@ requirements_tools:
 
 .PHONY: fmt
 fmt: requirements_tools
-	@poetry run yapf -i */*.py
+	@poetry run black */*.py
 
 .PHONY: lint
 lint: requirements_tools

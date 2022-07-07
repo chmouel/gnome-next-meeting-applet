@@ -29,7 +29,7 @@ dbus-python = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
-yapf = "*"
+black = "*"
 toml = "*"
 pylint = "*"
 mypy = "^0.930"
