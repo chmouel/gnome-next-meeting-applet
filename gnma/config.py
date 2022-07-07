@@ -11,6 +11,7 @@ DEFAULT_CONFIG = {
     "skip_non_confirmed": True,
     "skip_non_accepted": False,
     "skip_all_day": False,
+    "starts_today_only": False,
     "my_emails": [],
     "max_results": 10,
     "title_max_char": 20,

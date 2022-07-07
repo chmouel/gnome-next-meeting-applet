@@ -85,6 +85,7 @@ Settings:
   need to configure `my_emails` setting for that.
 * **skip_non_confirmed**: Skip calendar events that are not confirmed.
 * **skip_all_day**: Skip all day events.
+* **starts_today_only**: Skip all but today events.
 * **my_emails**: A list of email addresses.
 * **restrict_to_calendar**: Restrict to some calendar, by default it shows event from all calendars.
 * **title_max_char**: The maximum length of the title
@@ -93,7 +94,7 @@ Settings:
 * **calendar_day_prefix_url**: The prefix URL for the day in the web calendar when clicking, by default this goes to google calendar URL.
 * **strip_title_emojis**: wether removing the emojis from title when showing in
   the menubar, so to keep the panel clean
-* **skip_all_day**: Skip all days meeting.
+
 
 Default icons are customizatble too:
 

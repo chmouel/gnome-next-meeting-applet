@@ -327,7 +327,7 @@ class GnomeOnlineAccountCal:
         if tzid:
             timezone = ECal.TimezoneCache.get_timezone(client, tzid.get_tzid())
         elif ical_time.is_utc():
-            timezone = ICal.Timezone.get_utc_timezone()
+            timezone = ICalGLib.Timezone.get_utc_timezone()
         else:
             timezone = client.get_default_timezone()
 
