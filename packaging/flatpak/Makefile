@@ -19,7 +19,7 @@ clean:
 
 .PHONY: generate-dev
 generate-dev: $(RELEASEY)
-	@sed 's/- release.yaml/- dev.yaml/' >  $(DEVY)
+	@sed 's/- release.yaml/- dev.yaml/' $(RELEASEY) >  $(DEVY)
 
 .PHONY: build-dev
 build-dev: generate-dev
