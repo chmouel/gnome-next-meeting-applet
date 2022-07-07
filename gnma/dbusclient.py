@@ -20,8 +20,10 @@ class DBUSClient:
             self.dbus_intf = dbus.Interface(
                 dbus.SessionBus().get_object(
                     dbusservice.DBUS_BUS_NAME,
-                    "/" + dbusservice.DBUS_BUS_NAME.replace(".", "/")),
-                dbusservice.DBUS_BUS_NAME)
+                    "/" + dbusservice.DBUS_BUS_NAME.replace(".", "/"),
+                ),
+                dbusservice.DBUS_BUS_NAME,
+            )
         except dbus.exceptions.DBusException as excp:
             if self.verbose:
                 raise excp

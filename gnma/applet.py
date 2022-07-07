@@ -14,14 +14,15 @@ gi.require_version("Gtk", "3.0")
 try:
     gi.require_version("AppIndicator3", "0.1")
 except ValueError:
-    gi.require_version('AyatanaAppIndicator3', '0.1')
+    gi.require_version("AyatanaAppIndicator3", "0.1")
 
 try:
     from gi.repository import AppIndicator3 as appindicator
 except ImportError:
-    from gi.repository import AyatanaAppIndicator3 as appindicator  # type:ignore
-else:
-    raise Exception("Cannot find ayatana or appindicator3 library")
+    try:
+        from gi.repository import AyatanaAppIndicator3 as appindicator  # type:ignore
+    except ImportError as e:
+        raise Exception("Cannot find ayatana or appindicator3 library") from e
 
 # pylint: disable=E0611 disable=C0411
 from gi.repository import EDataServer
@@ -38,7 +39,6 @@ APP_INDICTOR_ID = "gnome-next-meeting-applet"
 
 
 class Applet(goacal.GnomeOnlineAccountCal):
-
     def __init__(self, args):
         self.args = args
         super().__init__()
@@ -66,10 +66,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         configfile = pathlib.Path(config.CONFIG_FILE).expanduser()
         if configfile.exists():
             logging.debug("loading configfile: %s", configfile)
-            self.config = {
-                **config.DEFAULT_CONFIG,
-                **yaml.safe_load(configfile.open())
-            }
+            self.config = {**config.DEFAULT_CONFIG, **yaml.safe_load(configfile.open())}
             if self.config["verbose"]:
                 self.args.verbose = True
                 self.set_logging()
@@ -90,13 +87,17 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 del self.all_events[event.uid]
                 logging.debug("[SKIP] elapsed: %s", event.summary)
                 continue
-            if self.config["starts_today_only"] and datetime.datetime.now().date() < event.end_dttime.date():
+            if (
+                self.config["starts_today_only"]
+                and datetime.datetime.now().date() < event.end_dttime.date()
+            ):
                 del self.all_events[event.uid]
                 logging.debug("[SKIP] non today event: %s", event.summary)
                 continue
-            if (self.config["skip_non_confirmed"]
-                    and event.comp.get_status().value_name !=
-                    "I_CAL_STATUS_CONFIRMED"):
+            if (
+                self.config["skip_non_confirmed"]
+                and event.comp.get_status().value_name != "I_CAL_STATUS_CONFIRMED"
+            ):
                 logging.debug("[SKIP] non confirmed event")
                 continue
             if self.config["skip_all_day"] and event.all_day:
@@ -108,25 +109,27 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 skipit = True
                 for attendee in event.comp.get_attendees():
                     for myemail in self.config["my_emails"]:
-                        if (attendee.get_value().replace("mailto:",
-                                                         "") == myemail
-                                and attendee.get_partstat().value_name
-                                == "I_CAL_PARTSTAT_ACCEPTED"):
+                        if (
+                            attendee.get_value().replace("mailto:", "") == myemail
+                            and attendee.get_partstat().value_name
+                            == "I_CAL_PARTSTAT_ACCEPTED"
+                        ):
                             skipit = False
             if skipit:
-                logging.debug("[SKIP] not accepted: %s",
-                              event.comp.get_summary().get_value())
+                logging.debug(
+                    "[SKIP] not accepted: %s", event.comp.get_summary().get_value()
+                )
                 del self.all_events[event.uid]
                 continue
 
             ret.append(event)
 
-        lastids = [x.uid for x in ret[:self.config["max_results"]]]
+        lastids = [x.uid for x in ret[: self.config["max_results"]]]
         if self.last_sorted and self.last_sorted == lastids:
             return []
 
         self.last_sorted = lastids
-        return ret[:self.config["max_results"]]
+        return ret[: self.config["max_results"]]
 
     def first_event_label(self, event):
         """Show first event in menubar"""
@@ -141,8 +144,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         now = datetime.datetime.now()
         if event.end_dttime == now:
             return ["Meeting over 😲", summary]
-        humanized_str = strings.humanize_time(event.start_dttime,
-                                              event.end_dttime)
+        humanized_str = strings.humanize_time(event.start_dttime, event.end_dttime)
         return [humanized_str, summary]
 
     def open_source_location(self, source):
@@ -167,7 +169,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
             return True
         # pylint: disable=W0632
         humanized_str, title = getlabel
-        title = title[:self.config["title_max_char"]]
+        title = title[: self.config["title_max_char"]]
 
         new_label = f"{humanized_str} - {title}"
         if self.last_label == new_label:
@@ -184,8 +186,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
         menu.append(gtk.SeparatorMenuItem())
 
         setting_menu = gtk.Menu()
-        label = ("Remove autostart"
-                 if self.autostart_file.exists() else "Auto start at boot")
+        label = (
+            "Remove autostart" if self.autostart_file.exists() else "Auto start at boot"
+        )
         item_autostart = gtk.MenuItem(label=label)
         item_autostart.connect("activate", self.install_uninstall_autostart)
         setting_menu.add(item_autostart)
@@ -203,8 +206,11 @@ class Applet(goacal.GnomeOnlineAccountCal):
 
     def make_attacchment_item(self, menu, event):
         now = datetime.datetime.now()
-        if not (event.start_dttime < now and now < event.end_dttime
-                and event.comp.get_attachments()):
+        if not (
+            event.start_dttime < now
+            and now < event.end_dttime
+            and event.comp.get_attachments()
+        ):
             return menu
         menuitem = gtk.MenuItem(label="📑 Open current meeting document")
         menuitem.location = event.comp.get_attachments()[0].get_url()
@@ -220,7 +226,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 return ""
 
         if event.comp.get_location() and event.comp.get_location().startswith(
-                "https://"):
+            "https://"
+        ):
             return event.comp.get_location()
 
         match_videocall_summary = self.match_videocall_url_from_summary(event)
@@ -247,13 +254,13 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 currentday = event_day
 
             summary = strings.htmlspecialchars(
-                event.comp.get_summary().get_value().strip())
+                event.comp.get_summary().get_value().strip()
+            )
             if datetime.datetime.now() >= event.start_dttime:
                 summary = f"<i>{summary}</i>"
             icon = self.make_icon(event)
             start_time_str = event.start_dttime.strftime("%H:%M")
-            menuitem = gtk.MenuItem(
-                label=f"{icon} {summary} - {start_time_str}")
+            menuitem = gtk.MenuItem(label=f"{icon} {summary} - {start_time_str}")
             menuitem.get_child().set_use_markup(True)
 
             menuitem.location = self.get_meeting_url(event)
@@ -283,8 +290,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         event_day = event.start_dttime.strftime("%A %d %B %Y")
         if currentday != "":
             menu.append(gtk.MenuItem(label=""))
-        todayitem = gtk.MenuItem(
-            label=f'<span size="large">{event_day}</span>')
+        todayitem = gtk.MenuItem(label=f'<span size="large">{event_day}</span>')
         todayitem.get_child().set_use_markup(True)
         prefix_url = self.config["calendar_day_prefix_url"]
         # this only works with google calendar i think

@@ -1,7 +1,7 @@
 import gi  # type: ignore
 
 # pylint: disable=C0413, W1202
-gi.require_version('GLib', '2.0')
+gi.require_version("GLib", "2.0")
 
 from gi.repository import GLib as glib  # type: ignore
 
