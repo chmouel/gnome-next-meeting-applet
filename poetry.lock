@@ -405,7 +405,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "pygobject"
-version = "3.42.1"
+version = "3.42.2"
 description = "Python bindings for GObject Introspection"
 category = "main"
 optional = false
@@ -574,7 +574,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6b087cc41ce3a9058494d0cbaeacd3c4e75070a390929c5ae309f308e2c4cbae"
+content-hash = "1f1d970decc06659cc13d083a99b9c7e1ef23f3c9842532cca3c0227fedc17fd"
 
 [metadata.files]
 appnope = [
@@ -805,7 +805,7 @@ pygments = [
     {file = "Pygments-2.12.0.tar.gz", hash = "sha256:5eb116118f9612ff1ee89ac96437bb6b49e8f04d8a13b514ba26f620208e26eb"},
 ]
 pygobject = [
-    {file = "PyGObject-3.42.1.tar.gz", hash = "sha256:80d6a3ad1630e9d1edf31b9e9fad9a894c57e18545a3c95ef0044ac4042b8620"},
+    {file = "PyGObject-3.42.2.tar.gz", hash = "sha256:21524cef33100c8fd59dc135948b703d79d303e368ce71fa60521cc971cd8aa7"},
 ]
 pylint = [
     {file = "pylint-2.14.5-py3-none-any.whl", hash = "sha256:fabe30000de7d07636d2e82c9a518ad5ad7908590fe135ace169b44839c15f90"},
