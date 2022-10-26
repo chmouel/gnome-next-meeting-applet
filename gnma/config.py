@@ -35,6 +35,7 @@ VIDEOCALL_DESC_REGEXP = [
     r"(https://meet.lync.com/[^\n]*)",
     r"(https://meet.office.com/[^\n]*)",
     r"(https://meet.microsoft.com/[^\n]*)",
+    r"(https://teams.microsoft.com/[^>\n]*)",
 ]
 
 AUTOSTART_DESKTOP_FILE = """#!/usr/bin/env xdg-open
