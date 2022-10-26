@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "gnome-next-meeting-applet"
+name = "gnome_next_meeting_applet"
 version = "2.9.0"
 description = "Show your next meeetings in an applet"
 authors = ["Chmouel Boudjnah <chmouel@chmouel.com>"]
 maintainers = ["Chmouel Boudjnah <chmouel@chmouel.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = ""
+homepage = "https://github.com/chmouel/gnome-next-meeting-applet"
 keywords = [
     "calendar", "Gnome",
 ]

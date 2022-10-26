@@ -9,8 +9,9 @@ finalaction="copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?d
 
 gitdir=$(git rev-parse --show-toplevel)
 cd "${gitdir}"
-justbuildrpm=""
 image_name=gnome-next-meeting-applet-rpm-builder
+
+echo ${finalaction}
 
 while getopts "rd" o; do
     case "${o}" in
@@ -34,13 +35,14 @@ shift $((OPTIND-1))
 
 sudo docker build -f ./packaging/rpm/Dockerfile -t ${image_name} .
 
+pname=${NAME//-/_}
 sudo docker run --rm \
-           -v ~/.config/copr:/home/builder/.config/copr \
+           -v $HOME/.config/copr:/home/builder/.config/copr \
            -v "${gitdir}":/src \
            --name gnome-next-meeting-applet-builder \
            -it ${image_name} \
            /bin/bash -c "sed 's/_VERSION_/${VERSION}/' /src/packaging/rpm/${NAME}.spec > /tmp/${NAME}.spec && \
                          sed -i -e \"/^%changelog/a\* $(date '+%a %b %-d %Y') ${AUTHOR_EMAIL} - ${VERSION}-${RELEASE}\n- New vesion ${VERSION}\n\" /tmp/${NAME}.spec && \
-                         cp -v dist/${NAME}-${VERSION}.tar.gz /tmp/
+                         cp -v dist/${pname}-${VERSION}.tar.gz /tmp/${NAME}-${VERSION}.tar.gz && \
                          rpmbuild -bs /tmp/${NAME}.spec --define '_sourcedir /tmp/' --define '_srcrpmdir /tmp/' && \
                          ${finalaction}"

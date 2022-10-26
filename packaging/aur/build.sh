@@ -14,27 +14,28 @@ cd "${gitdir}"
 
 while getopts "d" o; do
     case "${o}" in
-        d)
-            finalaction="echo done"
-            ;;
-        *)
-            echo "Invalid option"; exit 1;
-            ;;
+    d)
+        finalaction="bash"
+        ;;
+    *)
+        echo "Invalid option"
+        exit 1
+        ;;
     esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
 VERSION=${1:-${POETRY_NAME_VERSION#* }}
 
 sudo docker build -f ./packaging/aur/Dockerfile -t ${image_name} .
 
 sudo docker run --rm \
-           -v ~/.config/copr:/home/builder/.config/copr \
-           -v "${gitdir}":/src \
-           -v $SSH_AUTH_SOCK:/ssh-agent --env SSH_AUTH_SOCK=/ssh-agent \
-           --name ${PKGNAME}-builder \
-           -it ${image_name} \
-           /bin/bash -c "set -x;mkdir -p ~/.ssh/;chmod 0700 ~/.ssh && \
+    -v ~/.config/copr:/home/builder/.config/copr \
+    -v "${gitdir}":/src \
+    -v $SSH_AUTH_SOCK:/ssh-agent --env SSH_AUTH_SOCK=/ssh-agent \
+    --name ${PKGNAME}-arch-builder \
+    -it ${image_name} \
+    /bin/bash -c "set -x;mkdir -p ~/.ssh/;chmod 0700 ~/.ssh && \
                          ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts && \
                          git clone --depth=1 ssh://aur@aur.archlinux.org/${PKGNAME} /tmp/${PKGNAME} && \
                          cd /tmp/${PKGNAME} && \

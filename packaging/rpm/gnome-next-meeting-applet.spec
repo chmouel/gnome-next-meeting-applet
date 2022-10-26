@@ -35,7 +35,7 @@ calendar configured in Gnome Online Accounts or Evolution data server.
 %pyproject_buildrequires
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n gnome_next_meeting_applet-%{version}
 
 %build
 %pyproject_wheel
@@ -64,11 +64,3 @@ install -D -m0644 data/desktop/icon.svg $RPM_BUILD_ROOT/%{_datadir}/icons/hicolo
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
-* Thu Dec 30 2021 Chmouel Boudjnah <chmouel@chmouel.com> - 2.3.0-1
-- Fix icons install.
-
-* Fri Nov 30 2021 Chmouel Boudjnah <chmouel@chmouel.com> - 2.0.0-1
-- Use poetry pypackages
-
-* Fri Feb  5 2021 Chmouel Boudjnah <chmouel@chmouel.com> - 0.1.0-1
-- first packaging version
