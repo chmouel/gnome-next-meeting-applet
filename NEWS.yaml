@@ -1,4 +1,11 @@
 ---
+Version: 2.9.0
+Date: 2022-10-26
+Description:
+  - Add support for microsoft teams leaks (@yawks)
+  - Update dependencies
+
+---
 Version: 2.8.1
 Date: 2022-07-11
 Description:
