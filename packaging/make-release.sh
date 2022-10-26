@@ -69,17 +69,17 @@ bumpversion() {
     exit 1
 }
 [[ -z ${VERSION} ]] && bumpversion
-# editChanges
-# vfile=pyproject.toml
-# sed -i "s/^version = .*/version = \"${VERSION}\"/" ${vfile}
-# git commit -S -m "Release ${VERSION} 🥳" ${vfile} NEWS.yaml ${APP_DATA_FILE}  || true
-# git tag -s ${VERSION} -m "Releasing version ${VERSION}"
-# git push --tags origin ${VERSION}
-# env NOTESTS=ci git push origin main
-# rm -rf build
-# poetry build
-# pname=${PKGNAME//-/_}
-# gh release create -F ${TMP} ${VERSION} ./dist/${pname}-${VERSION}.tar.gz ./dist/${pname}-${VERSION}-py3-none-any.whl
+editChanges
+vfile=pyproject.toml
+sed -i "s/^version = .*/version = \"${VERSION}\"/" ${vfile}
+git commit -S -m "Release ${VERSION} 🥳" ${vfile} NEWS.yaml ${APP_DATA_FILE}  || true
+git tag -s ${VERSION} -m "Releasing version ${VERSION}"
+git push --tags origin ${VERSION}
+env NOTESTS=ci git push origin main
+rm -rf build
+poetry build
+pname=${PKGNAME//-/_}
+gh release create -F ${TMP} ${VERSION} ./dist/${pname}-${VERSION}.tar.gz ./dist/${pname}-${VERSION}-py3-none-any.whl
 
 ./packaging/debian/build.sh
 ./packaging/aur/build.sh
