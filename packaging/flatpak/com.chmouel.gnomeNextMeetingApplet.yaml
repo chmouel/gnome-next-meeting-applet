@@ -33,20 +33,15 @@ modules:
   - shared-modules/intltool/intltool-0.51.json
   - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
   - name: gnome-online-accounts
+    buildsystem: meson
     config-opts:
-      - "--disable-telepathy"
-      - "--disable-documentation"
-      - "--disable-backend"
-      # enabling debug via configure causes both -g and -o0 # to be
-      # set, which is bad since the former is redundant with the
-      # default fd.o build-options, and the latter conflicts with
-      # them. so disable debug instead.
-      - "--enable-debug=no"
+      - -Dvapi=false
+      - -Dgoabackend=false
+      - -Dintrospection=false
     sources:
-      - type: archive
-        url: https://download.gnome.org/sources/gnome-online-accounts/3.40/gnome-online-accounts-3.40.0.tar.xz
-        sha256: 585c4f979f6f543b77bfdb4fb01eb18ba25c2aec5b7866c676d929616fb2c3fa
-
+      - type: git
+        url: https://gitlab.gnome.org/GNOME/gnome-online-accounts.git
+        branch: 036271b5ead22c05444862781f750c6baaf0d21d
   - name: libical
     buildsystem: cmake-ninja
     config-opts:
