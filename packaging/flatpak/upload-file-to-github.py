@@ -13,12 +13,9 @@ import os.path
 import urllib
 
 
-def github_request(token: str,
-                   method: str,
-                   url: str,
-                   headers=None,
-                   data=None,
-                   params=None):
+def github_request(
+    token: str, method: str, url: str, headers=None, data=None, params=None
+):
     if not headers:
         headers = {}
 
@@ -41,7 +38,7 @@ def github_request(token: str,
         return github_request(token, method, response.headers["Location"])
 
     if response.status >= 400:
-        headers.pop('Authorization', None)
+        headers.pop("Authorization", None)
         raise Exception(
             f"Error: {response.status} - {json.loads(response.read())} - {method} - {url} - {data} - {headers}"
         )
@@ -51,26 +48,29 @@ def github_request(token: str,
 
 def create_ref_from_tags(args):
     resp, jeez = github_request(
-        args.token, "GET",
-        f"/repos/{args.owner_repository}/git/{args.from_tag}")
+        args.token, "GET", f"/repos/{args.owner_repository}/git/{args.from_tag}"
+    )
     last_commit_sha = jeez["object"]["sha"]
     if jeez["object"]["type"] == "tag":
         _, jeez = github_request(args.token, "GET", jeez["object"]["url"])
-        last_commit_sha = jeez['object']["sha"]
+        last_commit_sha = jeez["object"]["sha"]
 
     print("TAG SHA: " + last_commit_sha)
 
-    branchname = f"release-{os.path.basename(args.from_tag)}"
-    branch_ref = f"refs/heads/{branchname}"
+    if not args.branch_ref:
+        branchname = f"release-{os.path.basename(args.from_tag)}"
+        branch_ref = f"refs/heads/{branchname}"
+    else:
+        branch_ref = args.branch_ref
+        branchname = os.path.basename(branch_ref)
     print(f"Create branch: {branchname}")
     try:
-        resp, jeez = github_request(args.token,
-                                    "POST",
-                                    f"/repos/{args.owner_repository}/git/refs",
-                                    data={
-                                        "ref": branch_ref,
-                                        "sha": last_commit_sha
-                                    })
+        resp, jeez = github_request(
+            args.token,
+            "POST",
+            f"/repos/{args.owner_repository}/git/refs",
+            data={"ref": branch_ref, "sha": last_commit_sha},
+        )
     except Exception as e:
         raise e
     args.branch_ref = branch_ref
@@ -82,8 +82,8 @@ def upload_to_github(args):
         raise Exception("Need a branch-ref args")
     # Get last commit SHA of a branch
     resp, jeez = github_request(
-        args.token, "GET",
-        f"/repos/{args.owner_repository}/git/{args.branch_ref}")
+        args.token, "GET", f"/repos/{args.owner_repository}/git/{args.branch_ref}"
+    )
     last_commit_sha = jeez["object"]["sha"]
     print("Last commit SHA: " + last_commit_sha)
 
@@ -92,10 +92,7 @@ def upload_to_github(args):
         args.token,
         "POST",
         f"/repos/{args.owner_repository}/git/blobs",
-        data={
-            "content": base64content.decode(),
-            "encoding": "base64"
-        },
+        data={"content": base64content.decode(), "encoding": "base64"},
     )
     blob_content_sha = jeez["sha"]
 
@@ -104,14 +101,15 @@ def upload_to_github(args):
         "POST",
         f"/repos/{args.owner_repository}/git/trees",
         data={
-            "base_tree":
-            last_commit_sha,
-            "tree": [{
-                "path": args.destination,
-                "mode": "100644",
-                "type": "blob",
-                "sha": blob_content_sha,
-            }],
+            "base_tree": last_commit_sha,
+            "tree": [
+                {
+                    "path": args.destination,
+                    "mode": "100644",
+                    "type": "blob",
+                    "sha": blob_content_sha,
+                }
+            ],
         },
     )
     tree_sha = jeez["sha"]
@@ -141,8 +139,26 @@ def upload_to_github(args):
     return (resp, jeez)
 
 
+def create_pr(args: argparse.Namespace):
+    mainb = os.path.basename(args.from_tag)
+    version = os.path.basename(args.branch_ref)
+    jeez = {"title": f"Releasing  {version}", "head": version, "base": mainb}
+    resp, rjeez = github_request(
+        args.token,
+        "POST",
+        f"/repos/{args.owner_repository}/pulls",
+        data=jeez,
+    )
+    if resp.status != 200:
+        print(f"status error: {resp.status} {resp.msg}")
+        return
+
+    print(f"PullRequest has been created: {rjeez['url']}")
+
+
 def parse_args():
-    parser = argparse.ArgumentParser(description='Upload a file to github ref')
+    parser = argparse.ArgumentParser(description="Upload a file to github ref")
+    parser.add_argument("--create-pr", action="store_true", help="create a PR")
     parser.add_argument("--filename", "-f", required=True)
     parser.add_argument("--message", "-m", required=True)
     parser.add_argument("--destination", "-d", required=True)
@@ -156,11 +172,14 @@ def parse_args():
 
 
 def main(args):
-    if args.from_tag:
-        resp, jz = create_ref_from_tags(args)
+    if args.create_pr:
+        create_pr(args)
+    elif args.from_tag:
+        resp, _ = create_ref_from_tags(args)
+        print(resp.status)
     else:
-        resp, jz = upload_to_github(args)
-    print(resp.status)
+        resp, _ = upload_to_github(args)
+        print(resp.status)
 
 
 if __name__ == "__main__":

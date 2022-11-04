@@ -45,7 +45,7 @@ run-release: install-release
 release:
 	./update-release.sh
 	target_release=`poetry version|cut -d" " -f2` ; \
-	./upload-file-to-github.py --branch-ref refs/heads/master -o flathub/$(ID) \
+	./upload-file-to-github.py --branch-ref refs/heads/release-$$target_release --from-tag refs/heads/master -o flathub/$(ID) \
 		--email "$(EMAIL)" --name "$(NAME)" \
 		--token "`pass show $(GITHUB_PASS_TOKEN)`" --message "Release $$target_release" \
 		--destination release.yaml --filename release.yaml && \
