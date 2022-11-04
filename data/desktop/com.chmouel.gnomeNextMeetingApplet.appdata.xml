@@ -31,6 +31,11 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release type="stable" version="2.9.2" date="2022-11-04T00:00:00Z">
+      <description>
+        <p>Fix flatpak build</p>
+      </description>
+    </release>
     <release type="stable" version="2.9.1" date="2022-10-27T00:00:00Z">
       <description>
         <p>Fix building on older fedora.</p>
