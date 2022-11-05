@@ -33,7 +33,7 @@ editChanges() {
    done
    mv -v ${TMP} NEWS.yaml
    appstreamcli news-to-metainfo NEWS.yaml ${APP_DATA_FILE}
-   yq -r "select(.Version==\"${VERSION}\") | .Description" NEWS.yaml > ${TMP}
+   yq -r "select(.Version==\"${VERSION}\") | (\"- \" + ( .Description | join(\"\n- \")))" NEWS.yaml > ${TMP}
 }
 
 bumpversion() {
