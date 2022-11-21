@@ -32,7 +32,7 @@ pytest = "*"
 black = "*"
 toml = "*"
 pylint = "*"
-mypy = "^0.990"
+mypy = "^0.991"
 ipython = "^8.6.0"
 
 [tool.poetry.scripts]
