@@ -36,6 +36,7 @@ VIDEOCALL_DESC_REGEXP = [
     r"(https://meet.office.com/[^\n]*)",
     r"(https://meet.microsoft.com/[^\n]*)",
     r"(https://teams.microsoft.com/[^>\n]*)",
+    r"(https://(\w+\.)?webex.*MTID=[^\s]+)",
 ]
 
 AUTOSTART_DESKTOP_FILE = """#!/usr/bin/env xdg-open
