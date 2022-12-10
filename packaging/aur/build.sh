@@ -27,6 +27,7 @@ shift $((OPTIND - 1))
 
 VERSION=${1:-${POETRY_NAME_VERSION#* }}
 
+sudo docker pull archlinux:latest
 sudo docker build -f ./packaging/aur/Dockerfile -t ${image_name} .
 
 sudo docker run --rm \

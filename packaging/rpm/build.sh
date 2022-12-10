@@ -33,6 +33,7 @@ shift $((OPTIND-1))
     exit 1
 }
 
+sudo docker pull fedora:latest
 sudo docker build -f ./packaging/rpm/Dockerfile -t ${image_name} .
 
 pname=${NAME//-/_}

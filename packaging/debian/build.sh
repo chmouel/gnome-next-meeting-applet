@@ -40,6 +40,7 @@ gpg --list-secret-keys >/dev/null || {
 for dockerdistroversion in latest rolling; do
     dockerfile=/tmp/Dockerfile.${dockerdistroversion}.$$
     sed "s/FROM ubuntu:.*/FROM ubuntu:${dockerdistroversion}/" ./packaging/debian/Dockerfile >${dockerfile}
+    sudo docker pull ubuntu:${dockerdistroversion}
     sudo docker build -f ${dockerfile} -t ${NAME}-${dockerdistroversion}-builder .
     fpath=$(readlink -f .)
     pname=${NAME//-/_}
