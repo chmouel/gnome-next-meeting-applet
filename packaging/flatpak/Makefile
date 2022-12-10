@@ -50,4 +50,5 @@ release:
 		--token "`pass show $(GITHUB_PASS_TOKEN)`" --message "Release $$target_release" \
 		--destination release.yaml --filename release.yaml && \
 		git commit -m "Release flatpak release.yaml $$target_release" release.yaml && \
-		env NOTESTS=ci git push origin main
+		env NOTESTS=ci git push origin main && \
+		gh pr create -B master -R flathub/$(ID) -H release-$$target_release -t "Update to $$target_release" -b "Updating gnome-next-meeting-applet to $$target_release"
