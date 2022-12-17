@@ -157,8 +157,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
             format back to a clickable markup URL. Regular URLs are not escaped, hence we use a normal regex.
             """
             # Matches normal inline links with white-space in front.
-            normal_url_regex = r"(\s)(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:$§%_\+.~#?&\/=]*))"
-            # Matches inline links in the escaped angle-bracket format (https://www.rfc-editor.org/rfc/rfc2822#section-3.4)
+            normal_url_regex = r"(\s)(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}" \
+                               r"\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:$§%_\+.~#?&\/=]*))"
+            # Matches links in the escaped angle-bracket format (https://www.rfc-editor.org/rfc/rfc2822#section-3.4)
             escaped_angle_bracket_url_regex = r"(\S*)&lt;(.+?(?=&gt;))&gt;"
 
             description_markup = glib.markup_escape_text(description_string)
