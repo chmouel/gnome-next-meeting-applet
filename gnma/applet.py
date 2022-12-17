@@ -153,13 +153,15 @@ class Applet(goacal.GnomeOnlineAccountCal):
             """
             Parses the event descriptions into Pango markup with clickable links.
             E-Mail descriptions are very unsafe, so it's trivial to break the markup conversion.
-            This is why we escape the descriptions and explicitly convert escaped URLs in angle-bracket
-            format back to a clickable markup URL. Regular URLs are not escaped, hence we use a normal regex.
+            This is why we escape the descriptions and explicitly convert escaped URLs in
+            angle-bracket format back to a clickable markup URL. Regular URLs are not
+            escaped, hence we use a normal regex.
             """
             # Matches normal inline links with white-space in front.
             normal_url_regex = r"(\s)(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}" \
                                r"\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:$§%_\+.~#?&\/=]*))"
-            # Matches links in the escaped angle-bracket format (https://www.rfc-editor.org/rfc/rfc2822#section-3.4)
+            # Matches links in the escaped angle-bracket format (e.g. Link<URL>)
+            # See https://www.rfc-editor.org/rfc/rfc2822#section-3.4
             escaped_angle_bracket_url_regex = r"(\S*)&lt;(.+?(?=&gt;))&gt;"
 
             description_markup = glib.markup_escape_text(description_string)
@@ -197,7 +199,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 description_string = "\n".join(
                     map(lambda desc: desc.get_value(), source.event.comp.get_descriptions()))
 
-                label_string = (summary_string + "\n" + description_string) or "Event description is empty."
+                label_string = (summary_string + "\n" + description_string) \
+                               or "Event description is empty."
                 parsed_label_string = parse_description_to_markdown(label_string)
                 self.label.set_markup(parsed_label_string)
 
