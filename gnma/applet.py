@@ -88,15 +88,15 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 logging.debug("[SKIP] elapsed: %s", event.summary)
                 continue
             if (
-                self.config["starts_today_only"]
-                and datetime.datetime.now().date() < event.end_dttime.date()
+                    self.config["starts_today_only"]
+                    and datetime.datetime.now().date() < event.end_dttime.date()
             ):
                 del self.all_events[event.uid]
                 logging.debug("[SKIP] non today event: %s", event.summary)
                 continue
             if (
-                self.config["skip_non_confirmed"]
-                and event.comp.get_status().value_name != "I_CAL_STATUS_CONFIRMED"
+                    self.config["skip_non_confirmed"]
+                    and event.comp.get_status().value_name != "I_CAL_STATUS_CONFIRMED"
             ):
                 logging.debug("[SKIP] non confirmed event")
                 continue
@@ -110,9 +110,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 for attendee in event.comp.get_attendees():
                     for myemail in self.config["my_emails"]:
                         if (
-                            attendee.get_value().replace("mailto:", "") == myemail
-                            and attendee.get_partstat().value_name
-                            == "I_CAL_PARTSTAT_ACCEPTED"
+                                attendee.get_value().replace("mailto:", "") == myemail
+                                and attendee.get_partstat().value_name
+                                == "I_CAL_PARTSTAT_ACCEPTED"
                         ):
                             skipit = False
             if skipit:
@@ -146,6 +146,62 @@ class Applet(goacal.GnomeOnlineAccountCal):
             return ["Meeting over 😲", summary]
         humanized_str = strings.humanize_time(event.start_dttime, event.end_dttime)
         return [humanized_str, summary]
+
+    def open_description_window(self, source):
+
+        def parse_description_to_markdown(description_string):
+            """
+            Parses the event descriptions into Pango markup with clickable links.
+            E-Mail descriptions are very unsafe, so it's trivial to break the markup conversion.
+            This is why we escape the descriptions and explicitly convert escaped URLs in angle-bracket
+            format back to a clickable markup URL. Regular URLs are not escaped, hence we use a normal regex.
+            """
+            # Matches normal inline links with white-space in front.
+            normal_url_regex = r"(\s)(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:$§%_\+.~#?&\/=]*))"
+            # Matches inline links in the escaped angle-bracket format (https://www.rfc-editor.org/rfc/rfc2822#section-3.4)
+            escaped_angle_bracket_url_regex = r"(\S*)&lt;(.+?(?=&gt;))&gt;"
+
+            description_markup = glib.markup_escape_text(description_string)
+            description_markup = re.sub(
+                escaped_angle_bracket_url_regex,
+                r'<a href="\2" title="\2">\1</a>',
+                description_markup
+            )
+            description_markup = re.sub(
+                normal_url_regex,
+                r'\1<a href="\2" title="\2">\2</a>',
+                description_markup)
+
+            return description_markup
+
+        class EventDescriptionWindow(gtk.Window):
+            def __init__(self):
+                super().__init__(title="Please manually select meeting link")
+                self.set_default_size(600, 400)
+
+                self.grid = gtk.Grid()
+                self.add(self.grid)
+
+                scrolled_window = gtk.ScrolledWindow()
+                scrolled_window.set_hexpand(True)
+                scrolled_window.set_vexpand(True)
+                self.grid.attach(scrolled_window, 0, 1, 3, 1)
+
+                self.label = gtk.Label()
+                self.label.set_selectable(True)
+                scrolled_window.add(self.label)
+
+                # Set all event descriptions in label
+                summary_string = source.event.comp.get_summary().get_value()
+                description_string = "\n".join(
+                    map(lambda desc: desc.get_value(), source.event.comp.get_descriptions()))
+
+                label_string = (summary_string + "\n" + description_string) or "Event description is empty."
+                parsed_label_string = parse_description_to_markdown(label_string)
+                self.label.set_markup(parsed_label_string)
+
+        win = EventDescriptionWindow()
+        win.show_all()
 
     def open_source_location(self, source):
         if source.location == "":
@@ -204,12 +260,12 @@ class Applet(goacal.GnomeOnlineAccountCal):
         menu.show_all()
         self.indicator.set_menu(menu)
 
-    def make_attacchment_item(self, menu, event):
+    def make_attachment_item(self, menu, event):
         now = datetime.datetime.now()
         if not (
-            event.start_dttime < now
-            and now < event.end_dttime
-            and event.comp.get_attachments()
+                event.start_dttime < now
+                and now < event.end_dttime
+                and event.comp.get_attachments()
         ):
             return menu
         menuitem = gtk.MenuItem(label="📑 Open current meeting document")
@@ -226,7 +282,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 return ""
 
         if event.comp.get_location() and event.comp.get_location().startswith(
-            "https://"
+                "https://"
         ):
             return event.comp.get_location()
 
@@ -244,7 +300,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
             return
         first_event = events[0]
         self.set_indicator_icon_label(first_event)
-        menu = self.make_attacchment_item(menu, first_event)
+        menu = self.make_attachment_item(menu, first_event)
 
         currentday = ""
         for event in events:
@@ -262,9 +318,13 @@ class Applet(goacal.GnomeOnlineAccountCal):
             start_time_str = event.start_dttime.strftime("%H:%M")
             menuitem = gtk.MenuItem(label=f"{icon} {summary} - {start_time_str}")
             menuitem.get_child().set_use_markup(True)
-
-            menuitem.location = self.get_meeting_url(event)
-            menuitem.connect("activate", self.open_source_location)
+            location = self.get_meeting_url(event)
+            if not location:
+                menuitem.event = event
+                menuitem.connect("activate", self.open_description_window)
+            else:
+                menuitem.location = location
+                menuitem.connect("activate", self.open_source_location)
             menu.append(menuitem)
 
         self.add_last_item(menu)
