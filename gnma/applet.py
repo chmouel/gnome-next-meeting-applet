@@ -88,15 +88,15 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 logging.debug("[SKIP] elapsed: %s", event.summary)
                 continue
             if (
-                    self.config["starts_today_only"]
-                    and datetime.datetime.now().date() < event.end_dttime.date()
+                self.config["starts_today_only"]
+                and datetime.datetime.now().date() < event.end_dttime.date()
             ):
                 del self.all_events[event.uid]
                 logging.debug("[SKIP] non today event: %s", event.summary)
                 continue
             if (
-                    self.config["skip_non_confirmed"]
-                    and event.comp.get_status().value_name != "I_CAL_STATUS_CONFIRMED"
+                self.config["skip_non_confirmed"]
+                and event.comp.get_status().value_name != "I_CAL_STATUS_CONFIRMED"
             ):
                 logging.debug("[SKIP] non confirmed event")
                 continue
@@ -110,9 +110,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 for attendee in event.comp.get_attendees():
                     for myemail in self.config["my_emails"]:
                         if (
-                                attendee.get_value().replace("mailto:", "") == myemail
-                                and attendee.get_partstat().value_name
-                                == "I_CAL_PARTSTAT_ACCEPTED"
+                            attendee.get_value().replace("mailto:", "") == myemail
+                            and attendee.get_partstat().value_name
+                            == "I_CAL_PARTSTAT_ACCEPTED"
                         ):
                             skipit = False
             if skipit:
@@ -148,7 +148,6 @@ class Applet(goacal.GnomeOnlineAccountCal):
         return [humanized_str, summary]
 
     def open_description_window(self, source):
-
         def parse_description_to_markdown(description_string):
             """
             Parses the event descriptions into Pango markup with clickable links.
@@ -158,8 +157,10 @@ class Applet(goacal.GnomeOnlineAccountCal):
             escaped, hence we use a normal regex.
             """
             # Matches normal inline links with white-space in front.
-            normal_url_regex = r"(\s)(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}" \
-                               r"\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:$§%_\+.~#?&\/=]*))"
+            normal_url_regex = (
+                r"(\s)(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}"
+                r"\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:$§%_\+.~#?&\/=]*))"
+            )
             # Matches links in the escaped angle-bracket format (e.g. Link<URL>)
             # See https://www.rfc-editor.org/rfc/rfc2822#section-3.4
             escaped_angle_bracket_url_regex = r"(\S*)&lt;(.+?(?=&gt;))&gt;"
@@ -168,12 +169,13 @@ class Applet(goacal.GnomeOnlineAccountCal):
             description_markup = re.sub(
                 escaped_angle_bracket_url_regex,
                 r'<a href="\2" title="\2">\1</a>',
-                description_markup
+                description_markup,
             )
             description_markup = re.sub(
                 normal_url_regex,
                 r'\1<a href="\2" title="\2">\2</a>',
-                description_markup)
+                description_markup,
+            )
 
             return description_markup
 
@@ -197,10 +199,15 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 # Set all event descriptions in label
                 summary_string = source.event.comp.get_summary().get_value()
                 description_string = "\n".join(
-                    map(lambda desc: desc.get_value(), source.event.comp.get_descriptions()))
+                    map(
+                        lambda desc: desc.get_value(),
+                        source.event.comp.get_descriptions(),
+                    )
+                )
 
-                label_string = (summary_string + "\n" + description_string) \
-                               or "Event description is empty."
+                label_string = (
+                    summary_string + "\n" + description_string
+                ) or "Event description is empty."
                 parsed_label_string = parse_description_to_markdown(label_string)
                 self.label.set_markup(parsed_label_string)
 
@@ -267,9 +274,9 @@ class Applet(goacal.GnomeOnlineAccountCal):
     def make_attachment_item(self, menu, event):
         now = datetime.datetime.now()
         if not (
-                event.start_dttime < now
-                and now < event.end_dttime
-                and event.comp.get_attachments()
+            event.start_dttime < now
+            and now < event.end_dttime
+            and event.comp.get_attachments()
         ):
             return menu
         menuitem = gtk.MenuItem(label="📑 Open current meeting document")
@@ -286,7 +293,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
                 return ""
 
         if event.comp.get_location() and event.comp.get_location().startswith(
-                "https://"
+            "https://"
         ):
             return event.comp.get_location()
 
