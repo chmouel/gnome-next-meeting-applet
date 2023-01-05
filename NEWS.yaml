@@ -1,4 +1,11 @@
 ---
+Version: 2.10.0
+Date: 2023-01-05
+Description:
+  - We now have a wonderful window showing up when no meeting url is found to show all url 
+    attached in the description so user can click on it. (contributed by @FynnMazurkiewicz)
+
+---
 Version: 2.9.3
 Date: 2022-12-10
 Description:
