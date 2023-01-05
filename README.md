@@ -23,14 +23,14 @@
 
 <a href='https://flathub.org/apps/details/com.chmouel.gnomeNextMeetingApplet'><img height='40' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
-### Ubuntu
+### [Ubuntu](https://launchpad.net/~chmouel/+archive/ubuntu/gnome-next-meeting-applet)
 
 ```bash
 sudo add-apt-repository ppa:chmouel/gnome-next-meeting-applet
 sudo apt-get -y install gnome-next-meeting-applet
 ```
 
-### Fedora
+### [Fedora](https://copr.fedorainfracloud.org/coprs/chmouel/gnome-next-meeting-applet)
 
 You first need to install this gnome extension to get [appindicator-support](https://extensions.gnome.org/extension/615/appindicator-support/), when this is installed you can simply do :
 
@@ -39,12 +39,10 @@ dnf copr enable chmouel/gnome-next-meeting-applet
 dnf install gnome-next-meeting-applet
 ```
 
-### Arch
+### [Arch](https://aur.archlinux.org/packages/gnome-next-meeting-applet/)
 
 Just install the package from AUR with your favourite aur installer (ie:
 [yay](https://github.com/Jguer/yay))
-
-<https://aur.archlinux.org/packages/gnome-next-meeting-applet/>
 
 It depends on the
 [`gnome-shell-extension-appindicator`](https://archlinux.org/packages/community/any/gnome-shell-extension-appindicator/)
