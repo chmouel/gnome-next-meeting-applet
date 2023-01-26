@@ -69,6 +69,14 @@ automatically with default value at startup if you don't have one already.
 
 A sample file is located here: [config.sample.yaml](./config.sample.yaml).
 
+If using flatpak, you can do this to determine where your `$XDG_CONFIG_HOME`:
+
+```bash
+$ flatpak run --command=bash com.chmouel.gnomeNextMeetingApplet
+[📦 com.chmouel.gnomeNextMeetingApplet ~]$ echo $XDG_CONFIG_HOME
+/home/myuser/.var/app/com.chmouel.gnomeNextMeetingApplet/config
+```
+
 Settings:
 
 * **default_icon**: The default icon when showing each meeting (default: ‣)
