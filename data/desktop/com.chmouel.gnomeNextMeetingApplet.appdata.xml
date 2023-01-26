@@ -31,6 +31,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release type="stable" version="2.10.1" date="2023-01-26T00:00:00Z">
+      <description>
+        <ul>
+          <li>Update flatpak dependencies, gnome platform 43</li>
+          <li>Fix webex url regexp @FynnMazurkiewicz</li>
+        </ul>
+      </description>
+    </release>
     <release type="stable" version="2.10.0" date="2023-01-05T00:00:00Z">
       <description>
         <p>We now have a wonderful window showing up when no meeting url is found to show all url attached in the description so user can click on it. (contributed by @FynnMazurkiewicz)</p>

@@ -1,4 +1,11 @@
 ---
+Version: 2.10.1
+Date: 2023-01-26
+Description:
+  - Update flatpak dependencies, gnome platform 43
+  - Fix webex url regexp @FynnMazurkiewicz
+
+---
 Version: 2.10.0
 Date: 2023-01-05
 Description:
