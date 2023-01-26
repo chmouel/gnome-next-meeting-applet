@@ -32,7 +32,15 @@ sudo apt-get -y install gnome-next-meeting-applet
 
 ### [Fedora](https://copr.fedorainfracloud.org/coprs/chmouel/gnome-next-meeting-applet)
 
-You first need to install this gnome extension to get [appindicator-support](https://extensions.gnome.org/extension/615/appindicator-support/), when this is installed you can simply do :
+You first need to install the appindicator-support with dnf:
+
+```shell
+dnf install gnome-shell-extension-appindicator
+```
+
+or from [extensions.gnome.org](https://extensions.gnome.org/extension/615/appindicator-support/).
+
+when this is installed you can simply add the copr repository :
 
 ```bash
 dnf copr enable chmouel/gnome-next-meeting-applet
