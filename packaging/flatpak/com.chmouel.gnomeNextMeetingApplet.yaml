@@ -1,5 +1,5 @@
 app-id: com.chmouel.gnomeNextMeetingApplet
-runtime-version: '41'
+runtime-version: '43'
 runtime: org.gnome.Platform
 sdk: org.gnome.Sdk
 command: gnome-next-meeting-applet
@@ -41,7 +41,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.gnome.org/GNOME/gnome-online-accounts.git
-        branch: 036271b5ead22c05444862781f750c6baaf0d21d
+        branch: d9be7f4d198245e0cdfd0af7fc4a18413b2dcac6
   - name: libical
     buildsystem: cmake-ninja
     config-opts:
@@ -54,8 +54,8 @@ modules:
       - "-DICAL_GLIB_VAPI=true"
     sources:
       - type: archive
-        url: https://github.com/libical/libical/releases/download/v3.0.11/libical-3.0.11.tar.gz
-        sha256: 1e6c5e10c5a48f7a40c68958055f0e2759d9ab3563aca17273fe35a5df7dbbf1
+        url: https://github.com/libical/libical/releases/download/v3.0.16/libical-3.0.16.tar.gz
+        sha256: b44705dd71ca4538c86fb16248483ab4b48978524fb1da5097bd76aa2e0f0c33
     cleanup:
       - /lib/cmake
 
@@ -64,6 +64,7 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - "-DCMAKE_BUILD_TYPE=Release"
+      - "-DENABLE_OAUTH2_WEBKITGTK4=OFF"
       - "-DENABLE_CANBERRA=OFF"
       - "-DENABLE_EXAMPLES=OFF"
       - "-DENABLE_GOA=ON"
@@ -78,8 +79,8 @@ modules:
       - "-DWITH_OPENLDAP=OFF"
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/evolution-data-server/3.40/evolution-data-server-3.40.4.tar.xz
-        sha256: 87c185f18c37270e3611981f19bd9221ac974c807462c8dce90bea08712c5800
+        url: https://download.gnome.org/sources/evolution-data-server/3.47/evolution-data-server-3.47.1.tar.xz
+        sha256: 2c685f3a6ec4712ead8fc6c3a0f9cf54e3edbb20c1ee5833af7946301061cc31
     cleanup:
       - /lib/cmake
       - /lib/evolution-data-server/*-backends
