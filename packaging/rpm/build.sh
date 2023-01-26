@@ -5,7 +5,7 @@ NAME=${POETRY_NAME_VERSION% *}
 VERSION=${POETRY_NAME_VERSION#* }
 AUTHOR_EMAIL="$(git config --get user.name) <$(git config --get user.email)>"
 RELEASE=1
-finalaction="copr-cli build ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm"
+finalaction="copr-cli build --nowait ${NAME} /tmp/${NAME}-${VERSION}-1\$(rpm --eval '%{?dist}').src.rpm"
 
 gitdir=$(git rev-parse --show-toplevel)
 cd "${gitdir}"
