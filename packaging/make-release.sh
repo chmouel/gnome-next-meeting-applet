@@ -26,7 +26,7 @@ editChanges() {
        echo -e "---\nVersion: ${VERSION}\nDate: $(date +%Y-%m-%d)\nDescription:\n  - \n" > ${TMP}
    fi
    cat NEWS.yaml >> ${TMP}
-   $EDITOR +5 $TMP
+   "${EDITOR:-vi}" +5 $TMP
    while true;do
          read -p "continue releasing? [yN]: " ANSWER
          [[ ${ANSWER,} == y ]] && break
