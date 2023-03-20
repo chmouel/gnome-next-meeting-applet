@@ -645,13 +645,13 @@ plugins = ["importlib-metadata"]
 
 [[package]]
 name = "pygobject"
-version = "3.42.2"
+version = "3.44.0"
 description = "Python bindings for GObject Introspection"
 category = "main"
 optional = false
-python-versions = ">=3.6, <4"
+python-versions = ">=3.7, <4"
 files = [
-    {file = "PyGObject-3.42.2.tar.gz", hash = "sha256:21524cef33100c8fd59dc135948b703d79d303e368ce71fa60521cc971cd8aa7"},
+    {file = "PyGObject-3.44.0.tar.gz", hash = "sha256:34c21bdca7aeaa602980dc51c11bb31ec300753975a66d5d41cb67e619e6835b"},
 ]
 
 [package.dependencies]
@@ -961,4 +961,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "9ee63600ba8a620040a4357d433d07972d7a53a0ee8062ffc41e010b88928263"
+content-hash = "a918a8657bf65da0b8e0ff4d5b02b7c4ba5e2ced4be115a595073d303fe853bf"
