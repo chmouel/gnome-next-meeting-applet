@@ -22,7 +22,7 @@ except ImportError:
     try:
         from gi.repository import AyatanaAppIndicator3 as appindicator  # type:ignore
     except ImportError as e:
-        raise Exception("Cannot find ayatana or appindicator3 library") from e
+        raise ImportError("Cannot find ayatana or appindicator3 library") from e
 
 # pylint: disable=E0611 disable=C0411
 from gi.repository import EDataServer
@@ -66,7 +66,8 @@ class Applet(goacal.GnomeOnlineAccountCal):
         configfile = pathlib.Path(config.CONFIG_FILE).expanduser()
         if configfile.exists():
             logging.debug("loading configfile: %s", configfile)
-            self.config = {**config.DEFAULT_CONFIG, **yaml.safe_load(configfile.open())}
+            with configfile.open() as configfile_fp:
+                self.config = {**config.DEFAULT_CONFIG, **yaml.safe_load(configfile_fp)}
             if self.config["verbose"]:
                 self.args.verbose = True
                 self.set_logging()
