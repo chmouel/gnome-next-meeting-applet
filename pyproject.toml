@@ -33,7 +33,7 @@ black = "*"
 toml = "*"
 pylint = "*"
 mypy = "^1.1"
-ipython = "^8.11.0"
+ipython = "^8.12.0"
 
 [tool.poetry.scripts]
 gnome-next-meeting-applet = "gnma.cli:cli"
