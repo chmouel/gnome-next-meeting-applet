@@ -49,7 +49,7 @@ dnf install gnome-next-meeting-applet
 
 ### [Arch](https://aur.archlinux.org/packages/gnome-next-meeting-applet/)
 
-Just install the package from AUR with your favourite aur installer (ie:
+Just install the package [gnome-next-meeting-applet](https://aur.archlinux.org/packages/gnome-next-meeting-applet/) from AUR with your favourite aur installer (ie:
 [yay](https://github.com/Jguer/yay))
 
 It depends on the
