@@ -107,9 +107,9 @@ modules:
       - sha256: 1ee72b035b21a475e1ed648e26541b04e5d7e753d75ca79de8c583b25785531b
         type: file
         url: https://files.pythonhosted.org/packages/bc/3f/64e6e066d163fbcf13213f9eeda0fc83376243335ea46a66cefd70d62e8f/pycairo-1.20.1.tar.gz
-      - sha256: b9803991ec0b0b4175e81fee0ad46090fa7af438fe169348a9b18ae53447afcd
+      - sha256: 665fbe980c91e8b31ad78ed3f66879946948200864002d193f67eccc1d7d5d83
         type: file
-        url: https://files.pythonhosted.org/packages/cc/72/48cfdd7a0caf3c27f392d2657731ac6f7c3c1c0a60bfeba3e1ba9ffa7ba9/PyGObject-3.42.0.tar.gz
+        url: https://files.pythonhosted.org/packages/44/80/96d6317a15a13a4f80ffa61118dc144a70756135fbc6ace30f9b033f51f7/PyGObject-3.44.1.tar.gz
       - sha256: 961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
         type: file
         url: https://files.pythonhosted.org/packages/36/7a/87837f39d0296e723bb9b62bbb257d0355c7f6128853c78955f57342a56d/python_dateutil-2.8.2-py2.py3-none-any.whl
