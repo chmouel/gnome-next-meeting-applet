@@ -1,4 +1,10 @@
 ---
+Version: 2.11.0
+Date: 2023-07-03
+Description:
+  - Make skip_all_day true by default @castrojo 
+
+---
 Version: 2.10.1
 Date: 2023-01-26
 Description:
