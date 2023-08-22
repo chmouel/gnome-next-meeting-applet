@@ -1,5 +1,5 @@
 app-id: com.chmouel.gnomeNextMeetingApplet
-runtime-version: '43'
+runtime-version: '44'
 runtime: org.gnome.Platform
 sdk: org.gnome.Sdk
 command: gnome-next-meeting-applet
@@ -10,6 +10,7 @@ finish-args:
   - "--socket=wayland"
   - "--share=network"
   - "--talk-name=org.gnome.OnlineAccounts"
+  - "--filesystem=~/.config/gnome-next-meeting-applet:ro"
   - "--talk-name=org.gnome.evolution.dataserver.*"
   - "--talk-name=org.kde.StatusNotifierWatcher"
   - "--talk-name=com.canonical.indicator.application"
@@ -32,16 +33,22 @@ cleanup:
 modules:
   - shared-modules/intltool/intltool-0.51.json
   - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
-  - name: gnome-online-accounts
+  - name: librest
     buildsystem: meson
     config-opts:
-      - -Dvapi=false
-      - -Dgoabackend=false
-      - -Dintrospection=false
+      - -Dgtk_doc=false
     sources:
-      - type: git
-        url: https://gitlab.gnome.org/GNOME/gnome-online-accounts.git
-        branch: d9be7f4d198245e0cdfd0af7fc4a18413b2dcac6
+      - type: archive
+        url: https://download.gnome.org/sources/rest/0.9/rest-0.9.1.tar.xz
+        sha256: 9266a5c10ece383e193dfb7ffb07b509cc1f51521ab8dad76af96ed14212c2e3
+
+  - name: gnome-online-accounts
+    buildsystem: meson
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/gnome-online-accounts/3.48/gnome-online-accounts-3.48.0.tar.xz
+        sha256: 418bb9fcffdbd72a98205ad365137617fc1e3551a54de74f6a98d45d266175bf
+
   - name: libical
     buildsystem: cmake-ninja
     config-opts:
@@ -64,7 +71,6 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - "-DCMAKE_BUILD_TYPE=Release"
-      - "-DENABLE_OAUTH2_WEBKITGTK4=OFF"
       - "-DENABLE_CANBERRA=OFF"
       - "-DENABLE_EXAMPLES=OFF"
       - "-DENABLE_GOA=ON"
@@ -79,8 +85,8 @@ modules:
       - "-DWITH_OPENLDAP=OFF"
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/evolution-data-server/3.47/evolution-data-server-3.47.1.tar.xz
-        sha256: 2c685f3a6ec4712ead8fc6c3a0f9cf54e3edbb20c1ee5833af7946301061cc31
+        url: https://download.gnome.org/sources/evolution-data-server/3.48/evolution-data-server-3.48.4.tar.xz
+        sha256: 997e3f93b17efb0affcc017bee8780ba5fa2c009e36551bbc91a08ae552d6d60
     cleanup:
       - /lib/cmake
       - /lib/evolution-data-server/*-backends
@@ -90,31 +96,25 @@ modules:
   - name: python-deps
     buildsystem: simple
     build-commands:
-      - pip3 install --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} --no-build-isolation pyyaml dbus-python humanize pycairo pygobject python-dateutil six
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} --no-build-isolation poetry-core PyYAML dbus-python==1.2.18 humanize pycairo python_dateutil
     sources:
-      - sha256: 98c11c755a16ef6c5673c22ca94a3802a7df4746a0853a70b6fae8b9f5cac206
-        type: file
-        url: https://files.pythonhosted.org/packages/40/d0/adc9ab25f68d9382f32c355627423a32135efaa5aaeebd6dec6d19e6b0af/poetry-core-1.0.7.tar.gz
-      - sha256: 607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e
-        type: file
-        url: https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d/PyYAML-5.4.1.tar.gz
-      - sha256: 92bdd1e68b45596c833307a5ff4b217ee6929a1502f5341bae28fd120acf7260
-        type: file
+      - type: file
+        url: https://files.pythonhosted.org/packages/fc/7d/e1fb5889102e49e7ef7192f155e9409233255ed64594827b81d4e5950335/poetry_core-1.6.1-py3-none-any.whl
+        sha256: 70707340447dee0e7f334f9495ae652481c67b32d8d218f296a376ac2ed73573
+      - type: file
+        url: https://files.pythonhosted.org/packages/cd/e5/af35f7ea75cf72f2cd079c95ee16797de7cd71f29ea7c68ae5ce7be1eda0/PyYAML-6.0.1.tar.gz
+        sha256: bfdf460b1736c775f2ba9f6a92bca30bc2095067b8a9d77876d1fad6cc3b4a43
+      - type: file
         url: https://files.pythonhosted.org/packages/b1/5c/ccfc167485806c1936f7d3ba97db6c448d0089c5746ba105b6eb22dba60e/dbus-python-1.2.18.tar.gz
-      - sha256: a6f7cc1597db69a4e571ad5e19b4da07ee871da5a9de2b233dbfab02d98e9754
-        type: file
-        url: https://files.pythonhosted.org/packages/46/a8/74f8bf12c7d93bb2e111d13bae198996032d9a53dbbfc3bf4837a466cbe9/humanize-3.13.1-py3-none-any.whl
-      - sha256: 1ee72b035b21a475e1ed648e26541b04e5d7e753d75ca79de8c583b25785531b
-        type: file
-        url: https://files.pythonhosted.org/packages/bc/3f/64e6e066d163fbcf13213f9eeda0fc83376243335ea46a66cefd70d62e8f/pycairo-1.20.1.tar.gz
-      - sha256: 665fbe980c91e8b31ad78ed3f66879946948200864002d193f67eccc1d7d5d83
-        type: file
-        url: https://files.pythonhosted.org/packages/44/80/96d6317a15a13a4f80ffa61118dc144a70756135fbc6ace30f9b033f51f7/PyGObject-3.44.1.tar.gz
-      - sha256: 961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
-        type: file
+        sha256: 92bdd1e68b45596c833307a5ff4b217ee6929a1502f5341bae28fd120acf7260
+      - type: file
+        url: https://files.pythonhosted.org/packages/5e/81/60bbbb745b397fa56b82ec71ecbada00f574319b8f36c5f53c6c0c0c0601/humanize-4.7.0-py3-none-any.whl
+        sha256: df7c429c2d27372b249d3f26eb53b07b166b661326e0325793e0a988082e3889
+      - type: file
+        url: https://files.pythonhosted.org/packages/a2/dd/bc2c9ee9485308a29c18b1241329e677917af25c60b127857f0fb23d0c6e/pycairo-1.24.0.tar.gz
+        sha256: 1444d52f1bb4cc79a4a0c0fe2ccec4bd78ff885ab01ebe1c0f637d8392bcafb6
+      - type: file
         url: https://files.pythonhosted.org/packages/36/7a/87837f39d0296e723bb9b62bbb257d0355c7f6128853c78955f57342a56d/python_dateutil-2.8.2-py2.py3-none-any.whl
-      - sha256: 8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
-        type: file
-        url: https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl
+        sha256: 961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
 
   - release.yaml
