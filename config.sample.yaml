@@ -24,6 +24,11 @@ calendar_day_prefix_url: "https://calendar.google.com/calendar/r/day/"
 # something is coming up.
 change_icon_minutes: 5
 
+# We can automatically open the web browser to the meetig url with the
+# auto_open_minutes variable. Give it the number of minutes before the meeting
+# or 0 to disable. (the auto opening only happen once per meeting).
+auto_open_minutes: 0
+
 # You can customize the icons to a svg or png files with those variables :
 # icon_default_path: the default icon, it will use the icon
 #                    "x-office-calendar-symbolic" from gnome theme by default.
