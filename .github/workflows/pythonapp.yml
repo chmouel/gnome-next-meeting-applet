@@ -9,14 +9,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
     - name: Install poetry pylint
       run: |
-        sudo apt install -y python3-dev gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev libdbus-1-dev
-        pip3 install --upgrade poetry
+        sudo apt install -y python3-dev gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev libdbus-1-dev meson python-is-python3 python3-pip
+        pip3 install -U poetry
         poetry install -v
     - name: Test code
       run: |

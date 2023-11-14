@@ -2,7 +2,7 @@ PACKAGE := gnome-next-meeting-applet
 
 .PHONY: requirements
 requirements:
-	poetry install --no-dev
+	poetry install --only main
 
 .PHONY: requirements_tools
 requirements_tools:
@@ -18,4 +18,5 @@ lint: requirements_tools
 
 .PHONY: run
 run:
-	@poetry run $(PACKAGE) -v
+	@unset DBUS_SESSION_BUS_ADDRESS ;\
+		env poetry run $(PACKAGE) -v

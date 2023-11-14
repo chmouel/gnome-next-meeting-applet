@@ -7,16 +7,16 @@ maintainers = ["Chmouel Boudjnah <chmouel@chmouel.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/chmouel/gnome-next-meeting-applet"
-keywords = [
-    "calendar", "Gnome",
-]
-packages = [
-    { include = "gnma" }
-]
+keywords = ["calendar", "Gnome"]
+packages = [{ include = "gnma" }]
 
 include = [
- { path = "data/", format = ["sdist"] },
- { path = "config.sample.yaml", format = ["sdist"] }
+    { path = "data/", format = [
+        "sdist",
+    ] },
+    { path = "config.sample.yaml", format = [
+        "sdist",
+    ] },
 ]
 
 [tool.poetry.dependencies]
@@ -25,7 +25,8 @@ PyGObject = "^3.46.0"
 python-dateutil = "*"
 PyYAML = "*"
 humanize = "*"
-dbus-python = "*"
+dbus-python = "^1.3.2"
+poetry = "1.1.12"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
@@ -47,6 +48,4 @@ issues = "https://github.com/chmouel/gnome-next-meeting-applet/issues"
 
 # pyproject.toml
 [tool.pytest.ini_options]
-filterwarnings = [
-    "ignore:.*deprecated:DeprecationWarning"
-]
+filterwarnings = ["ignore:.*deprecated:DeprecationWarning"]
