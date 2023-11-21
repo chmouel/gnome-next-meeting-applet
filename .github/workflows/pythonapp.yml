@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install system dependencies
-      run: apt install gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev libdbus-1-dev
+      run: sudo apt install gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev libdbus-1-dev
     - name: Install poetry
       run: pipx install poetry==v1.6.1
     - uses: actions/setup-python@v4
