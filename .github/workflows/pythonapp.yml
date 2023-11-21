@@ -9,10 +9,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Install poetry pylint
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: poetry
+    - name: Install poetry
       run: |
-        sudo apt install -y python3-dev gobject-introspection pkg-config libcairo-dev libgirepository1.0-dev libdbus-1-dev python-is-python3 python3-pip
-        pip3 install -U poetry
         poetry install -v
     - name: Test code
       run: |
