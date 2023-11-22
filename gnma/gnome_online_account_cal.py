@@ -185,7 +185,7 @@ class GnomeOnlineAccountCal:
         mod_dttime = datetime.datetime.fromtimestamp(mod_timet)
 
         uid = self.create_uid(calendar, comp)
-        if not uid in self.all_events:
+        if uid not in self.all_events:
             self.all_events[uid] = types.Event(
                 uid,
                 calendar.color,
