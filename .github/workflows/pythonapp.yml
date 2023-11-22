@@ -19,11 +19,10 @@ jobs:
         cache: poetry
     - name: Install Poetry dependencies
       run: |
-        export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
-        poetry install -v
+        make  requirements_tools
     - name: Test code
       run: |
-        poetry run pytest -v
+        make test
     - name: Lint code
       run: |
-        poetry run pylint -r y gnma
+        make lint

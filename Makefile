@@ -1,22 +1,37 @@
 PACKAGE := gnome-next-meeting-applet
 
+all: requirements
+
 .PHONY: requirements
 requirements:
-	poetry install --only main
+	@echo "🫖 Installing requirements..."
+	@env PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring \
+		poetry install -q --only main
 
 .PHONY: requirements_tools
 requirements_tools:
-	poetry install
+	@echo "⛲ Installing requirements..."
+	@env PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring \
+		poetry install -q
 
 .PHONY: fmt
 fmt: requirements_tools
-	@poetry run black */*.py
+	@echo "🧹 Formatting..."
+	@poetry run ruff format  */*.py
 
 .PHONY: lint
 lint: requirements_tools
-	@poetry run pylint -r y gnma/
+	@echo "🚿 Linting..."
+	@poetry run ruff check --fix gnma/
 
 .PHONY: run
 run:
+	@echo "🚀 Running..."
 	@unset DBUS_SESSION_BUS_ADDRESS ;\
 		env poetry run $(PACKAGE) -v
+
+.PHONY: test
+test: requirements_tools
+	@echo "🧪 Testing..."
+	@poetry run pytest -v
+
