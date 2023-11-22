@@ -31,6 +31,11 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release type="stable" version="2.12.1" date="2023-11-22T00:00:00Z">
+      <description>
+        <p>Flatpak packaging fix</p>
+      </description>
+    </release>
     <release type="stable" version="2.12.0" date="2023-11-22T00:00:00Z">
       <description>
         <p>Add auto_open_minutes to let the event automatically open a number of minutes before it starts.</p>
