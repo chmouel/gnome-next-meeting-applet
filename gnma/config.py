@@ -14,6 +14,7 @@ DEFAULT_CONFIG = {
     "starts_today_only": False,
     "my_emails": [],
     "max_results": 10,
+    "auto_open_minutes": 0,
     "title_max_char": 20,
     "event_organizers_icon": {},
     "title_match_icon": {},
