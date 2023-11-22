@@ -21,7 +21,7 @@ include = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-PyGObject = "^3.46.0"
+PyGObject = "3.44.2"
 python-dateutil = "*"
 PyYAML = "*"
 humanize = "*"
