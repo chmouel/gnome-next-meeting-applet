@@ -45,6 +45,7 @@ class Applet(goacal.GnomeOnlineAccountCal):
         self.config = config.DEFAULT_CONFIG
         self.last_sorted = []
         self.last_label = ""
+        self.auto_open_uuids = []
         self.indicator = appindicator.Indicator.new(
             APP_INDICTOR_ID,
             "calendar",
@@ -246,6 +247,12 @@ class Applet(goacal.GnomeOnlineAccountCal):
         icon, tooltip = icons.by_event_time(self.config, event)
         self.indicator.set_icon_full(icon, tooltip)
 
+        if auto_open_intime(self.config, event):
+            if event.uid not in self.auto_open_uuids:
+                self.auto_open_uuids.append(event.uid)
+                meeting_url = self.get_meeting_url(event)
+                gtk.show_uri(None, meeting_url, gtk.get_current_event_time())
+
         self.last_label = new_label
         self.indicator.set_label(new_label, APP_INDICTOR_ID)
         return True
@@ -401,6 +408,24 @@ class Applet(goacal.GnomeOnlineAccountCal):
         glib.timeout_add_seconds(30, self.set_indicator_icon_label)
         gtk.main()
 
+
+def auto_open_intime(config, event) -> bool:
+    """Check if event is in auto open time"""
+    now = datetime.datetime.now()
+    autoconfig = config["auto_open_minutes"]
+    if autoconfig <= 0:
+        return False
+    # pylint: disable=C0113,R1705
+    if (
+        now
+        > (
+            event.start_dttime
+            - datetime.timedelta(minutes=autoconfig)
+        )
+        and not now > event.start_dttime
+    ):
+        return True
+    return False
 
 def run(args):
     Applet(args).run()
