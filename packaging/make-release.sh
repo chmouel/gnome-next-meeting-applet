@@ -81,7 +81,7 @@ poetry build
 pname=${PKGNAME//-/_}
 gh release create -F ${TMP} ${VERSION} ./dist/${pname}-${VERSION}.tar.gz ./dist/${pname}-${VERSION}-py3-none-any.whl
 
-./packaging/debian/build.sh
+# ./packaging/debian/build.sh
 ./packaging/aur/build.sh
 ./packaging/rpm/build.sh
 make -C ./packaging/flatpak release

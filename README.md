@@ -24,6 +24,7 @@
 <a href='https://flathub.org/apps/details/com.chmouel.gnomeNextMeetingApplet'><img height='40' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
 ### [Ubuntu](https://launchpad.net/~chmouel/+archive/ubuntu/gnome-next-meeting-applet)
+**DEPRECATED: Use the flatpak instead**
 
 ```bash
 sudo add-apt-repository ppa:chmouel/gnome-next-meeting-applet
