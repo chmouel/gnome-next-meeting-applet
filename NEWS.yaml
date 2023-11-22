@@ -1,4 +1,10 @@
 ---
+Version: 2.12.2
+Date: 2023-11-22
+Description:
+  - Flatpak packaging fix
+
+---
 Version: 2.12.1
 Date: 2023-11-22
 Description:

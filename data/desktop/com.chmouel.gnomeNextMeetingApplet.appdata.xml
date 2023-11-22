@@ -31,6 +31,11 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release type="stable" version="2.12.2" date="2023-11-22T00:00:00Z">
+      <description>
+        <p>Flatpak packaging fix</p>
+      </description>
+    </release>
     <release type="stable" version="2.12.1" date="2023-11-22T00:00:00Z">
       <description>
         <p>Flatpak packaging fix</p>
