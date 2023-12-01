@@ -31,7 +31,7 @@ dbus-python = "1.2.18"
 ruff = "^0.1.6"
 pytest = "*"
 toml = "*"
-mypy = "^1.6"
+mypy = "^1.7"
 ipython = "^8.12.3"
 
 [tool.ruff]
