@@ -1,3 +1,8 @@
+
+> [!CAUTION]
+> Due of a lack of time and not using gnome any more, i am not able to support this project anymore.>
+> Feel free to contact me on [Fosstodon](https://fosstodon.org/@chmouel) if you would like to take over this project
+
 # Gnome Next Meeting applet
 
 <img src="./data/desktop/icon.svg" width=64 height=64 align=center> An applet to show your next meetings with Gnome Online Accounts
